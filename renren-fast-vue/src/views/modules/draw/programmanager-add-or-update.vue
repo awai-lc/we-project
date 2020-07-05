@@ -1,44 +1,72 @@
 <template>
-  <el-dialog
-    :title="!dataForm.id ? '新增' : '修改'"
-    :close-on-click-modal="false"
-    :visible.sync="visible">
-    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
+    <el-form :model="dataForm" :inline="true" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="180px" size="mini">
     <el-form-item label="项目编码" prop="code">
-      <el-input v-model="dataForm.code" placeholder="项目编码"></el-input>
+      <el-input v-model="dataForm.code" placeholder="项目编码" :disabled="true"></el-input>
     </el-form-item>
     <el-form-item label="项目名称" prop="name">
       <el-input v-model="dataForm.name" placeholder="项目名称"></el-input>
     </el-form-item>
-    <el-form-item label="项目状态（1底稿，2可抽取，3抽取中，4需补抽，5完成）" prop="proStatus">
-      <el-input v-model="dataForm.proStatus" placeholder="项目状态（1底稿，2可抽取，3抽取中，4需补抽，5完成）"></el-input>
+    <el-form-item label="项目状态" prop="proStatus">
+      <el-input v-model="dataForm.proStatus" placeholder="项目状态" :disabled="true"></el-input>
     </el-form-item>
-    <el-form-item label="采购单位ID" prop="purchasingId">
-      <el-input v-model="dataForm.purchasingId" placeholder="采购单位ID"></el-input>
+    <el-form-item label="采购单位" prop="purchasingId">
+     <el-select
+        v-model="dataForm.purchasingId"
+        multiple
+        filterable
+        remote
+        reserve-keyword
+        :remote-method="remoteMethod"
+        :loading="loading">
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value">
+        </el-option>
+      </el-select>
     </el-form-item>
-    <el-form-item label="抽取单位ID" prop="extractionUnit">
-      <el-input v-model="dataForm.extractionUnit" placeholder="抽取单位ID"></el-input>
+    <el-form-item label="抽取单位" prop="extractionUnit">
+      <el-input v-model="dataForm.extractionUnit" placeholder="抽取单位"></el-input>
     </el-form-item>
-    <el-form-item label="采购方式ID" prop="purWay">
-      <el-input v-model="dataForm.purWay" placeholder="采购方式ID"></el-input>
+    <el-form-item label="采购方式" prop="purWay">
+      <el-select v-model="dataForm.purWay" clearable placeholder="请选择">
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value">
+        </el-option>
+      </el-select>
     </el-form-item>
     <el-form-item label="评审开始时间" prop="startReview">
-      <el-input v-model="dataForm.startReview" placeholder="评审开始时间"></el-input>
+
+               <el-date-picker
+                 v-model="dataForm.startReview"
+                 type="datetime"
+                 placeholder="选择日期时间">
+               </el-date-picker>
+
     </el-form-item>
     <el-form-item label="评审结束时间" prop="endReview">
-      <el-input v-model="dataForm.endReview" placeholder="评审结束时间"></el-input>
+          <el-date-picker
+            v-model="dataForm.endReview"
+            type="datetime"
+            placeholder="选择日期时间">
+          </el-date-picker>
     </el-form-item>
-    <el-form-item label="采购备案号" prop="govProRecordNumber">
-      <el-input v-model="dataForm.govProRecordNumber" placeholder="采购备案号"></el-input>
+    <el-form-item label="政府采购计划备案号" prop="govProRecordNumber">
+      <el-input v-model="dataForm.govProRecordNumber" placeholder="采购备案号" ></el-input>
     </el-form-item>
     <el-form-item label="参与采购评审人代表" prop="govProPerson">
-      <el-input v-model="dataForm.govProPerson" placeholder="参与采购评审人代表"></el-input>
+      <el-input v-model="dataForm.govProPerson" placeholder="参与采购评审人代表" ></el-input>
     </el-form-item>
     <el-form-item label="评审内容" prop="reviewContent">
       <el-input v-model="dataForm.reviewContent" placeholder="评审内容"></el-input>
     </el-form-item>
-    <el-form-item label="预算金额" prop="budgetAmount">
-      <el-input v-model="dataForm.budgetAmount" placeholder="预算金额"></el-input>
+    <el-form-item label="预算金额(万元)" prop="budgetAmount">
+    <el-input-number v-model="dataForm.budgetAmount" :precision="2" :step="0.1" :max="10"></el-input-number>
+
     </el-form-item>
     <el-form-item label="抽取单位联系人" prop="extractionUnitContact">
       <el-input v-model="dataForm.extractionUnitContact" placeholder="抽取单位联系人"></el-input>
@@ -49,8 +77,16 @@
     <el-form-item label="评审地址" prop="address">
       <el-input v-model="dataForm.address" placeholder="评审地址"></el-input>
     </el-form-item>
-    <el-form-item label="项目所属监管地ID" prop="supervisoryPlaceId">
-      <el-input v-model="dataForm.supervisoryPlaceId" placeholder="项目所属监管地ID"></el-input>
+    <el-form-item label="项目所属监管地" prop="supervisoryPlaceId">
+       <el-select v-model="dataForm.supervisoryPlaceId" clearable placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+
     </el-form-item>
     <el-form-item label="回避专家单位" prop="avoidUnit">
       <el-input v-model="dataForm.avoidUnit" placeholder="回避专家单位"></el-input>
@@ -58,24 +94,13 @@
     <el-form-item label="备注" prop="remark">
       <el-input v-model="dataForm.remark" placeholder="备注"></el-input>
     </el-form-item>
-    <el-form-item label="新增人ID" prop="addby">
-      <el-input v-model="dataForm.addby" placeholder="新增人ID"></el-input>
-    </el-form-item>
-    <el-form-item label="新增时间" prop="addbytime">
-      <el-input v-model="dataForm.addbytime" placeholder="新增时间"></el-input>
-    </el-form-item>
-    <el-form-item label=" 最近修改人ID" prop="lastmodifiedby">
-      <el-input v-model="dataForm.lastmodifiedby" placeholder=" 最近修改人ID"></el-input>
-    </el-form-item>
-    <el-form-item label="最近修改时间" prop="lastmodifiedbytime">
-      <el-input v-model="dataForm.lastmodifiedbytime" placeholder="最近修改时间"></el-input>
-    </el-form-item>
+     <el-form-item>
+        <el-button type="primary" @click="dataFormSubmit()">保存</el-button>
+        <el-button @click="resetForm('ruleForm')">重置</el-button>
+        <el-button @click="resetForm('ruleForm')">修改</el-button>
+        <el-button @click="resetForm('ruleForm')">打印</el-button>
+      </el-form-item>
     </el-form>
-    <span slot="footer" class="dialog-footer">
-      <el-button @click="visible = false">取消</el-button>
-      <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
-    </span>
-  </el-dialog>
 </template>
 
 <script>
@@ -102,30 +127,26 @@
           address: '',
           supervisoryPlaceId: '',
           avoidUnit: '',
-          remark: '',
-          addby: '',
-          addbytime: '',
-          lastmodifiedby: '',
-          lastmodifiedbytime: ''
+          remark: ''
         },
         dataRule: {
           code: [
-            { required: true, message: '项目编码不能为空', trigger: 'blur' }
+
           ],
           name: [
             { required: true, message: '项目名称不能为空', trigger: 'blur' }
           ],
           proStatus: [
-            { required: true, message: '项目状态（1底稿，2可抽取，3抽取中，4需补抽，5完成）不能为空', trigger: 'blur' }
+
           ],
           purchasingId: [
-            { required: true, message: '采购单位ID不能为空', trigger: 'blur' }
+            { required: true, message: '采购单位不能为空', trigger: 'blur' }
           ],
           extractionUnit: [
-            { required: true, message: '抽取单位ID不能为空', trigger: 'blur' }
+            { required: true, message: '抽取单位不能为空', trigger: 'blur' }
           ],
           purWay: [
-            { required: true, message: '采购方式ID不能为空', trigger: 'blur' }
+            { required: true, message: '采购方式不能为空', trigger: 'blur' }
           ],
           startReview: [
             { required: true, message: '评审开始时间不能为空', trigger: 'blur' }
@@ -134,10 +155,10 @@
             { required: true, message: '评审结束时间不能为空', trigger: 'blur' }
           ],
           govProRecordNumber: [
-            { required: true, message: '采购备案号不能为空', trigger: 'blur' }
+
           ],
           govProPerson: [
-            { required: true, message: '参与采购评审人代表不能为空', trigger: 'blur' }
+
           ],
           reviewContent: [
             { required: true, message: '评审内容不能为空', trigger: 'blur' }
@@ -155,26 +176,15 @@
             { required: true, message: '评审地址不能为空', trigger: 'blur' }
           ],
           supervisoryPlaceId: [
-            { required: true, message: '项目所属监管地ID不能为空', trigger: 'blur' }
+            { required: true, message: '项目所属监管地不能为空', trigger: 'blur' }
           ],
           avoidUnit: [
-            { required: true, message: '回避专家单位不能为空', trigger: 'blur' }
+
           ],
           remark: [
-            { required: true, message: '备注不能为空', trigger: 'blur' }
-          ],
-          addby: [
-            { required: true, message: '新增人ID不能为空', trigger: 'blur' }
-          ],
-          addbytime: [
-            { required: true, message: '新增时间不能为空', trigger: 'blur' }
-          ],
-          lastmodifiedby: [
-            { required: true, message: ' 最近修改人ID不能为空', trigger: 'blur' }
-          ],
-          lastmodifiedbytime: [
-            { required: true, message: '最近修改时间不能为空', trigger: 'blur' }
+
           ]
+
         }
       }
     },
@@ -223,7 +233,7 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.$http({
-              url: this.$http.adornUrl(`/draw/programmanager/${!this.dataForm.id ? 'save' : 'update'}`),
+              url: this.$http.adornUrl(`/draw/programmanager/save`),
               method: 'post',
               data: this.$http.adornData({
                 'id': this.dataForm.id || undefined,
