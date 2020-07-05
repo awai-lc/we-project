@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hbzf.draw.dao.ChoseMajorDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.hbzf.draw.entity.ChoseMajorEntity" id="choseMajorMap">
+        <result property="id" column="id"/>
+        <result property="majorId" column="major_id"/>
+        <result property="majorCode" column="major_code"/>
+        <result property="proId" column="pro_id"/>
+        <result property="majorName" column="major_name"/>
+        <result property="chosedCount" column="chosed_count"/>
+        <result property="needCount" column="need_count"/>
+        <result property="expertCount" column="expert_count"/>
+        <result property="placeName" column="place_name"/>
+    </resultMap>
+
+
+</mapper>
