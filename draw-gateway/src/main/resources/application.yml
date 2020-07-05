@@ -24,4 +24,4 @@ spring:
             - RewritePath=/api(?<segment>/?.*), /renren-fast/$\{segment}
 
   application:
-    name: mall-gateway
+    name: draw-gateway
