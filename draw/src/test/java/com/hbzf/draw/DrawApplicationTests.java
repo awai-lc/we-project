@@ -1,5 +1,7 @@
 package com.hbzf.draw;
 
+import com.hbzf.draw.dao.ProgramManagerDao;
+import com.hbzf.draw.service.ProgramManagerService;
 import com.hbzf.draw.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -15,6 +17,12 @@ import java.util.Date;
 @RunWith(SpringJUnit4ClassRunner.class)
 class DrawApplicationTests {
 
+    @Resource
+    ProgramManagerDao programManagerDao;
 
+    @Test
+    public void test1(){
+        programManagerDao.selectById(1L);
+    }
 
 }
