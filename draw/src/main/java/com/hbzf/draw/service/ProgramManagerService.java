@@ -22,6 +22,6 @@ public interface ProgramManagerService extends IService<ProgramManagerEntity> {
      * 项目保存
      * @param request
      */
-    void save(ProgramManagerRequest request);
+    Long save(ProgramManagerRequest request);
 }
 

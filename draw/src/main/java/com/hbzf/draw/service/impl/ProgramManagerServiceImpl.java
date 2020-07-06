@@ -43,12 +43,13 @@ public class ProgramManagerServiceImpl extends ServiceImpl<ProgramManagerDao, Pr
     }
 
     @Override
-    public void save(ProgramManagerRequest request) {
+    public Long save(ProgramManagerRequest request) {
         if(null == request.getProgramManager().getId()){
             insertManager(request);
         }else {
             updateManager(request);
         }
+        return request.getProgramManager().getId();
     }
 
 

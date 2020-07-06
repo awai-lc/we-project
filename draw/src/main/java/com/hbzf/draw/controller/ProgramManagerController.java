@@ -68,10 +68,9 @@ public class ProgramManagerController {
             if (null == request || null == request.getProgramManager()) {
                 return R.error(R.ILLEGAL_ARGUMENT_CODE, R.ILLEGAL_ARGUMENT_MESSAGE);
             }
-            programManagerService.save(request);
-            return R.ok(R.SUCCESS_CODE, R.SUCCESS_MESSAGE);
+            return R.ok(programManagerService.save(request).toString());
         } catch (BizException e) {
-            return R.error(R.ERROR_CODE, e.getMessage());
+            return R.error(e.getMessage());
         } catch (Exception e) {
             log.error("ProgramManagerController save request={}", JSON.toJSONString(request));
             return R.error(R.ERROR_CODE, R.ERROR_MESSAGE);
