@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.hbzf.draw.entity.request.ProgramManagerRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -59,8 +60,8 @@ public class ProgramManagerController {
      */
     @RequestMapping("/save")
     //@RequiresPermissions("draw:programmanager:save")
-    public R save(@RequestBody ProgramManagerEntity programManager){
-		programManagerService.save(programManager);
+    public R save(@RequestBody ProgramManagerRequest request){
+		//programManagerService.save(programManager);
 
         return R.ok();
     }
