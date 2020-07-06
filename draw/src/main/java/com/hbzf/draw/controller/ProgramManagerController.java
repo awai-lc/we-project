@@ -4,7 +4,10 @@ import java.util.Arrays;
 import java.util.Map;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.alibaba.fastjson.JSON;
 import com.hbzf.draw.entity.request.ProgramManagerRequest;
+import com.hbzf.draw.util.exception.BizException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,7 +21,6 @@ import com.hbzf.common.utils.PageUtils;
 import com.hbzf.common.utils.R;
 
 
-
 /**
  * 项目表
  *
@@ -26,6 +28,7 @@ import com.hbzf.common.utils.R;
  * @email 36628353@qq.com
  * @date 2020-07-05 00:02:58
  */
+@Slf4j
 @RestController
 @RequestMapping("draw/programmanager")
 public class ProgramManagerController {
@@ -37,7 +40,7 @@ public class ProgramManagerController {
      */
     @RequestMapping("/list")
     //@RequiresPermissions("draw:programmanager:list")
-    public R list(@RequestParam Map<String, Object> params){
+    public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = programManagerService.queryPage(params);
 
         return R.ok().put("page", page);
@@ -49,8 +52,8 @@ public class ProgramManagerController {
      */
     @RequestMapping("/info/{id}")
     //@RequiresPermissions("draw:programmanager:info")
-    public R info(@PathVariable("id") Long id){
-		ProgramManagerEntity programManager = programManagerService.getById(id);
+    public R info(@PathVariable("id") Long id) {
+        ProgramManagerEntity programManager = programManagerService.getById(id);
 
         return R.ok().put("programManager", programManager);
     }
@@ -60,10 +63,19 @@ public class ProgramManagerController {
      */
     @RequestMapping("/save")
     //@RequiresPermissions("draw:programmanager:save")
-    public R save(@RequestBody ProgramManagerRequest request){
-		//programManagerService.save(programManager);
-
-        return R.ok();
+    public R save(@RequestBody ProgramManagerRequest request) {
+        try {
+            if (null == request || null == request.getProgramManager()) {
+                return R.error(R.ILLEGAL_ARGUMENT_CODE, R.ILLEGAL_ARGUMENT_MESSAGE);
+            }
+            programManagerService.save(request);
+            return R.ok(R.SUCCESS_CODE, R.SUCCESS_MESSAGE);
+        } catch (BizException e) {
+            return R.error(R.ERROR_CODE, e.getMessage());
+        } catch (Exception e) {
+            log.error("ProgramManagerController save request={}", JSON.toJSONString(request));
+            return R.error(R.ERROR_CODE, R.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -71,8 +83,8 @@ public class ProgramManagerController {
      */
     @RequestMapping("/update")
     //@RequiresPermissions("draw:programmanager:update")
-    public R update(@RequestBody ProgramManagerEntity programManager){
-		programManagerService.updateById(programManager);
+    public R update(@RequestBody ProgramManagerEntity programManager) {
+        programManagerService.updateById(programManager);
 
         return R.ok();
     }
@@ -82,8 +94,8 @@ public class ProgramManagerController {
      */
     @RequestMapping("/delete")
     //@RequiresPermissions("draw:programmanager:delete")
-    public R delete(@RequestBody Long[] ids){
-		programManagerService.removeByIds(Arrays.asList(ids));
+    public R delete(@RequestBody Long[] ids) {
+        programManagerService.removeByIds(Arrays.asList(ids));
 
         return R.ok();
     }

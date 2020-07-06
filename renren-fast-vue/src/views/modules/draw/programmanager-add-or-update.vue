@@ -155,6 +155,7 @@
       return {
         disabled:true,
         visible: false,
+        isRouterAlive:true,
         dataForm: {
           id: 0,
           code: '1231',
@@ -313,7 +314,7 @@
         this.disabled = false;
       },
       cancelUpdate(){
-              this.disabled = true;
+            this.disabled = true
             },
       // 表单提交
       dataFormSubmit () {

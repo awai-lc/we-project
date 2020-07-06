@@ -15,6 +15,10 @@
         <result property="expertCount" column="expert_count"/>
         <result property="placeName" column="place_name"/>
     </resultMap>
+    <update id="deleteByProId">
+        update chose_major set is_delete = 1
+        where pro_id = #{chose_major,jdbcType=BIGINT}
+    </update>
 
 
 </mapper>

@@ -20,6 +20,11 @@ CREATE TABLE `chose_major` (
   `need_count` int(10) NOT NULL DEFAULT '0' COMMENT '需抽取专家数',
   `expert_count` int(10) NOT NULL DEFAULT '0' COMMENT '库存专家数',
   `place_name` varchar(100) NOT NULL DEFAULT '' COMMENT '所属区域名称',
+  `is_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除（0否， 1是）',
+  `addBy` bigint(20) NOT NULL DEFAULT '0' COMMENT '新增人ID',
+  `addByTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '新增时间',
+  `lastModifiedBy` bigint(20) NOT NULL DEFAULT '0' COMMENT ' 最近修改人ID',
+  `lastModifiedByTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最近修改时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='选中专业';
 
