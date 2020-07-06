@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.hbzf.common.utils.PageUtils;
 import com.hbzf.draw.entity.MajorEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,5 +17,7 @@ import java.util.Map;
 public interface MajorService extends IService<MajorEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+    PageUtils queryPage(Map<String, Object> params,long parentId);
+    List<MajorEntity> listWithTree();
 }
 
