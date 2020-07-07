@@ -17,7 +17,7 @@
     </resultMap>
     <update id="deleteByProId">
         update chose_major set is_delete = 1
-        where pro_id = #{chose_major,jdbcType=BIGINT}
+        where pro_id = #{proId,jdbcType=BIGINT}
     </update>
 
 

@@ -1,5 +1,7 @@
 HELP.md
 target/
+/.idea/
+/renren-fast-vue/lishaofan/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**
 !**/src/test/**

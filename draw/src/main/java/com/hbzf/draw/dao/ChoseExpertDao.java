@@ -13,5 +13,6 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface ChoseExpertDao extends BaseMapper<ChoseExpertEntity> {
-	
+
+    void deleteByProId(Long id);
 }

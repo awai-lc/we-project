@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Lists;
 import com.hbzf.common.utils.PageUtils;
 import com.hbzf.common.utils.Query;
+import com.hbzf.draw.dao.ChoseExpertDao;
 import com.hbzf.draw.dao.ChoseMajorDao;
 import com.hbzf.draw.dao.ProgramManagerDao;
 import com.hbzf.draw.dao.biz.UnitBiz;
@@ -35,6 +36,9 @@ public class ProgramManagerServiceImpl extends ServiceImpl<ProgramManagerDao, Pr
     private ChoseMajorDao choseMajorDao;
     @Resource
     private UnitBiz unitBiz;
+
+    @Resource
+    private ChoseExpertDao choseExpertDao;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -95,6 +99,7 @@ public class ProgramManagerServiceImpl extends ServiceImpl<ProgramManagerDao, Pr
     private void insertMajorList(ProgramManagerRequest request) {
         List<ChoseMajorEntity> choseMajorList = transToChoseMajor(request);
         choseMajorDao.deleteByProId(request.getProgramManager().getId());
+        choseExpertDao.deleteByProId(request.getProgramManager().getId());
         choseMajorList.parallelStream().forEach(e -> {
             choseMajorDao.insert(e);
         });
