@@ -10,6 +10,9 @@
         <result property="addby" column="addBy"/>
         <result property="addbytime" column="addByTime"/>
     </resultMap>
+    <select id="selectByAll" resultMap="unitMap">
+        select * from unit
+    </select>
 
 
 </mapper>

@@ -35,8 +35,8 @@ public class ProgramManagerDto {
     /**
      * 采购单位ID
      */
-    @NotNull
-    private Long purchasingId;
+    @NotBlank
+    private String purchasingId;
 
     /**
      * 抽取单位ID

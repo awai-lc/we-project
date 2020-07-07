@@ -4,6 +4,8 @@ import com.hbzf.draw.entity.PurWayEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  * 采购方式
  * 
@@ -13,5 +15,5 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface PurWayDao extends BaseMapper<PurWayEntity> {
-	
+
 }

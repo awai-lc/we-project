@@ -40,7 +40,7 @@ public class ProgramManagerEntity implements Serializable {
 	/**
 	 * 采购单位ID
 	 */
-	private Long purchasingId;
+	private String purchasingId;
 	/**
 	 * 抽取单位ID
 	 */
