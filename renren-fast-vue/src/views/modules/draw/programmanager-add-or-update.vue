@@ -316,12 +316,65 @@
         supervisoryPlaces: [{
           supervisoryPlaceId: '1',
           label: '省本级'
+        },{
+          supervisoryPlaceId: '2',
+          label: '武汉市'
+        },{
+          supervisoryPlaceId: '3',
+          label: '黄石市'
+        },{
+          supervisoryPlaceId: '4',
+          label: '十堰市'
+        },{
+          supervisoryPlaceId: '5',
+          label: '宜昌市'
+        },{
+          supervisoryPlaceId: '6',
+          label: '襄樊市'
+        },{
+          supervisoryPlaceId: '7',
+          label: '鄂州市'
+        },{
+          supervisoryPlaceId: '8',
+          label: '荆门市'
+        },{
+          supervisoryPlaceId: '9',
+          label: '孝感市'
+        },{
+          supervisoryPlaceId: '10',
+          label: '荆州市'
+        },{
+          supervisoryPlaceId: '11',
+          label: '黄冈市'
+        },{
+          supervisoryPlaceId: '12',
+          label: '随州市'
+        },{
+          supervisoryPlaceId: '13',
+          label: '仙桃市'
+        },{
+          supervisoryPlaceId: '14',
+          label: '潜江市'
+        },{
+          supervisoryPlaceId: '15',
+          label: '天门市'
+        },{
+          supervisoryPlaceId: '16',
+          label: '神农架林区'
         }],
         proStatuses: [{
           proStatus: '1',
           label: '底稿'
-        }
-        ]
+        },{
+          proStatus: '2',
+          label: '待抽取'
+        },{
+          proStatus: '3',
+          label: '抽取中'
+        },{
+          proStatus: '4',
+          label: '抽取完成'
+        }]
       }
     },
     methods: {
@@ -394,35 +447,6 @@
             }
             cb(that.items);
           }
-        });
-      },
-      createFilter(queryString) {
-        return (restaurant) => {
-          return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
-        };
-      },
-      getPlanTypeData(val,fun) {
-        let dataArr = [];
-        let para = {
-          icaocode: val,
-        };
-        baseDataPlaneTypeList(para).then(res => {    //发送请求
-          if (!res) return false;
-          let dataList = res.data.pageInfo.list;
-          if(dataList.length>0){
-            dataList.forEach((item,index) => {
-              dataArr.push({
-                value:item.icaocode,
-                name:item.cnfullname
-              })
-            });
-          }else {
-            dataArr.push({
-              value:'无搜索结果',
-              noId:'无搜索结果',
-            })
-          }
-          fun(dataArr);
         });
       },
       handleSelect(item) {

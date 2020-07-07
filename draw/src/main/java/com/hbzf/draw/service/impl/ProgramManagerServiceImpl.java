@@ -162,8 +162,7 @@ public class ProgramManagerServiceImpl extends ServiceImpl<ProgramManagerDao, Pr
         ProgramManagerEntity entity = new ProgramManagerEntity();
         BeanUtils.copyProperties(request.getProgramManager(), entity);
         entity.setCode(createProCode());
-        entity.setProStatus(ProStatusEnum.D.getCode());
-        //todo 操作人
+        entity.setProStatus(ProStatusEnum.DCQ.getCode());
         entity.setAddby(1L);
         entity.setAddbytime(new Date());
         entity.setLastmodifiedby(1L);
@@ -172,7 +171,7 @@ public class ProgramManagerServiceImpl extends ServiceImpl<ProgramManagerDao, Pr
     }
 
     private String createProCode() {
-        return "PR-" + new Date().getTime();
+        return "PR-" + System.currentTimeMillis();
     }
 
 

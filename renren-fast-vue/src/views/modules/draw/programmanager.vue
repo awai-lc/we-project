@@ -55,7 +55,7 @@
         </el-col>
       </el-row>
     </el-form>
-    <el-table :data="dataList" border v-loading="dataListLoading" @selection-change="selectionChangeHandle" size="mini"
+    <el-table :data="dataList" border v-loading="dataListLoading"  size="mini"
               max-height="400" style="width: 100%;height: 400px">
       <el-table-column prop="code" header-align="center" align="center" label="项目编码">
       </el-table-column>
@@ -110,10 +110,65 @@
         proStatuses: [{
           proStatus: '1',
           label: '底稿'
-        }],
+        },{
+          proStatus: '2',
+          label: '待抽取'
+        },{
+          proStatus: '3',
+          label: '抽取中'
+        },{
+          proStatus: '4',
+          label: '抽取完成'
+        }
+        ],
         supervisoryPlaces: [{
           supervisoryPlaceId: '1',
           label: '省本级'
+        },{
+          supervisoryPlaceId: '2',
+          label: '武汉市'
+        },{
+          supervisoryPlaceId: '3',
+          label: '黄石市'
+        },{
+          supervisoryPlaceId: '4',
+          label: '十堰市'
+        },{
+          supervisoryPlaceId: '5',
+          label: '宜昌市'
+        },{
+          supervisoryPlaceId: '6',
+          label: '襄樊市'
+        },{
+          supervisoryPlaceId: '7',
+          label: '鄂州市'
+        },{
+          supervisoryPlaceId: '8',
+          label: '荆门市'
+        },{
+          supervisoryPlaceId: '9',
+          label: '孝感市'
+        },{
+          supervisoryPlaceId: '10',
+          label: '荆州市'
+        },{
+          supervisoryPlaceId: '11',
+          label: '黄冈市'
+        },{
+          supervisoryPlaceId: '12',
+          label: '随州市'
+        },{
+          supervisoryPlaceId: '13',
+          label: '仙桃市'
+        },{
+          supervisoryPlaceId: '14',
+          label: '潜江市'
+        },{
+          supervisoryPlaceId: '15',
+          label: '天门市'
+        },{
+          supervisoryPlaceId: '16',
+          label: '神农架林区'
         }],
         dataList: [],
         pageIndex: 1,

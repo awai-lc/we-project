@@ -7,7 +7,10 @@ public enum ProStatusEnum {
     /**
      *
      */
-    D(1,"底稿");
+    D(1,"底稿"),
+    DCQ(2,"待抽取"),
+    CQZ(3,"抽取中"),
+    WC(4,"抽取完成");
 
     private int code;
     private String desc;
