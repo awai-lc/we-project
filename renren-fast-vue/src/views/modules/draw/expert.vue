@@ -6,8 +6,8 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button v-if="isAuth('draw:programmanager:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-        <el-button v-if="isAuth('draw:programmanager:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+        <el-button v-if="isAuth('draw:expert:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
+        <el-button v-if="isAuth('draw:expert:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -23,152 +23,83 @@
         width="50">
       </el-table-column>
       <el-table-column
-        prop="id"
+        prop="expertName"
         header-align="center"
         align="center"
-        label="主键">
+        label="专家名称">
       </el-table-column>
       <el-table-column
-        prop="code"
+        prop="majorName"
         header-align="center"
+        width="200px"
         align="center"
-        label="项目编码">
+        label="专业名称">
       </el-table-column>
       <el-table-column
-        prop="name"
+        prop="phone"
         header-align="center"
+        width="110px"
         align="center"
-        label="项目名称">
+        label="手机号">
       </el-table-column>
       <el-table-column
-        prop="proStatus"
+        prop="email"
+        width="150px"
         header-align="center"
         align="center"
-        label="项目状态（1底稿，2可抽取，3抽取中，4需补抽，5完成）">
+        label="邮箱">
       </el-table-column>
       <el-table-column
-        prop="purchasingId"
         header-align="center"
         align="center"
-        label="采购单位ID">
+        label="在职状态">
+        <template slot-scope="scope">
+            <el-switch
+              v-model="scope.row.jobStatus"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              active-value=1
+              inactive-value=2>
+            </el-switch>
+        </template>
       </el-table-column>
       <el-table-column
-        prop="extractionUnit"
+        prop="title"
         header-align="center"
         align="center"
-        label="抽取单位ID">
+        label="职称">
       </el-table-column>
       <el-table-column
-        prop="purWay"
+        prop="birth"
         header-align="center"
+        width="110px"
         align="center"
-        label="采购方式ID">
-      </el-table-column>
-      <el-table-column
-        prop="startReview"
-        header-align="center"
-        align="center"
-        label="评审开始时间">
-      </el-table-column>
-      <el-table-column
-        prop="endReview"
-        header-align="center"
-        align="center"
-        label="评审结束时间">
-      </el-table-column>
-      <el-table-column
-        prop="govProRecordNumber"
-        header-align="center"
-        align="center"
-        label="采购备案号">
-      </el-table-column>
-      <el-table-column
-        prop="govProPerson"
-        header-align="center"
-        align="center"
-        label="参与采购评审人代表">
-      </el-table-column>
-      <el-table-column
-        prop="reviewContent"
-        header-align="center"
-        align="center"
-        label="评审内容">
-      </el-table-column>
-      <el-table-column
-        prop="budgetAmount"
-        header-align="center"
-        align="center"
-        label="预算金额">
-      </el-table-column>
-      <el-table-column
-        prop="extractionUnitContact"
-        header-align="center"
-        align="center"
-        label="抽取单位联系人">
-      </el-table-column>
-      <el-table-column
-        prop="extractionUnitPhone"
-        header-align="center"
-        align="center"
-        label="抽取单位电话">
+        label="出生年月">
       </el-table-column>
       <el-table-column
         prop="address"
         header-align="center"
         align="center"
-        label="评审地址">
+        width="300px"
+        label="地址">
       </el-table-column>
       <el-table-column
-        prop="supervisoryPlaceId"
+        prop="unit"
         header-align="center"
+        width="300px"
         align="center"
-        label="项目所属监管地ID">
+        label="工作单位">
       </el-table-column>
-      <el-table-column
-        prop="avoidUnit"
-        header-align="center"
-        align="center"
-        label="回避专家单位">
-      </el-table-column>
-      <el-table-column
-        prop="remark"
-        header-align="center"
-        align="center"
-        label="备注">
-      </el-table-column>
-      <el-table-column
-        prop="addby"
-        header-align="center"
-        align="center"
-        label="新增人ID">
-      </el-table-column>
-      <el-table-column
-        prop="addbytime"
-        header-align="center"
-        align="center"
-        label="新增时间">
-      </el-table-column>
-      <el-table-column
-        prop="lastmodifiedby"
-        header-align="center"
-        align="center"
-        label=" 最近修改人ID">
-      </el-table-column>
-      <el-table-column
-        prop="lastmodifiedbytime"
-        header-align="center"
-        align="center"
-        label="最近修改时间">
-      </el-table-column>
+      
       <el-table-column
         fixed="right"
         header-align="center"
         align="center"
-        width="150"
+        width="150px"
         label="操作">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
-          <el-button type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
+          <el-button  size="mini" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
+          <el-button type="danger" size="mini" @click="deleteHandle(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -187,7 +118,7 @@
 </template>
 
 <script>
-  import AddOrUpdate from './programmanager-add-or-update'
+  import AddOrUpdate from './expert-add-or-update'
   export default {
     data () {
       return {
@@ -214,7 +145,7 @@
       getDataList () {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/draw/programmanager/list'),
+          url: this.$http.adornUrl('/draw/expert/list'),
           method: 'get',
           params: this.$http.adornParams({
             'page': this.pageIndex,
@@ -265,7 +196,7 @@
           type: 'warning'
         }).then(() => {
           this.$http({
-            url: this.$http.adornUrl('/draw/programmanager/delete'),
+            url: this.$http.adornUrl('/draw/expert/delete'),
             method: 'post',
             data: this.$http.adornData(ids, false)
           }).then(({data}) => {
@@ -287,3 +218,8 @@
     }
   }
 </script>
+<style>
+  .el-table th.gutter{
+   display: table-cell!important;
+}
+</style>

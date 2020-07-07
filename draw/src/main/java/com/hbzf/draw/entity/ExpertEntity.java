@@ -1,5 +1,6 @@
 package com.hbzf.draw.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
@@ -32,6 +33,11 @@ public class ExpertEntity implements Serializable {
 	 * 专业id
 	 */
 	private Long majorId;
+	/**
+	 * 专业名称
+	 */
+	@TableField(exist = false)
+	private String majorName;
 	/**
 	 * 手机号
 	 */

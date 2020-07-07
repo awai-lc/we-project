@@ -7,6 +7,7 @@
       <module fileurl="file://$PROJECT_DIR$/draw-common/draw-common.iml" filepath="$PROJECT_DIR$/draw-common/draw-common.iml" />
       <module fileurl="file://$PROJECT_DIR$/draw-gateway/draw-gateway.iml" filepath="$PROJECT_DIR$/draw-gateway/draw-gateway.iml" />
       <module fileurl="file://$PROJECT_DIR$/renren-fast/renren-fast.iml" filepath="$PROJECT_DIR$/renren-fast/renren-fast.iml" />
+      <module fileurl="file://$PROJECT_DIR$/renren-generator/renren-generator.iml" filepath="$PROJECT_DIR$/renren-generator/renren-generator.iml" />
       <module fileurl="file://$PROJECT_DIR$/we-project.iml" filepath="$PROJECT_DIR$/we-project.iml" />
     </modules>
   </component>
