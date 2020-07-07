@@ -33,6 +33,7 @@ spring:
                     config:
                         multi-statement-allow: true
 
+            validation-query: select 1
 
 ##多数据源的配置
 #dynamic:

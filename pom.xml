@@ -15,6 +15,7 @@
         <module>draw-gateway</module>
         <module>draw-common</module>
         <module>renren-fast</module>
+        <module>renren-generator</module>
     </modules>
 
 </project>
