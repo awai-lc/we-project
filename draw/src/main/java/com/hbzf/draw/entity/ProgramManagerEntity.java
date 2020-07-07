@@ -1,5 +1,6 @@
 package com.hbzf.draw.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
@@ -113,5 +114,25 @@ public class ProgramManagerEntity implements Serializable {
 	 * 最近修改时间
 	 */
 	private Date lastmodifiedbytime;
+
+	@TableField(exist = false)
+	private String proStatusText;
+
+	@TableField(exist = false)
+	private String purWayText;
+	@TableField(exist = false)
+	private String supervisoryPlaceText;
+
+
+	/**
+	 * 评审开始时间
+	 */
+	@TableField(exist = false)
+	private String startReviewText;
+	/**
+	 * 评审结束时间
+	 */
+	@TableField(exist = false)
+	private String endReviewText;
 
 }

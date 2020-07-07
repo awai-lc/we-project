@@ -173,7 +173,7 @@
       <el-table-column prop="majorName" label="专业名称">
       </el-table-column>
       <el-table-column label="需抽取专家数">
-        <template scope="scope">
+        <template slot-scope="scope">
 
           <el-input-number  v-if="scope.row.isEdit == 1" v-model="scope.row.needCount" :min="1"
                             :max="scope.row.expertCount" label="描述文字" size="mini"></el-input-number>

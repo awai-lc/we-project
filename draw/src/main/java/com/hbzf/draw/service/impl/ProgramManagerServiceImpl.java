@@ -13,9 +13,13 @@ import com.hbzf.draw.entity.ChoseMajorEntity;
 import com.hbzf.draw.entity.ProgramManagerEntity;
 import com.hbzf.draw.entity.request.ProgramManagerRequest;
 import com.hbzf.draw.enums.ProStatusEnum;
+import com.hbzf.draw.enums.PurWayEnum;
+import com.hbzf.draw.enums.SupervisoryPlaceEnum;
 import com.hbzf.draw.service.ProgramManagerService;
+import com.hbzf.draw.util.DateUtil;
 import com.hbzf.draw.util.exception.BizException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +43,30 @@ public class ProgramManagerServiceImpl extends ServiceImpl<ProgramManagerDao, Pr
                 new QueryWrapper<ProgramManagerEntity>()
         );
 
+        transToProDto(page.getRecords());
         return new PageUtils(page);
+    }
+
+    private void transToProDto(List<ProgramManagerEntity> page) {
+        if(CollectionUtils.isNotEmpty(page)){
+            page.forEach(e ->{
+                ProStatusEnum statusEnum = ProStatusEnum.parseCode(e.getProStatus());
+                if(Objects.nonNull(statusEnum)){
+                    e.setProStatusText(statusEnum.getDesc());
+                }
+                PurWayEnum purWayEnum = PurWayEnum.parseCode(e.getPurWay().intValue());
+                if(Objects.nonNull(purWayEnum)){
+                    e.setPurWayText(purWayEnum.getDesc());
+                }
+                SupervisoryPlaceEnum placeEnum = SupervisoryPlaceEnum.parseCode(e.getSupervisoryPlaceId().intValue());
+                if(Objects.nonNull(placeEnum)){
+                    e.setSupervisoryPlaceText(placeEnum.getDesc());
+                }
+                e.setStartReviewText(DateUtil.formatDateStr(e.getStartReview()));
+                e.setEndReviewText(DateUtil.formatDateStr(e.getEndReview()));
+            });
+
+        }
     }
 
     @Override

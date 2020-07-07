@@ -1,25 +1,13 @@
 package com.hbzf.draw.enums;
 
-/**
- * 项目状态
- */
-public enum ProStatusEnum {
+public enum SupervisoryPlaceEnum {
     /**
      *
      */
-    D(1,"底稿");
-
+    SBJ(1, "省本级")
+    ;
     private int code;
     private String desc;
-
-    public static ProStatusEnum parseCode(int code) {
-        for (ProStatusEnum value : ProStatusEnum.values()) {
-            if (value.getCode() == code) {
-                return value;
-            }
-        }
-        return null;
-    }
 
     public int getCode() {
         return code;
@@ -37,9 +25,17 @@ public enum ProStatusEnum {
         this.desc = desc;
     }
 
-    ProStatusEnum(int code, String desc) {
+    SupervisoryPlaceEnum(int code, String desc) {
         this.code = code;
         this.desc = desc;
     }
 
+    public static SupervisoryPlaceEnum parseCode(int code) {
+        for (SupervisoryPlaceEnum value : SupervisoryPlaceEnum.values()) {
+            if (value.getCode() == code) {
+                return value;
+            }
+        }
+        return null;
+    }
 }
