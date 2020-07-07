@@ -21,6 +21,7 @@ import com.hbzf.draw.util.DateUtil;
 import com.hbzf.draw.util.exception.BizException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -42,9 +43,32 @@ public class ProgramManagerServiceImpl extends ServiceImpl<ProgramManagerDao, Pr
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        String name = params.get("name").toString();
+        if (StringUtils.isNotBlank(name)) {
+            queryWrapper.likeRight("name", name.trim());
+        }
+        String extractionUnit = (String) params.get("extractionUnit");
+        if (StringUtils.isNotBlank(extractionUnit)) {
+            queryWrapper.likeRight("extraction_unit", extractionUnit.trim());
+        }
+        String proStatus = (String) params.get("proStatus");
+        if (StringUtils.isNotBlank(proStatus)) {
+            queryWrapper.eq("pro_status", proStatus);
+        }
+        String supervisoryPlaceId = (String) params.get("supervisoryPlaceId");
+        if (StringUtils.isNotBlank(supervisoryPlaceId)) {
+            queryWrapper.eq("supervisory_place_id", supervisoryPlaceId);
+        }
+        String startTime = (String) params.get("startReviewTime");
+        String endTime = (String) params.get("endReviewTime");
+        if(StringUtils.isNotBlank(startTime) && StringUtils.isNotBlank(endTime)){
+            queryWrapper.ge("start_review", startTime);
+            queryWrapper.le("end_review", endTime);
+        }
         IPage<ProgramManagerEntity> page = this.page(
                 new Query<ProgramManagerEntity>().getPage(params),
-                new QueryWrapper<ProgramManagerEntity>()
+                queryWrapper
         );
 
         transToProDto(page.getRecords());
@@ -52,18 +76,18 @@ public class ProgramManagerServiceImpl extends ServiceImpl<ProgramManagerDao, Pr
     }
 
     private void transToProDto(List<ProgramManagerEntity> page) {
-        if(CollectionUtils.isNotEmpty(page)){
-            page.forEach(e ->{
+        if (CollectionUtils.isNotEmpty(page)) {
+            page.forEach(e -> {
                 ProStatusEnum statusEnum = ProStatusEnum.parseCode(e.getProStatus());
-                if(Objects.nonNull(statusEnum)){
+                if (Objects.nonNull(statusEnum)) {
                     e.setProStatusText(statusEnum.getDesc());
                 }
                 PurWayEnum purWayEnum = PurWayEnum.parseCode(e.getPurWay().intValue());
-                if(Objects.nonNull(purWayEnum)){
+                if (Objects.nonNull(purWayEnum)) {
                     e.setPurWayText(purWayEnum.getDesc());
                 }
                 SupervisoryPlaceEnum placeEnum = SupervisoryPlaceEnum.parseCode(e.getSupervisoryPlaceId().intValue());
-                if(Objects.nonNull(placeEnum)){
+                if (Objects.nonNull(placeEnum)) {
                     e.setSupervisoryPlaceText(placeEnum.getDesc());
                 }
                 e.setStartReviewText(DateUtil.formatDateStr(e.getStartReview()));
@@ -148,7 +172,7 @@ public class ProgramManagerServiceImpl extends ServiceImpl<ProgramManagerDao, Pr
     }
 
     private String createProCode() {
-        return "PR-" + new Date().toString();
+        return "PR-" + new Date().getTime();
     }
 
 

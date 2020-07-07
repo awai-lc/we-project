@@ -7,8 +7,16 @@
             <el-input v-model="dataForm.name" placeholder="项目名称"></el-input>
           </el-form-item>
         </el-col>
+        <el-col :span="9">
+          <el-form-item label="评审时间"  label-width="90px">
+            <el-date-picker v-model="dataForm.reviewTime" class="block"
+                            type="datetimerange" range-separator="至"
+                            start-placeholder="开始日期" end-placeholder="结束日期">
+            </el-date-picker>
+          </el-form-item>
+        </el-col>
         <el-col :span="6">
-          <el-form-item label="项目状态"  label-width="90px">
+          <el-form-item label="项目状态"  label-width="110px">
             <el-select v-model="dataForm.proStatus" clearable placeholder="请选择">
               <el-option
                 v-for="item in proStatuses"
@@ -19,13 +27,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="8">
-          <el-form-item label="评审时间"  label-width="70px">
-            <el-date-picker v-model="dataForm.reviewTime" type="datetimerange" range-separator="至"
-                            start-placeholder="开始日期" end-placeholder="结束日期">
-            </el-date-picker>
-          </el-form-item>
-        </el-col>
+
       </el-row>
       <el-row>
         <el-col :span="5">
@@ -140,10 +142,11 @@
             'limit': this.pageSize,
             'key': this.dataForm.key,
             name: this.dataForm.name,
-            reviewTime: this.dataForm.reviewTime,
+            startReviewTime: this.dataForm.reviewTime[0],
+            endReviewTime: this.dataForm.reviewTime[1],
             extractionUnit: this.dataForm.extractionUnit,
             proStatus:this.dataForm.proStatus,
-            supervisoryPlaceId:this.dataForm.proStatus
+            supervisoryPlaceId:this.dataForm.supervisoryPlaceId
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
