@@ -161,7 +161,7 @@
         </el-col>
       </el-row>
     </el-form>
-    <el-button @click="">新增</el-button>
+    <el-button @click="addMajor()">新增</el-button>
     <el-table size="mini"
               :data="tableData"
               ref="multipleTable"
@@ -175,15 +175,15 @@
       <el-table-column label="需抽取专家数">
         <template slot-scope="scope">
 
-          <el-input-number  v-if="scope.row.isEdit == 1" v-model="scope.row.needCount" :min="1"
-                            :max="scope.row.expertCount" label="描述文字" size="mini"></el-input-number>
+          <el-input-number v-if="scope.row.isEdit == 1" v-model="scope.row.needCount" :min="1"
+                           :max="scope.row.expertCount" label="描述文字" size="mini"></el-input-number>
 
           <span v-else>{{scope.row.needCount}}</span>
         </template>
       </el-table-column>
       <el-table-column prop="chosedCount" label="已抽取专家数">
       </el-table-column>
-      <el-table-column prop="expertCount" label="库存专家数" >
+      <el-table-column prop="expertCount" label="库存专家数">
 
       </el-table-column>
       <el-table-column prop="placeName" label="专业所属地区">
@@ -199,25 +199,52 @@
       <el-col :span="9" :offset="7">
         <el-button type="primary" @click="dataFormSubmit()" :disabled="saveDisabled">保存</el-button>
         <el-button @click="resetForm()" :disabled="resetBtnDisabled">重置</el-button>
-        <el-button @click="formUpdate()" :disabled="updateBtnDisabled" >修改</el-button>
-        <el-button @click="formUpdate()"  :disabled="chouQuDisabled">抽取</el-button>
+        <el-button @click="formUpdate()" :disabled="updateBtnDisabled">修改</el-button>
+        <div v-if="specialLogic" style="display: inline">
+          <el-popover
+            v-model="specialLogicVisible"
+            placement="top"
+            width="300">
+            <el-input v-model="specialLogicList" style="width: 100%"></el-input>
+            <div style="text-align: center; margin-top: 10px">
+              <el-button type="primary" size="mini" @click="specialLogicVisible = false">确定</el-button>
+            </div>
+            <el-button slot="reference" :disabled="chouQuDisabled">抽取</el-button>
+          </el-popover>
+        </div>
+        <el-button v-if="!specialLogic" :disabled="chouQuDisabled">抽取</el-button>
         <el-button @click="" :disabled="printDisabled">打印</el-button>
       </el-col>
     </el-row>
+    <!-- 弹窗, 新增 / 修改 -->
+    <el-dialog
+      :close-on-click-modal="false"
+      :visible.sync="majorAddVisible">
+      <add-or-update ref="addOrUpdate" @refreshDataList=""></add-or-update>
+    </el-dialog>
   </div>
 </template>
 
 
 <script>
+  import AddOrUpdate from './major'
+
   export default {
+    components: {
+      AddOrUpdate
+    },
     data() {
       return {
+        majorAddVisible: false,
+        specialLogicList: '',
+        specialLogicVisible: false,
+        specialLogic: true,
         disabled: false,
         resetBtnDisabled: false,
         updateBtnDisabled: true,
         isRouterAlive: true,
         saveDisabled: false,
-        chouQuDisabled: true,
+        chouQuDisabled: false,
         printDisabled: true,
         proNameDisabled: false,
         restaurants: [],
@@ -316,62 +343,62 @@
         supervisoryPlaces: [{
           supervisoryPlaceId: '1',
           label: '省本级'
-        },{
+        }, {
           supervisoryPlaceId: '2',
           label: '武汉市'
-        },{
+        }, {
           supervisoryPlaceId: '3',
           label: '黄石市'
-        },{
+        }, {
           supervisoryPlaceId: '4',
           label: '十堰市'
-        },{
+        }, {
           supervisoryPlaceId: '5',
           label: '宜昌市'
-        },{
+        }, {
           supervisoryPlaceId: '6',
           label: '襄樊市'
-        },{
+        }, {
           supervisoryPlaceId: '7',
           label: '鄂州市'
-        },{
+        }, {
           supervisoryPlaceId: '8',
           label: '荆门市'
-        },{
+        }, {
           supervisoryPlaceId: '9',
           label: '孝感市'
-        },{
+        }, {
           supervisoryPlaceId: '10',
           label: '荆州市'
-        },{
+        }, {
           supervisoryPlaceId: '11',
           label: '黄冈市'
-        },{
+        }, {
           supervisoryPlaceId: '12',
           label: '随州市'
-        },{
+        }, {
           supervisoryPlaceId: '13',
           label: '仙桃市'
-        },{
+        }, {
           supervisoryPlaceId: '14',
           label: '潜江市'
-        },{
+        }, {
           supervisoryPlaceId: '15',
           label: '天门市'
-        },{
+        }, {
           supervisoryPlaceId: '16',
           label: '神农架林区'
         }],
         proStatuses: [{
           proStatus: '1',
           label: '底稿'
-        },{
+        }, {
           proStatus: '2',
           label: '待抽取'
-        },{
+        }, {
           proStatus: '3',
           label: '抽取中'
-        },{
+        }, {
           proStatus: '4',
           label: '抽取完成'
         }]
@@ -391,7 +418,7 @@
             }).then(({data}) => {
               if (data && data.code === 0) {
                 this.updateBtnDisabled = false;
-                this.chouQuDisabled =false;
+                this.chouQuDisabled = false;
                 this.resetBtnDisabled = true;
                 this.saveDisabled = true;
                 this.proNameDisabled = true;
@@ -400,7 +427,7 @@
                 this.dataForm.proStatus = data.programManager.proStatus + '';
                 this.dataForm.purchasingId = data.programManager.purchasingId;
                 this.dataForm.extractionUnit = data.programManager.extractionUnit;
-                this.dataForm.purWay = data.programManager.purWay+ '';
+                this.dataForm.purWay = data.programManager.purWay + '';
                 this.dataForm.startReview = data.programManager.startReview;
                 this.dataForm.endReview = data.programManager.endReview;
                 this.dataForm.govProRecordNumber = data.programManager.govProRecordNumber;
@@ -410,7 +437,7 @@
                 this.dataForm.extractionUnitContact = data.programManager.extractionUnitContact;
                 this.dataForm.extractionUnitPhone = data.programManager.extractionUnitPhone;
                 this.dataForm.address = data.programManager.address;
-                this.dataForm.supervisoryPlaceId = data.programManager.supervisoryPlaceId+ '';
+                this.dataForm.supervisoryPlaceId = data.programManager.supervisoryPlaceId + '';
                 this.dataForm.avoidUnit = data.programManager.avoidUnit;
                 this.dataForm.remark = data.programManager.remark;
               }
@@ -427,8 +454,11 @@
       formUpdate() {
         this.disabled = false;
         this.saveDisabled = false;
-        this.chouQuDisabled =true;
-        this.printDisabled =true;
+        this.chouQuDisabled = true;
+        this.printDisabled = true;
+      },
+      addMajor() {
+        this.majorAddVisible = true;
       },
       querySearch(queryString, cb) {
         var that = this;
@@ -441,7 +471,7 @@
           if (data && data.code === 0) {
             that.items = [];
             var ds = data.list;
-            for(var i =0; i< ds.length ; i++){
+            for (var i = 0; i < ds.length; i++) {
               console.log(ds[i]);
               that.items.push({"value": ds[i]});
             }
