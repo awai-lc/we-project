@@ -11,7 +11,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="项目名称" prop="name">
-            <el-input v-model="dataForm.name" placeholder="项目名称" :disabled="disabled"></el-input>
+            <el-input v-model="dataForm.name" placeholder="项目名称" :disabled="proNameDisabled"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -219,6 +219,8 @@
         saveDisabled: false,
         chouQuDisabled: true,
         printDisabled: true,
+        proNameDisabled: false,
+        restaurants: [],
         dataForm: {
           id: 0,
           code: '',
@@ -339,6 +341,7 @@
                 this.chouQuDisabled =false;
                 this.resetBtnDisabled = true;
                 this.saveDisabled = true;
+                this.proNameDisabled = true;
                 this.dataForm.code = data.programManager.code;
                 this.dataForm.name = data.programManager.name;
                 this.dataForm.proStatus = data.programManager.proStatus + '';
@@ -368,32 +371,62 @@
       deleteRow(index, rows) {
         rows.splice(index, 1);
       },
-      dialogFormAdd() {
-        for (var i = 0; i < this.multipleTable.length; i++) {
-          return this.multipleTable[i];
-        }
-      },
       formUpdate() {
         this.disabled = false;
         this.saveDisabled = false;
-        this.resetBtnDisabled = false;
         this.chouQuDisabled =true;
         this.printDisabled =true;
       },
       querySearch(queryString, cb) {
-        var restaurants = this.restaurants;
-        var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
-        // 调用 callback 返回建议列表的数据
-        cb(results);
+        var that = this;
+        var url = '/draw/queryByName';
+        this.$http({
+          url: this.$http.adornUrl(`/draw/unit/queryByName/` + queryString),
+          method: 'get',
+          params: this.$http.adornParams()
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+            that.items = [];
+            var ds = data.list;
+            for(var i =0; i< ds.length ; i++){
+              console.log(ds[i]);
+              that.items.push({"value": ds[i]});
+            }
+            cb(that.items);
+          }
+        });
       },
       createFilter(queryString) {
         return (restaurant) => {
           return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
         };
       },
+      getPlanTypeData(val,fun) {
+        let dataArr = [];
+        let para = {
+          icaocode: val,
+        };
+        baseDataPlaneTypeList(para).then(res => {    //发送请求
+          if (!res) return false;
+          let dataList = res.data.pageInfo.list;
+          if(dataList.length>0){
+            dataList.forEach((item,index) => {
+              dataArr.push({
+                value:item.icaocode,
+                name:item.cnfullname
+              })
+            });
+          }else {
+            dataArr.push({
+              value:'无搜索结果',
+              noId:'无搜索结果',
+            })
+          }
+          fun(dataArr);
+        });
+      },
       handleSelect(item) {
         console.log(item);
-
       },
       mod(index, row) {
         row.isEdit = 1
