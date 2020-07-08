@@ -27,7 +27,10 @@ public class ExpertServiceImpl extends ServiceImpl<ExpertDao, ExpertEntity> impl
                 new QueryWrapper<ExpertEntity>()
         );
         page.getRecords().forEach((record)->{
-            record.setMajorName(majorDao.selectById(record.getMajorId()).getMajorName());
+            MajorEntity majorEntity = majorDao.selectById(record.getMajorId());
+            if (majorEntity != null){
+                record.setMajorName(majorEntity.getMajorName());
+            }
         });
         return new PageUtils(page);
     }
