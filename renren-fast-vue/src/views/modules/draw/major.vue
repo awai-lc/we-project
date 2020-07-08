@@ -183,6 +183,10 @@ export default {
         this.majors = data.data
         console.log(data.data)
         this.expandedkey = [data.data[0].id]
+      }).catch(({response}) => {
+        this.$message.error(response.statusText)
+        this.majors = []
+        this.totalPage = 0
       })
     },
     append (data) {
@@ -230,7 +234,11 @@ export default {
             this.$message.error(data.msg)
           }
         })
-        .catch(() => {})
+        .catch((response) => {
+          this.$message.error(response.statusText)
+          this.majors = []
+          this.totalPage = 0
+        })
         })
         .catch(() => {
           this.$message({
@@ -267,7 +275,11 @@ export default {
             this.$message.error(data.msg)
           }
         })
-        .catch(() => {})
+        .catch((response) => {
+          this.$message.error(response.statusText)
+          this.majors = []
+          this.totalPage = 0
+        })
     },
     open (node, data) {
       this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
@@ -310,7 +322,11 @@ export default {
             this.$message.error(data.msg)
           }
         })
-        .catch(() => {})
+        .catch((response) => {
+          this.$message.error(response.statusText)
+          this.majors = []
+          this.totalPage = 0
+        })
       } else {
         this.$http({
           url: this.$http.adornUrl('/draw/major/update'),
@@ -335,7 +351,11 @@ export default {
             this.$message.error(data.msg)
           }
         })
-        .catch(() => {})
+        .catch((response) => {
+          this.$message.error(response.statusText)
+          this.majors = []
+          this.totalPage = 0
+        })
       }
     },
     // 每页数

@@ -82,5 +82,9 @@ public class ExpertEntity implements Serializable {
 	 * 最近修改时间
 	 */
 	private Date lastmodifiedbytime;
-
+	/**
+	 * 专业完整路径，即包括上级
+	 */
+	@TableField(exist = false)
+	private Long[] majorIds;
 }

@@ -42,7 +42,7 @@
     <el-form-item label="职称" prop="title">
       <el-input v-model="dataForm.title" placeholder="职称"></el-input>
     </el-form-item>
-     <el-form-item label="专业" prop="majorId">
+     <el-form-item label="专业" prop="majorIds">
       <!-- <el-input v-model="dataForm.majorId" placeholder="专业id"></el-input> -->
       <el-cascader
         v-model="dataForm.majorIds"
@@ -90,6 +90,9 @@
           expertName: [
             { required: true, message: '专家名称不能为空', trigger: 'blur' }
           ],
+          majorIds: [
+            { required: true, message: '专业不能为空', trigger: 'blur' }
+          ],
           phone: [
             { required: true, message: '手机号不能为空', trigger: 'blur' }
           ],
@@ -126,6 +129,8 @@
           })
         }).then(({ data }) => {
           this.majors = data.data
+        }).catch(({response}) => {
+          this.$message.error(response.statusText)
         })
       },
       init (id) {
@@ -152,6 +157,24 @@
                 this.dataForm.addby = data.expert.addby
                 this.dataForm.lastmodifiedby = data.expert.lastmodifiedby
                 this.dataForm.majorIds = data.expert.majorIds
+              }
+            }).catch((response) => {
+              this.$message.error(response.statusText)
+              this.dataForm = {
+                id: 0,
+                expertName: '',
+                majorId: '',
+                phone: '',
+                email: '',
+                address: '',
+                unit: '',
+                jobStatus: 1,
+                birth: '',
+                title: '',
+                addby: '',
+                lastmodifiedby: '',
+                lastmodifiedbytime: '',
+                majorIds: []
               }
             })
           }
@@ -193,6 +216,8 @@
                 } else {
                   this.$message.error(data.msg)
                 }
+              }).catch(({response}) => {
+                this.$message.error(response.statusText)
               })
             }
           })
@@ -229,6 +254,8 @@
                 } else {
                   this.$message.error(data.msg)
                 }
+              }).catch(({response}) => {
+                this.$message.error(response.statusText)
               })
             }
           })

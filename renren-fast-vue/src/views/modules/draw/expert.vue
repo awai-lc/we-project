@@ -13,7 +13,6 @@
     <el-table
       :data="dataList"
       border
-      v-loading="dataListLoading"
       @selection-change="selectionChangeHandle"
       style="width: 100%;">
       <el-table-column
@@ -58,8 +57,10 @@
               v-model="scope.row.jobStatus"
               active-color="#13ce66"
               inactive-color="#ff4949"
-              active-value=1
-              inactive-value=2>
+              :active-value=1
+              :inactive-value=2
+              :disabled= true
+              >
             </el-switch>
         </template>
       </el-table-column>
@@ -141,6 +142,9 @@
       this.getDataList()
     },
     methods: {
+      switchChange (data) {
+        console.log(data)
+      },
       // 获取数据列表
       getDataList () {
         this.dataListLoading = true
@@ -161,6 +165,10 @@
             this.totalPage = 0
           }
           this.dataListLoading = false
+        }).catch(({response}) => {
+          this.$message.error(response.statusText)
+          this.dataList = []
+          this.totalPage = 0
         })
       },
       // 每页数
@@ -212,6 +220,8 @@
             } else {
               this.$message.error(data.msg)
             }
+          }).catch(({response}) => {
+            this.$message.error(response.statusText)
           })
         })
       }

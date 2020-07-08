@@ -63,7 +63,6 @@ public class MajorController {
     //@RequiresPermissions("draw:major:info")
     public R info(@PathVariable("id") Long id){
 		MajorEntity major = majorService.getById(id);
-
         return R.ok().put("major", major);
     }
 

@@ -4,9 +4,7 @@ import com.hbzf.draw.dao.ExpertDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -83,6 +81,12 @@ public class MajorServiceImpl extends ServiceImpl<MajorDao, MajorEntity> impleme
     }
     //递归获取专家数
     private int getExpertCount(MajorEntity record, List<MajorEntity> entityList, int count) {
+        //先查询本身节点挂载的专家数
+        QueryWrapper wrapper = new QueryWrapper();
+        wrapper.eq("major_id", record.getId());
+        Integer reccnt = expertDao.selectCount(wrapper);
+        count = count + reccnt;
+
         List<MajorEntity> collect = entityList.stream().filter((entity) -> {
             return entity.getParentId() == record.getId();
         }).collect(Collectors.toList());
@@ -110,6 +114,23 @@ public class MajorServiceImpl extends ServiceImpl<MajorDao, MajorEntity> impleme
         }).collect(Collectors.toList());
 
         return collect;
+    }
+
+    @Override
+    public Long[] getPath(Long majorId) {
+        List<Long> pathList = new ArrayList<>();
+        List<Long> path = findParentPath(majorId,pathList);
+        Collections.reverse(path);
+        return path.toArray(new Long[path.size()]);
+    }
+
+    private List<Long> findParentPath(Long majorId, List<Long> pathList) {
+        MajorEntity majorEntity = baseMapper.selectById(majorId);
+        pathList.add(majorEntity.getId());
+        if (majorEntity.getParentId()!=0) {
+            findParentPath(majorEntity.getParentId(), pathList);
+        }
+        return pathList;
     }
 
     public List<MajorEntity> getChild(MajorEntity root, List<MajorEntity> list) {

@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 /**
@@ -42,6 +43,7 @@ public class MajorEntity implements Serializable {
 	/**
 	 * 子专业信息
 	 */
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
 	@TableField(exist = false)
 	private List<MajorEntity> childMajor;
 	/**
@@ -49,4 +51,5 @@ public class MajorEntity implements Serializable {
 	 */
 	@TableField(exist = false)
 	private int expertCount;
+
 }

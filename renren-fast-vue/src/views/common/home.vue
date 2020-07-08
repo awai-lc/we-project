@@ -1,14 +1,37 @@
 <template>
-  <div class="mod-home">
-    <h1>项目介绍</h1>
-    <h2>
-        基于快速开发平台搭建的商城系统
-    </h2>
-  </div>
+
+  <el-row :gutter="20">
+  <el-col :span="6">
+    <div class="mod-home">
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+        <span>项目数量</span>
+        </div>
+        <div class="text item">
+        <span>100</span>
+        </div>
+      </el-card>
+    </div>
+  </el-col>
+  <el-col :span="6">
+    <div class="mod-home">
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+          <span>专家数量</span>
+        </div>
+        <div class="text item">
+        <span>100</span>
+        </div>
+      </el-card>
+    </div>
+  </el-col>
+</el-row>
+  
 </template>
 
 <script>
   export default {
+  
   }
 </script>
 
@@ -16,5 +39,6 @@
   .mod-home {
     line-height: 1.5;
   }
+
 </style>
 

@@ -1,9 +1,12 @@
 package com.hbzf.draw.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Map;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.hbzf.draw.service.MajorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,7 +33,8 @@ import com.hbzf.common.utils.R;
 public class ExpertController {
     @Autowired
     private ExpertService expertService;
-
+    @Autowired
+    private MajorService majorService;
     /**
      * 列表
      */
@@ -50,7 +54,7 @@ public class ExpertController {
     //@RequiresPermissions("draw:expert:info")
     public R info(@PathVariable("id") Long id){
 		ExpertEntity expert = expertService.getById(id);
-
+		expert.setMajorIds(majorService.getPath(expert.getMajorId()));
         return R.ok().put("expert", expert);
     }
 
@@ -60,6 +64,8 @@ public class ExpertController {
     @RequestMapping("/save")
     //@RequiresPermissions("draw:expert:save")
     public R save(@RequestBody ExpertEntity expert){
+        expert.setAddbytime(new Date());
+        expert.setLastmodifiedbytime(new Date());
 		expertService.save(expert);
 
         return R.ok();
@@ -71,6 +77,7 @@ public class ExpertController {
     @RequestMapping("/update")
     //@RequiresPermissions("draw:expert:update")
     public R update(@RequestBody ExpertEntity expert){
+        expert.setLastmodifiedbytime(new Date());
 		expertService.updateById(expert);
 
         return R.ok();

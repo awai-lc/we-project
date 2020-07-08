@@ -77,7 +77,8 @@
       </el-table-column>
       <el-table-column header-align="center" align="center" width="150" label="操作">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">查看</el-button>
+          <!-- <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">查看</el-button> -->
+          <router-link :to="{path:'/draw-programmanager-add-or-update',query:{ id:scope.row.id }}">查看</router-link>
         </template>
       </el-table-column>
     </el-table>
@@ -110,13 +111,13 @@
         proStatuses: [{
           proStatus: '1',
           label: '底稿'
-        },{
+        }, {
           proStatus: '2',
           label: '待抽取'
-        },{
+        }, {
           proStatus: '3',
           label: '抽取中'
-        },{
+        }, {
           proStatus: '4',
           label: '抽取完成'
         }
@@ -124,49 +125,49 @@
         supervisoryPlaces: [{
           supervisoryPlaceId: '1',
           label: '省本级'
-        },{
+        }, {
           supervisoryPlaceId: '2',
           label: '武汉市'
-        },{
+        }, {
           supervisoryPlaceId: '3',
           label: '黄石市'
-        },{
+        }, {
           supervisoryPlaceId: '4',
           label: '十堰市'
-        },{
+        }, {
           supervisoryPlaceId: '5',
           label: '宜昌市'
-        },{
+        }, {
           supervisoryPlaceId: '6',
           label: '襄樊市'
-        },{
+        }, {
           supervisoryPlaceId: '7',
           label: '鄂州市'
-        },{
+        }, {
           supervisoryPlaceId: '8',
           label: '荆门市'
-        },{
+        }, {
           supervisoryPlaceId: '9',
           label: '孝感市'
-        },{
+        }, {
           supervisoryPlaceId: '10',
           label: '荆州市'
-        },{
+        }, {
           supervisoryPlaceId: '11',
           label: '黄冈市'
-        },{
+        }, {
           supervisoryPlaceId: '12',
           label: '随州市'
-        },{
+        }, {
           supervisoryPlaceId: '13',
           label: '仙桃市'
-        },{
+        }, {
           supervisoryPlaceId: '14',
           label: '潜江市'
-        },{
+        }, {
           supervisoryPlaceId: '15',
           label: '天门市'
-        },{
+        }, {
           supervisoryPlaceId: '16',
           label: '神农架林区'
         }],
@@ -188,6 +189,7 @@
     methods: {
       // 获取数据列表
       getDataList () {
+        console.log('----------' + this.$route.path)
         this.dataListLoading = true
         this.$http({
           url: this.$http.adornUrl('/draw/programmanager/list'),
@@ -200,8 +202,8 @@
             startReviewTime: this.dataForm.reviewTime[0],
             endReviewTime: this.dataForm.reviewTime[1],
             extractionUnit: this.dataForm.extractionUnit,
-            proStatus:this.dataForm.proStatus,
-            supervisoryPlaceId:this.dataForm.supervisoryPlaceId
+            proStatus: this.dataForm.proStatus,
+            supervisoryPlaceId: this.dataForm.supervisoryPlaceId
           })
         }).then(({data}) => {
           if (data && data.code === 0) {

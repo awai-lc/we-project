@@ -19,5 +19,7 @@ public interface MajorService extends IService<MajorEntity> {
     PageUtils queryPage(Map<String, Object> params);
     PageUtils queryPage(Map<String, Object> params,long parentId);
     List<MajorEntity> listWithTree();
+
+    Long[] getPath(Long majorId);
 }
 
