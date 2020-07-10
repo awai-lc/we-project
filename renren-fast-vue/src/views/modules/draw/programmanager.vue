@@ -80,8 +80,15 @@
           <!--<router-link :to="{path:'/draw-programmanager-add-or-update'
           ,query:{ id:scope.row.id },meta: { title: '123123123', isTab: true ,menuId: 4}} ">查看
           </router-link>-->
-          <el-button @click="$router.push({path:'/draw-programmanager-add-or-update',query:{ id:scope.row.id },meta: { title: '123123123', isTab: true ,menuId: '123123213123'} })" size="mini">查询</el-button>
+         <!-- <el-button @click="$router.push({path:'/draw-programmanager-add-or-update?'+ new Date()
+          ,query:{ id:scope.row.id },meta: { title: '123123123', isTab: true ,menuId: '123123213123'} })" size="mini">查询</el-button>-->
+          <router-link :to="'/draw/edit/'+scope.row.id">
+            <el-button type="primary" size="small" icon="el-icon-edit">
+              Edit
+            </el-button>
+          </router-link>
         </template>
+
       </el-table-column>
     </el-table>
     <el-pagination

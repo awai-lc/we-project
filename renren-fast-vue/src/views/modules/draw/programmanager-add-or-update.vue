@@ -239,6 +239,7 @@
 
       tab[0].title ="123";*/
       //获取传入的参数
+      console.log(this.$route)
       var param = this.$route.query;
       if (param && param.id != '0') {
         this.init(param.id)

@@ -78,12 +78,9 @@
     methods: {
       // tabs, 选中tab
       selectedTabHandle (tab) {
-        console.log(tab)
         tab = this.mainTabs.filter(item => item.name === tab.name)
         if (tab.length >= 1) {
-          if(tab[0].name = ""){
-
-          }
+          console.log(tab)
           this.$router.push({ name: tab[0].name, query: tab[0].query, params: tab[0].params })
         }
       },
