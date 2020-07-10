@@ -233,6 +233,19 @@
     components: {
       AddOrUpdate
     },
+    created() {
+    /*  console.log(this.$store.state.common.mainTabsActiveName);
+      var tab = this.$store.state.common.mainTabs.filter(item => item.name === this.$store.state.common.mainTabsActiveName);
+
+      tab[0].title ="123";*/
+      //获取传入的参数
+      var param = this.$route.query;
+      if (param && param.id != '0') {
+        this.init(param.id)
+      }
+    },
+    mounted(){
+    },
     data() {
       return {
         majorAddVisible: false,
@@ -409,6 +422,7 @@
         this.dataForm.id = id || 0;
         this.disabled = true;
         this.$nextTick(() => {
+       /*   tab[0].name = Vue.set()*/
           this.$refs['dataForm'].resetFields()
           if (this.dataForm.id) {
             this.$http({
@@ -472,7 +486,6 @@
             that.items = [];
             var ds = data.list;
             for (var i = 0; i < ds.length; i++) {
-              console.log(ds[i]);
               that.items.push({"value": ds[i]});
             }
             cb(that.items);
@@ -480,7 +493,6 @@
         });
       },
       handleSelect(item) {
-        console.log(item);
       },
       mod(index, row) {
         row.isEdit = 1

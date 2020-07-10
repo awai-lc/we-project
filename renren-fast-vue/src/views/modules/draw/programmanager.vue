@@ -8,7 +8,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="9">
-          <el-form-item label="评审时间"  label-width="90px">
+          <el-form-item label="评审时间" label-width="90px">
             <el-date-picker v-model="dataForm.reviewTime" class="block"
                             type="datetimerange" range-separator="至"
                             start-placeholder="开始日期" end-placeholder="结束日期">
@@ -16,7 +16,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="项目状态"  label-width="110px">
+          <el-form-item label="项目状态" label-width="110px">
             <el-select v-model="dataForm.proStatus" clearable placeholder="请选择">
               <el-option
                 v-for="item in proStatuses"
@@ -31,13 +31,13 @@
       </el-row>
       <el-row>
         <el-col :span="5">
-          <el-form-item label="抽取单位"  label-width="70px">
+          <el-form-item label="抽取单位" label-width="70px">
             <el-input v-model="dataForm.extractionUnit" placeholder="抽取单位"></el-input>
           </el-form-item>
         </el-col>
 
         <el-col :span="7">
-          <el-form-item label="所属监管地"  label-width="90px">
+          <el-form-item label="所属监管地" label-width="90px">
             <el-select v-model="dataForm.supervisoryPlaceId" clearable placeholder="请选择">
               <el-option
                 v-for="item in supervisoryPlaces"
@@ -55,7 +55,7 @@
         </el-col>
       </el-row>
     </el-form>
-    <el-table :data="dataList" border v-loading="dataListLoading"  size="mini"
+    <el-table :data="dataList" border v-loading="dataListLoading" size="mini"
               max-height="400" style="width: 100%;height: 400px">
       <el-table-column prop="code" header-align="center" align="center" label="项目编码">
       </el-table-column>
@@ -77,8 +77,10 @@
       </el-table-column>
       <el-table-column header-align="center" align="center" width="150" label="操作">
         <template slot-scope="scope">
-          <!-- <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">查看</el-button> -->
-          <router-link :to="{path:'/draw-programmanager-add-or-update',query:{ id:scope.row.id }}">查看</router-link>
+          <!--<router-link :to="{path:'/draw-programmanager-add-or-update'
+          ,query:{ id:scope.row.id },meta: { title: '123123123', isTab: true ,menuId: 4}} ">查看
+          </router-link>-->
+          <el-button @click="$router.push({path:'/draw-programmanager-add-or-update',query:{ id:scope.row.id },meta: { title: '123123123', isTab: true ,menuId: '123123213123'} })" size="mini">查询</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -98,8 +100,9 @@
 
 <script>
   import AddOrUpdate from './programmanager-add-or-update'
+
   export default {
-    data () {
+    data() {
       return {
         dataForm: {
           name: '',
@@ -183,13 +186,12 @@
     components: {
       AddOrUpdate
     },
-    activated () {
+    activated() {
       this.getDataList()
     },
     methods: {
       // 获取数据列表
-      getDataList () {
-        console.log('----------' + this.$route.path)
+      getDataList() {
         this.dataListLoading = true
         this.$http({
           url: this.$http.adornUrl('/draw/programmanager/list'),
@@ -217,13 +219,13 @@
         })
       },
       // 每页数
-      sizeChangeHandle (val) {
+      sizeChangeHandle(val) {
         this.pageSize = val
         this.pageIndex = 1
         this.getDataList()
       },
       // 当前页
-      currentChangeHandle (val) {
+      currentChangeHandle(val) {
         this.pageIndex = val
         this.getDataList()
       }
