@@ -1,11 +1,19 @@
 <template>
-  <article-detail :is-edit="true" />
+  <el-button  size="mini" @click="addOrUpdateHandle()">修改</el-button>
 </template>
 
 <script>
-  import ArticleDetail from './components/ArticleDetail'
+  import AddOrUpdate from './programmanager-add-or-update'
   export default {
     name: 'EditForm',
-    components: { ArticleDetail }
+    components: { AddOrUpdate },
+    methods:{
+      // 新增 / 修改
+      addOrUpdateHandle () {
+        this.$nextTick(() => {
+          this.$refs.addOrUpdate.init(1)
+        })
+      },
+    }
   }
 </script>

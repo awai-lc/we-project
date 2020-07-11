@@ -213,7 +213,8 @@
           </el-popover>
         </div>
         <el-button v-if="!specialLogic" :disabled="chouQuDisabled">抽取</el-button>
-        <el-button @click="" :disabled="printDisabled">打印</el-button>
+        <!--<el-button @click="singlePrint" icon="el-icon-printer" :disabled="printDisabled">打印</el-button>-->
+        <el-button @click="singlePrint" icon="el-icon-printer" >打印</el-button>
       </el-col>
     </el-row>
     <!-- 弹窗, 新增 / 修改 -->
@@ -228,16 +229,18 @@
 
 <script>
   import AddOrUpdate from './major'
+  import {PrintAccount} from '@/tools/doPrint.js'
+  import {getLodop} from '@/tools/lodop.js'
 
   export default {
     components: {
       AddOrUpdate
     },
     created() {
-    /*  console.log(this.$store.state.common.mainTabsActiveName);
-      var tab = this.$store.state.common.mainTabs.filter(item => item.name === this.$store.state.common.mainTabsActiveName);
+      /*  console.log(this.$store.state.common.mainTabsActiveName);
+        var tab = this.$store.state.common.mainTabs.filter(item => item.name === this.$store.state.common.mainTabsActiveName);
 
-      tab[0].title ="123";*/
+        tab[0].title ="123";*/
       //获取传入的参数
       console.log(this.$route)
       var param = this.$route.query;
@@ -245,7 +248,7 @@
         this.init(param.id)
       }
     },
-    mounted(){
+    mounted() {
     },
     data() {
       return {
@@ -423,7 +426,7 @@
         this.dataForm.id = id || 0;
         this.disabled = true;
         this.$nextTick(() => {
-       /*   tab[0].name = Vue.set()*/
+          /*   tab[0].name = Vue.set()*/
           this.$refs['dataForm'].resetFields()
           if (this.dataForm.id) {
             this.$http({
@@ -474,6 +477,14 @@
       },
       addMajor() {
         this.majorAddVisible = true;
+      },
+      singlePrint() {
+        PrintAccount(
+          '商品包装码',
+          '3'
+        )
+        LODOP.PRINT()
+        // LODOP.PREVIEW()
       },
       querySearch(queryString, cb) {
         var that = this;
