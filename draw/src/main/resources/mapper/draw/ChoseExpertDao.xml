@@ -6,6 +6,7 @@
 	<!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="com.hbzf.draw.entity.ChoseExpertEntity" id="choseExpertMap">
         <result property="id" column="id"/>
+        <result property="expertId" column="expert_id"/>
         <result property="majorId" column="major_id"/>
         <result property="proId" column="pro_id"/>
         <result property="isDelete" column="is_delete"/>
@@ -15,9 +16,15 @@
         <result property="lastmodifiedbytime" column="lastModifiedByTime"/>
     </resultMap>
     <delete id="deleteByProId">
-        update chose_major set is_delete = 1
+        update chose_expert set is_delete = 1
         where pro_id = #{proId,jdbcType=BIGINT}
     </delete>
+    <select id="listByProId" resultType="com.hbzf.draw.entity.dto.ChoseExpertDto">
+        select e.expert_name expertName,e.phone phone,e.address address,e.unit unit,e.title title, m.major_name majorName,ce.addByTime addByTime
+        from chose_expert ce left join expert e on ce.expert_id = e.id
+        left join major m on e.major_id = m.id
+        where ce.pro_id = #{id}
+    </select>
 
 
 </mapper>

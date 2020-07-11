@@ -1,9 +1,12 @@
 package com.hbzf.draw.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.hbzf.draw.entity.ExpertEntity;
+import com.hbzf.draw.entity.dto.ChoseExpertDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -50,6 +53,17 @@ public class ChoseExpertController {
     //@RequiresPermissions("draw:choseexpert:info")
     public R info(@PathVariable("id") Long id){
 		ChoseExpertEntity choseExpert = choseExpertService.getById(id);
+
+        return R.ok().put("choseExpert", choseExpert);
+    }
+
+    /**
+     * 信息
+     */
+    @RequestMapping("/listByProId/{id}")
+    //@RequiresPermissions("draw:choseexpert:info")
+    public R listByProId(@PathVariable("id") Long id){
+        List<ChoseExpertDto> choseExpert = choseExpertService.listByProId(id);
 
         return R.ok().put("choseExpert", choseExpert);
     }

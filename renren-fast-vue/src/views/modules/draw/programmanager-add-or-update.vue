@@ -214,7 +214,7 @@
         </div>
         <el-button v-if="!specialLogic" :disabled="chouQuDisabled">抽取</el-button>
         <!--<el-button @click="singlePrint" icon="el-icon-printer" :disabled="printDisabled">打印</el-button>-->
-        <el-button @click="singlePrint" icon="el-icon-printer" >打印</el-button>
+        <el-button @click="singlePrint" icon="el-icon-printer" :disabled="printDisabled">打印</el-button>
       </el-col>
     </el-row>
     <!-- 弹窗, 新增 / 修改 -->
@@ -223,6 +223,43 @@
       :visible.sync="majorAddVisible">
       <add-or-update ref="addOrUpdate" @refreshDataList=""></add-or-update>
     </el-dialog>
+    <div class="demo">
+      <form id="form1" hidden>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td align="center" valign="middle">
+              <table id="table1" width="80%" style="border:solid 1px black;border-collapse:collapse">
+                <caption id="caption1" align="center">专家抽取</caption>
+                <tr>
+                  <td style="border:solid 1px black">序号</td>
+                  <td style="border:solid 1px black">专家名称</td>
+                  <td style="border:solid 1px black">专家单位</td>
+                  <td style="border:solid 1px black">专家专业</td>
+                  <td style="border:solid 1px black">电话</td>
+                  <td style="border:solid 1px black">抽取时间</td>
+                </tr>
+                <tr>
+                  <td style="border:solid 1px black">序号</td>
+                  <td style="border:solid 1px black">专家名称</td>
+                  <td style="border:solid 1px black">专家单位</td>
+                  <td style="border:solid 1px black">专家专业</td>
+                  <td style="border:solid 1px black">电话</td>
+                  <td style="border:solid 1px black">抽取时间</td>
+                </tr>
+                <tr>
+                  <td style="border:solid 1px black">序号</td>
+                  <td style="border:solid 1px black">专家名称</td>
+                  <td style="border:solid 1px black">专家单位</td>
+                  <td style="border:solid 1px black">专家专业</td>
+                  <td style="border:solid 1px black">电话</td>
+                  <td style="border:solid 1px black">抽取时间</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -440,6 +477,9 @@
                 this.resetBtnDisabled = true;
                 this.saveDisabled = true;
                 this.proNameDisabled = true;
+                if(this.dataForm.status == 4){
+                  this.printDisabled = false;
+                }
                 this.dataForm.code = data.programManager.code;
                 this.dataForm.name = data.programManager.name;
                 this.dataForm.proStatus = data.programManager.proStatus + '';
@@ -479,12 +519,47 @@
         this.majorAddVisible = true;
       },
       singlePrint() {
-        PrintAccount(
-          '商品包装码',
-          '3'
-        )
-        LODOP.PRINT()
-        // LODOP.PREVIEW()
+        this.$http({
+          url: this.$http.adornUrl(`/draw/choseexpert/listByProId/${this.dataForm.id}`),
+          method: 'get',
+          params: this.$http.adornParams()
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+            if (data.choseExpert.length == 0) {
+              this.$message.error("请先抽取专家！")
+              return;
+            }
+            var proName = this.dataForm.name;
+            document.getElementById("table1").innerHTML = '';
+            var html = '<caption  align="center">' + proName + '项目抽取结果</caption>';
+            html += '<tr>\n' +
+              '                  <td style="border:solid 1px black">序号</td>\n' +
+              '                  <td style="border:solid 1px black">专家名称</td>\n' +
+              '                  <td style="border:solid 1px black">专家单位</td>\n' +
+              '                  <td style="border:solid 1px black">专家专业</td>\n' +
+              '                  <td style="border:solid 1px black">电话</td>\n' +
+              '                  <td style="border:solid 1px black">地址</td>\n' +
+              '                  <td style="border:solid 1px black">抽取时间</td>\n' +
+              '                </tr>';
+            var LODOP = getLodop();
+            for (var k = 0; k < data.choseExpert.length; k++) {
+              var a = data.choseExpert[k];
+              var num = k+1;
+              html += '<tr>\n' +
+                '                  <td style="border:solid 1px black">' + num + '</td>\n' +
+                '                    <td style="border:solid 1px black">' + a.expertName + '</td>\n' +
+                '                  <td style="border:solid 1px black">' + a.unit + '</td>\n' +
+                '                   <td style="border:solid 1px black">' + a.majorName + '</td>\n' +
+                '                  <td style="border:solid 1px black">' + a.phone + '</td>\n' +
+                '                  <td style="border:solid 1px black">' + a.address + '</td>\n' +
+                '                  <td style="border:solid 1px black">' + a.addbytime + '</td>\n' +
+                '                </tr>';
+            }
+            document.getElementById("table1").innerHTML = html;
+            LODOP.ADD_PRINT_HTM(30, 0, '210mm', '297mm', document.getElementById("form1").innerHTML);
+            LODOP.PREVIEW()
+          }
+        });
       },
       querySearch(queryString, cb) {
         var that = this;
@@ -503,12 +578,15 @@
             cb(that.items);
           }
         });
-      },
+      }
+      ,
       handleSelect(item) {
-      },
+      }
+      ,
       mod(index, row) {
         row.isEdit = 1
-      },
+      }
+      ,
       // 表单提交
       dataFormSubmit() {
         this.$refs['dataForm'].validate((valid) => {

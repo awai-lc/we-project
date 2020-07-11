@@ -24,6 +24,11 @@ public class ChoseExpertEntity implements Serializable {
 	 */
 	@TableId
 	private Long id;
+
+	/**
+	 * 专家id
+	 */
+	private Long expertId;
 	/**
 	 * 专业id
 	 */
