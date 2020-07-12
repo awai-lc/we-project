@@ -36,9 +36,7 @@ const mainRoutes = {
     { path: '/home', component: _import('common/home'), name: 'home', meta: { title: '首页' } },
     { path: '/theme', component: _import('common/theme'), name: 'theme', meta: { title: '主题' } },
     { path: '/demo-echarts', component: _import('demo/echarts'), name: 'demo-echarts', meta: { title: 'demo-echarts', isTab: true } },
-    { path: '/demo-ueditor', component: _import('demo/ueditor'), name: 'demo-ueditor', meta: { title: 'demo-ueditor', isTab: true } },
-    /*{ path: '/draw/programmanager-add-or-update',
-      component: _import('draw/programmanager-add-or-update'), name: 'programmanager-add-or-update', meta: { title: 'demo-ueditor', isTab: true } }*/
+    { path: '/demo-ueditor', component: _import('demo/ueditor'), name: 'demo-ueditor', meta: { title: 'demo-ueditor', isTab: true } }
   ],
   beforeEnter (to, from, next) {
     let token = Vue.cookie.get('token')
@@ -111,28 +109,102 @@ function fnCurrentRouteType (route, globalRoutes = []) {
 function fnAddDynamicMenuRoutes (menuList = [], routes = []) {
   var temp = []
   for (var i = 0; i < menuList.length; i++) {
+    console.log('!!!!!!' + menuList[i].list)
     if (menuList[i].list && menuList[i].list.length >= 1) {
+      console.log(i + '----ilist')
       temp = temp.concat(menuList[i].list)
     } else if (menuList[i].url && /\S/.test(menuList[i].url)) {
       menuList[i].url = menuList[i].url.replace(/^\//, '')
-      var route = {
-        path: menuList[i].url.replace('/', '-'),
-        component: null,
-        name: menuList[i].url.replace('/', '-'),
-        meta: {
-          menuId: menuList[i].menuId,
-          title: menuList[i].name,
-          isDynamic: true,
-          isTab: true,
-          iframeUrl: ''
+      console.log(i + '-----------' + menuList[i].url)
+      var route = {}
+      // route = {
+      //   path: menuList[i].url.replace('/', '-'),
+      //   component: null,
+      //   name: menuList[i].url.replace('/', '-'),
+      //   meta: {
+      //     menuId: menuList[i].menuId,
+      //     title: menuList[i].name,
+      //     isDynamic: true,
+      //     isTab: true,
+      //     iframeUrl: ''
+      //   }
+      // }
+      // if (menuList[i].url != 'draw/programmanager') {
+      //   console.log('!!draw/programmanager' + 'aaa' + menuList[i].url.replace('/', '-'))
+      //   route = {
+      //     path: menuList[i].url.replace('/', '-'),
+      //     component: null,
+      //     name: menuList[i].url.replace('/', '-'),
+      //     meta: {
+      //       menuId: menuList[i].menuId,
+      //       title: menuList[i].name,
+      //       isDynamic: true,
+      //       isTab: true,
+      //       iframeUrl: ''
+      //     }
+      //   }
+      // } else {
+      //   console.log('draw/programmanager' + '--caca--' + menuList[i].url.replace('/', '-'))
+      //   route = {
+      //     path: menuList[i].url.replace('/', '-'),
+      //     component: null,
+      //     name: menuList[i].url.replace('/', '-'),
+      //     meta: {
+      //       menuId: menuList[i].menuId,
+      //       title: menuList[i].name,
+      //       isDynamic: true,
+      //       isTab: true,
+      //       iframeUrl: ''
+      //     },
+      //     children: [{
+      //       path: 'edit/:id(\\d+)',
+      //       component: () => import('@/views/modules/draw/programmanager-list-add-or-update'),
+      //       name: 'programmanager-list-add-or-update',
+      //       meta: { title: '项目详情', noCache: true, activeMenu: '/draw/programmanager'},
+      //       hidden: true
+      //     }]
+      //   }
+      // }
+      if (menuList[i].url != 'draw/programmanager-add-or-update') {
+        console.log('!!draw/programmanager' + 'aaa' + menuList[i].url.replace('/', '-'))
+        route = {
+          path: menuList[i].url.replace('/', '-'),
+          component: null,
+          name: menuList[i].url.replace('/', '-'),
+          meta: {
+            menuId: menuList[i].menuId,
+            title: menuList[i].name,
+            isDynamic: true,
+            isTab: true,
+            iframeUrl: ''
+          }
+        }
+      } else {
+        console.log('draw/programmanager' + '--caca--' + menuList[i].url.replace('/', '-'))
+        route = {
+          path: menuList[i].url.replace('/', '-') + '/:id(\\d+)',
+          component: null,
+          name: menuList[i].url.replace('/', '-'),
+          meta: {
+            menuId: menuList[i].menuId,
+            title: menuList[i].name,
+            isDynamic: true,
+            noCache: true,
+            isTab: true,
+            iframeUrl: ''
+          },
+          hidden: true
         }
       }
+
       // url以http[s]://开头, 通过iframe展示
       if (isURL(menuList[i].url)) {
+        console.log('isURL----' + menuList[i].url)
         route['path'] = `i-${menuList[i].menuId}`
         route['name'] = `i-${menuList[i].menuId}`
         route['meta']['iframeUrl'] = menuList[i].url
       } else {
+        console.log('!!!isURL----' + menuList[i].url)
         try {
           route['component'] = _import(`modules/${menuList[i].url}`) || null
         } catch (e) {}

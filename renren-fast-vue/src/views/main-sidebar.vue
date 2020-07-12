@@ -92,6 +92,7 @@
                 return console.error('未能找到可用标签页!')
               }
             }
+            console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' + route)
             tab = {
               menuId: route.meta.menuId || route.name,
               name: route.name,

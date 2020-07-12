@@ -1,27 +1,48 @@
 <template>
-  <div  v-loading="fullscreenLoading">
-    <el-form :model="dataForm" :rules="dataRule" ref="dataForm"
-             @keyup.enter.native="dataFormSubmit()"
-             label-width="180px" size="mini" style="margin-bottom: 5px">
+   <div  v-loading="fullscreenLoading">
+    <el-form
+      :model="dataForm"
+      :rules="dataRule"
+      ref="dataForm"
+      @keyup.enter.native="dataFormSubmit()"
+      label-width="180px"
+      size="mini"
+      style="margin-bottom: 5px"
+    >
       <el-row>
         <el-col :span="8">
           <el-form-item label="项目编码" prop="code">
-            <el-input v-model="dataForm.code" placeholder="项目编码" :disabled="true"></el-input>
+            <el-input
+              v-model="dataForm.code"
+              placeholder="项目编码"
+              :disabled="true"
+            ></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="项目名称" prop="name">
-            <el-input v-model="dataForm.name" placeholder="项目名称" :disabled="proNameDisabled"></el-input>
+            <el-input
+              v-model="dataForm.name"
+              placeholder="项目名称"
+              :disabled="proNameDisabled"
+            ></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="项目状态" prop="proStatus">
-            <el-select v-model="dataForm.proStatus" clearable placeholder="请选择" :disabled="true" style="width: 100%">
+            <el-select
+              v-model="dataForm.proStatus"
+              clearable
+              placeholder="请选择"
+              :disabled="true"
+              style="width: 100%"
+            >
               <el-option
                 v-for="item in proStatuses"
                 :key="item.proStatus"
                 :label="item.label"
-                :value="item.proStatus">
+                :value="item.proStatus"
+              >
               </el-option>
             </el-select>
           </el-form-item>
@@ -30,29 +51,42 @@
       <el-row>
         <el-col :span="8">
           <el-form-item label="采购单位" prop="purchasingId">
-            <el-autocomplete :disabled="disabled" style="width: 100%"
-                             class="inline-input"
-                             v-model="dataForm.purchasingId"
-                             :fetch-suggestions="querySearch"
-                             placeholder="请输入内容"
-                             :trigger-on-focus="false"
-                             @select="handleSelect"
+            <el-autocomplete
+              :disabled="disabled"
+              style="width: 100%"
+              class="inline-input"
+              v-model="dataForm.purchasingId"
+              :fetch-suggestions="querySearch"
+              placeholder="请输入内容"
+              :trigger-on-focus="false"
+              @select="handleSelect"
             ></el-autocomplete>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="抽取单位" prop="extractionUnit">
-            <el-input v-model="dataForm.extractionUnit" placeholder="抽取单位" :disabled="disabled"></el-input>
+            <el-input
+              v-model="dataForm.extractionUnit"
+              placeholder="抽取单位"
+              :disabled="disabled"
+            ></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="采购方式" prop="purWay">
-            <el-select v-model="dataForm.purWay" clearable placeholder="请选择" :disabled="disabled" style="width: 100%">
+            <el-select
+              v-model="dataForm.purWay"
+              clearable
+              placeholder="请选择"
+              :disabled="disabled"
+              style="width: 100%"
+            >
               <el-option
                 v-for="item in purWays"
                 :key="item.purWay"
                 :label="item.label"
-                :value="item.purWay">
+                :value="item.purWay"
+              >
               </el-option>
             </el-select>
           </el-form-item>
@@ -61,67 +95,105 @@
       <el-row>
         <el-col :span="8">
           <el-form-item label="评审开始时间" prop="startReview">
-            <el-date-picker :disabled="disabled" style="width: 100%"
-                            v-model="dataForm.startReview"
-                            type="datetime"
-                            placeholder="选择日期时间">
+            <el-date-picker
+              :disabled="disabled"
+              style="width: 100%"
+              v-model="dataForm.startReview"
+              type="datetime"
+              placeholder="选择日期时间"
+            >
             </el-date-picker>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="评审结束时间" prop="endReview">
-            <el-date-picker :disabled="disabled" style="width: 100%"
-                            v-model="dataForm.endReview"
-                            type="datetime"
-                            placeholder="选择日期时间">
+            <el-date-picker
+              :disabled="disabled"
+              style="width: 100%"
+              v-model="dataForm.endReview"
+              type="datetime"
+              placeholder="选择日期时间"
+            >
             </el-date-picker>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="政府采购计划备案号" prop="govProRecordNumber">
-            <el-input v-model="dataForm.govProRecordNumber" placeholder="采购备案号" :disabled="disabled"
-                      style="width: 100%"></el-input>
+            <el-input
+              v-model="dataForm.govProRecordNumber"
+              placeholder="采购备案号"
+              :disabled="disabled"
+              style="width: 100%"
+            ></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="8">
           <el-form-item label="参与采购评审人代表" prop="govProPerson">
-            <el-input v-model="dataForm.govProPerson" placeholder="参与采购评审人代表" :disabled="disabled"></el-input>
+            <el-input
+              v-model="dataForm.govProPerson"
+              placeholder="参与采购评审人代表"
+              :disabled="disabled"
+            ></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="评审内容" prop="reviewContent">
-            <el-input v-model="dataForm.reviewContent" placeholder="评审内容" :disabled="disabled"></el-input>
+            <el-input
+              v-model="dataForm.reviewContent"
+              placeholder="评审内容"
+              :disabled="disabled"
+            ></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="预算金额(万元)" prop="budgetAmount">
-            <el-input-number v-model="dataForm.budgetAmount" :precision="2" :step="0.1" :max="10000" style="width: 100%"
-                             :disabled="disabled"></el-input-number>
+            <el-input-number
+              v-model="dataForm.budgetAmount"
+              :precision="2"
+              :step="0.1"
+              :max="10000"
+              style="width: 100%"
+              :disabled="disabled"
+            ></el-input-number>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="8">
           <el-form-item label="抽取单位联系人" prop="extractionUnitContact">
-            <el-input v-model="dataForm.extractionUnitContact" placeholder="抽取单位联系人" :disabled="disabled"></el-input>
+            <el-input
+              v-model="dataForm.extractionUnitContact"
+              placeholder="抽取单位联系人"
+              :disabled="disabled"
+            ></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="抽取单位电话" prop="extractionUnitPhone">
-            <el-input v-model="dataForm.extractionUnitPhone" placeholder="抽取单位电话" :disabled="disabled"></el-input>
+            <el-input
+              v-model="dataForm.extractionUnitPhone"
+              placeholder="抽取单位电话"
+              :disabled="disabled"
+            ></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="项目所属监管地" prop="supervisoryPlaceId">
-            <el-select v-model="dataForm.supervisoryPlaceId" clearable placeholder="请选择" :disabled="disabled"
-                       style="width: 100%">
+            <el-select
+              v-model="dataForm.supervisoryPlaceId"
+              clearable
+              placeholder="请选择"
+              :disabled="disabled"
+              style="width: 100%"
+            >
               <el-option
                 v-for="item in supervisoryPlaces"
                 :key="item.supervisoryPlaceId"
                 :label="item.label"
-                :value="item.supervisoryPlaceId">
+                :value="item.supervisoryPlaceId"
+              >
               </el-option>
             </el-select>
           </el-form-item>
@@ -134,7 +206,9 @@
               type="textarea"
               :rows="2"
               placeholder="评审地址"
-              v-model="dataForm.address" :disabled="disabled">
+              v-model="dataForm.address"
+              :disabled="disabled"
+            >
             </el-input>
           </el-form-item>
         </el-col>
@@ -144,9 +218,10 @@
               type="textarea"
               :rows="2"
               placeholder="回避专家单位"
-              v-model="dataForm.avoidUnit" :disabled="disabled">
+              v-model="dataForm.avoidUnit"
+              :disabled="disabled"
+            >
             </el-input>
-
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -155,7 +230,9 @@
               type="textarea"
               :rows="2"
               placeholder="备注"
-              v-model="dataForm.remark" :disabled="disabled">
+              v-model="dataForm.remark"
+              :disabled="disabled"
+            >
             </el-input>
           </el-form-item>
         </el-col>
@@ -174,20 +251,22 @@
       </el-table-column>
       <el-table-column label="需抽取专家数">
         <template slot-scope="scope">
+          <el-input-number
+            v-if="scope.row.isEdit == 1"
+            v-model="scope.row.needCount"
+            :min="1"
+            :max="scope.row.expertCount"
+            label="描述文字"
+            size="mini"
+          ></el-input-number>
 
-          <el-input-number v-if="scope.row.isEdit == 1" v-model="scope.row.needCount" :min="1"
-                           :max="scope.row.expertCount" label="描述文字" size="mini"></el-input-number>
-
-          <span v-else>{{scope.row.needCount}}</span>
+          <span v-else>{{ scope.row.needCount }}</span>
         </template>
       </el-table-column>
       <el-table-column prop="chosedCount" label="已抽取专家数">
       </el-table-column>
-      <el-table-column prop="expertCount" label="库存专家数">
-
-      </el-table-column>
-      <el-table-column prop="placeName" label="专业所属地区">
-      </el-table-column>
+      <el-table-column prop="expertCount" label="库存专家数"> </el-table-column>
+      <el-table-column prop="placeName" label="专业所属地区"> </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button @click="deleteRow(scope.$index, tableData)" type="text" size="small" :disabled="addMajorBtnDisabled">删除</el-button>
@@ -197,24 +276,44 @@
     </el-table>
     <el-row :gutter="24" style="margin-top: 10px">
       <el-col :span="9" :offset="7">
-        <el-button type="primary" @click="dataFormSubmit()" :disabled="saveDisabled">保存</el-button>
-        <el-button @click="resetForm()" :disabled="resetBtnDisabled">重置</el-button>
-        <el-button @click="formUpdate()" :disabled="updateBtnDisabled">修改</el-button>
+        <el-button
+          type="primary"
+          @click="dataFormSubmit()"
+          :disabled="saveDisabled"
+          >保存</el-button
+        >
+        <el-button @click="resetForm()" :disabled="resetBtnDisabled"
+          >重置</el-button
+        >
+        <el-button @click="formUpdate()" :disabled="updateBtnDisabled"
+          >修改</el-button
+        >
         <div v-if="specialLogic" style="display: inline">
-          <el-popover
-            v-model="specialLogicVisible"
-            placement="top"
-            width="300">
+          <el-popover v-model="specialLogicVisible" placement="top" width="300">
             <el-input v-model="specialLogicList" style="width: 100%"></el-input>
             <div style="text-align: center; margin-top: 10px">
-              <el-button type="primary" size="mini" @click="specialLogicVisible = false">确定</el-button>
+              <el-button
+                type="primary"
+                size="mini"
+                @click="specialLogicVisible = false"
+                >确定</el-button
+              >
             </div>
-            <el-button slot="reference" :disabled="chouQuDisabled">抽取</el-button>
+            <el-button slot="reference" :disabled="chouQuDisabled"
+              >抽取</el-button
+            >
           </el-popover>
         </div>
-        <el-button v-if="!specialLogic" :disabled="chouQuDisabled">抽取</el-button>
+        <el-button v-if="!specialLogic" :disabled="chouQuDisabled"
+          >抽取</el-button
+        >
         <!--<el-button @click="singlePrint" icon="el-icon-printer" :disabled="printDisabled">打印</el-button>-->
-        <el-button @click="singlePrint" icon="el-icon-printer" :disabled="printDisabled">打印</el-button>
+        <el-button
+          @click="singlePrint"
+          icon="el-icon-printer"
+          :disabled="printDisabled"
+          >打印</el-button
+        >
       </el-col>
     </el-row>
     <!-- 弹窗, 新增 / 修改 -->
@@ -229,8 +328,14 @@
         <table width="100%" border="0" cellspacing="0" cellpadding="0">
           <tr>
             <td align="center" valign="middle">
-              <table id="table1" width="80%" style="border:solid 1px black;border-collapse:collapse">
-                <caption id="caption1" align="center">专家抽取</caption>
+              <table
+                id="table1"
+                width="80%"
+                style="border:solid 1px black;border-collapse:collapse"
+              >
+                <caption id="caption1" align="center">
+                  专家抽取
+                </caption>
                 <tr>
                   <td style="border:solid 1px black">序号</td>
                   <td style="border:solid 1px black">专家名称</td>
@@ -283,6 +388,7 @@
       if (param && param.id && param.id !== '0') {
         console.log(param.id);
         this.init(param.id)
+        this.fetchData(param.id)
       }
     },
     mounted() {
@@ -373,16 +479,20 @@
         purWays: [{
           purWay: '1',
           label: '公开招标'
-        }, {
+        },
+        {
           purWay: '2',
           label: '竞争性谈判'
-        }, {
+        },
+        {
           purWay: '3',
           label: '竞争性磋商'
-        }, {
+        },
+        {
           purWay: '4',
           label: '询价采购'
-        }, {
+        },
+        {
           purWay: '5',
           label: '其他'
         }],
@@ -390,62 +500,82 @@
         supervisoryPlaces: [{
           supervisoryPlaceId: '1',
           label: '省本级'
-        }, {
+        },
+        {
           supervisoryPlaceId: '2',
           label: '武汉市'
-        }, {
+        },
+        {
           supervisoryPlaceId: '3',
           label: '黄石市'
-        }, {
+        },
+        {
           supervisoryPlaceId: '4',
           label: '十堰市'
-        }, {
+        },
+        {
           supervisoryPlaceId: '5',
           label: '宜昌市'
-        }, {
+        },
+        {
           supervisoryPlaceId: '6',
           label: '襄樊市'
-        }, {
+        },
+        {
           supervisoryPlaceId: '7',
           label: '鄂州市'
-        }, {
+        },
+        {
           supervisoryPlaceId: '8',
           label: '荆门市'
-        }, {
+        },
+        {
           supervisoryPlaceId: '9',
           label: '孝感市'
-        }, {
+        },
+        {
           supervisoryPlaceId: '10',
           label: '荆州市'
-        }, {
+        },
+        {
           supervisoryPlaceId: '11',
           label: '黄冈市'
-        }, {
+        },
+        {
           supervisoryPlaceId: '12',
           label: '随州市'
-        }, {
+        },
+        {
           supervisoryPlaceId: '13',
           label: '仙桃市'
-        }, {
+        },
+        {
           supervisoryPlaceId: '14',
           label: '潜江市'
-        }, {
+        },
+        {
           supervisoryPlaceId: '15',
           label: '天门市'
-        }, {
+        },
+        {
           supervisoryPlaceId: '16',
           label: '神农架林区'
-        }],
-        proStatuses: [{
+        }
+      ],
+      proStatuses: [
+        {
           proStatus: '1',
           label: '底稿'
-        }, {
+        },
+        {
           proStatus: '2',
           label: '待抽取'
-        }, {
+        },
+        {
           proStatus: '3',
           label: '抽取中'
-        }, {
+        },
+        {
           proStatus: '4',
           label: '抽取完成'
         }]
@@ -469,6 +599,22 @@
           }
         }
       },
+       fetchData (id) {
+              // set tagsview title
+            this.setTagsViewTitle(id)
+
+              // set page title
+            this.setPageTitle(id)
+          },
+          setTagsViewTitle (id) {
+            const title = '项目详情'
+            const route = Object.assign({}, this.tempRoute, { title: `${title}-${id}` })
+            this.$store.dispatch('tagsView/updateVisitedView', route)
+          },
+          setPageTitle (id) {
+            const title = '项目详情'
+            document.title = `${title} - ${id}`
+          },
       init(id) {
         this.dataForm.id = id || 0;
         this.disabled = true;

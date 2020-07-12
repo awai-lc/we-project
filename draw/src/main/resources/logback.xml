@@ -54,7 +54,7 @@
         </encoder>
     </appender>
 
-    <root level="debug">
+    <root level="info">
         <appender-ref ref="stdout"></appender-ref>
         <appender-ref ref="debugLog"></appender-ref>
         <appender-ref ref="infoLog"></appender-ref>

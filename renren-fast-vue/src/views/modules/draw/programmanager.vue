@@ -77,15 +77,11 @@
       </el-table-column>
       <el-table-column header-align="center" align="center" width="150" label="操作">
         <template slot-scope="scope">
-        <!--  <router-link :to="{path:'/draw-edit'} ">查看
-          </router-link>-->
-          <el-button @click="$router.push({path:'/draw-programmanager-add-or-update?'+ new Date()
-          ,query:{ id:scope.row.id },meta: { title: '123123123', isTab: true ,menuId: '123123213123'} })" size="mini">查询</el-button>
-         <!-- <router-link :to="'path:/draw/edit'">
+         <router-link :to="{path: '/draw-programmanager-add-or-update/'+scope.row.id,}">
             <el-button type="primary" size="small" icon="el-icon-edit">
-              Edit
+              查看
             </el-button>
-          </router-link>-->
+          </router-link>
         </template>
 
       </el-table-column>
@@ -108,7 +104,7 @@
   import AddOrUpdate from './programmanager-add-or-update'
 
   export default {
-    data() {
+    data () {
       return {
         dataForm: {
           name: '',
@@ -192,12 +188,12 @@
     components: {
       AddOrUpdate
     },
-    activated() {
+    activated () {
       this.getDataList()
     },
     methods: {
       // 获取数据列表
-      getDataList() {
+      getDataList () {
         this.dataListLoading = true
         this.$http({
           url: this.$http.adornUrl('/draw/programmanager/list'),
@@ -225,13 +221,13 @@
         })
       },
       // 每页数
-      sizeChangeHandle(val) {
+      sizeChangeHandle (val) {
         this.pageSize = val
         this.pageIndex = 1
         this.getDataList()
       },
       // 当前页
-      currentChangeHandle(val) {
+      currentChangeHandle (val) {
         this.pageIndex = val
         this.getDataList()
       }
