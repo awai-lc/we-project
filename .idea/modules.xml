@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/draw/draw.iml" filepath="$PROJECT_DIR$/draw/draw.iml" />
-      <module fileurl="file://$PROJECT_DIR$/draw-admin/draw-admin.iml" filepath="$PROJECT_DIR$/draw-admin/draw-admin.iml" />
       <module fileurl="file://$PROJECT_DIR$/draw-common/draw-common.iml" filepath="$PROJECT_DIR$/draw-common/draw-common.iml" />
       <module fileurl="file://$PROJECT_DIR$/draw-gateway/draw-gateway.iml" filepath="$PROJECT_DIR$/draw-gateway/draw-gateway.iml" />
       <module fileurl="file://$PROJECT_DIR$/renren-fast/renren-fast.iml" filepath="$PROJECT_DIR$/renren-fast/renren-fast.iml" />

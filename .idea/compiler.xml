@@ -6,31 +6,27 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="renren-generator" />
+        <module name="draw" />
         <module name="draw-admin" />
         <module name="draw-common" />
-        <module name="draw" />
-        <module name="renren-fast" />
         <module name="draw-gateway" />
+        <module name="renren-fast" />
+        <module name="renren-generator" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="draw" target="1.8" />
-      <module name="draw-admin" target="1.8" />
-      <module name="draw-common" target="1.8" />
+      <module name="draw" target="8" />
+      <module name="draw-common" target="8" />
       <module name="draw-gateway" target="1.8" />
-      <module name="draw-third-party" target="1.8" />
       <module name="renren-fast" target="1.8" />
       <module name="renren-generator" target="1.8" />
-      <module name="we-project" target="1.8" />
+      <module name="we-project" target="8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="draw" options="-parameters" />
-      <module name="draw-admin" options="-parameters" />
       <module name="draw-gateway" options="-parameters" />
-      <module name="draw-third-party" options="-parameters" />
       <module name="renren-fast" options="-parameters" />
       <module name="renren-generator" options="-parameters" />
     </option>
