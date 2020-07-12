@@ -23,7 +23,7 @@
         select e.expert_name expertName,e.phone phone,e.address address,e.unit unit,e.title title, m.major_name majorName,ce.addByTime addByTime
         from chose_expert ce left join expert e on ce.expert_id = e.id
         left join major m on e.major_id = m.id
-        where ce.pro_id = #{id}
+        where ce.pro_id = #{id} and ce.is_delete = 0
     </select>
 
 

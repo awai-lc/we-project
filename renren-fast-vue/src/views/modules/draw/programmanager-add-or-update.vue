@@ -303,13 +303,13 @@
           >修改</el-button
         >
         <div v-if="specialLogic" style="display: inline">
-          <el-popover v-model="specialLogicVisible" placement="top" width="300">
+          <el-popover placement="top" width="300" v-model="specialLogicVisible">
             <el-input v-model="specialLogicList" style="width: 100%"></el-input>
             <div style="text-align: center; margin-top: 10px">
               <el-button
                 type="primary"
                 size="mini"
-                @click="specialLogicVisible = false"
+                @click="chouquMethod()"
                 >确定</el-button
               >
             </div>
@@ -318,7 +318,7 @@
             >
           </el-popover>
         </div>
-        <el-button v-if="!specialLogic" :disabled="chouQuDisabled"
+        <el-button v-if="!specialLogic" :disabled="chouQuDisabled"  @click="chouquMethod()"
           >抽取</el-button
         >
         <!--<el-button @click="singlePrint" icon="el-icon-printer" :disabled="printDisabled">打印</el-button>-->
@@ -398,6 +398,7 @@ export default {
 
             tab[0].title ="123"; */
     // 获取传入的参数
+    this.init(9);
     var param = this.$route.query;
     if (param && param.id && param.id !== "0") {
       console.log(param.id);
@@ -633,6 +634,34 @@ export default {
       const title = "项目详情";
       document.title = `${title} - ${id}`;
     },
+    chouquMethod(){
+      this.specialLogicVisible = false;
+      this.fullscreenLoading = true;
+      this.$http({
+        url: this.$http.adornUrl(
+          `/draw/choseexpert/lottery`
+        ),
+        method: "get",
+        params: {
+          "proId": this.dataForm.id,
+          "phones" : this.specialLogicList,
+        }
+      }).then(({ data }) => {
+        this.fullscreenLoading = false;
+        if (data && data.code === 0) {
+          this.$message({
+            message: "抽取完成",
+            type: "success",
+            duration: 1500,
+            onClose: () => {
+              this.init(this.dataForm.id);
+            }
+          });
+        } else {
+          this.$message.error(data.msg);
+        }
+      });
+    },
     init(id) {
       this.dataForm.id = id || 0;
       this.disabled = true;
@@ -654,13 +683,14 @@ export default {
               this.saveDisabled = true;
               this.proNameDisabled = true;
               this.addMajorBtnDisabled = true;
-              if (this.dataForm.status == 4) {
-                this.printDisabled = false;
-              }
               var programManager = data.programManagerDetail.programManager;
               this.dataForm.code = programManager.code;
               this.dataForm.name = programManager.name;
               this.dataForm.proStatus = programManager.proStatus + "";
+              console.log(this.dataForm.proStatus)
+              if (this.dataForm.proStatus == 4) {
+                this.printDisabled = false;
+              }
               this.dataForm.purchasingId = programManager.purchasingId;
               this.dataForm.extractionUnit = programManager.extractionUnit;
               this.dataForm.purWay = programManager.purWay + "";

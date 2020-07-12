@@ -25,6 +25,17 @@ public class ChoseMajorDto {
     @NotNull
     private Integer needCount;
 
+    /**
+     * 需抽取专家数
+     */
+    @NotNull
+    private Integer expertCount;
+
+    @NotBlank
+    private String placeName;
+
+    @NotBlank
+    private String majorCode;
 
     /**
      * 是否删除
