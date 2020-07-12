@@ -3,7 +3,9 @@ package com.hbzf.draw.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.hbzf.common.utils.PageUtils;
 import com.hbzf.draw.entity.ChoseMajorEntity;
+import com.hbzf.draw.entity.dto.ChoseMajorDto;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,5 +18,7 @@ import java.util.Map;
 public interface ChoseMajorService extends IService<ChoseMajorEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    List<ChoseMajorDto> listByProId(Long proID);
 }
 

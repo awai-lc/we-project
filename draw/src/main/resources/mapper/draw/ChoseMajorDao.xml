@@ -20,5 +20,11 @@
         where pro_id = #{proId,jdbcType=BIGINT}
     </update>
 
+    <select id="listByProId" resultType="com.hbzf.draw.entity.dto.ChoseMajorDto">
+        select cm.major_id majorId, cm.need_count needCount, cm.is_delete isDelete
+        from chose_major cm
+        where cm.pro_id = #{id}
+    </select>
+
 
 </mapper>

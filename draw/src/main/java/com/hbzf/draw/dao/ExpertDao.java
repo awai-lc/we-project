@@ -2,7 +2,10 @@ package com.hbzf.draw.dao;
 
 import com.hbzf.draw.entity.ExpertEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.hbzf.draw.entity.dto.ExpertDto;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 /**
  * 专家
@@ -13,5 +16,10 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface ExpertDao extends BaseMapper<ExpertEntity> {
+
+
+    List<ExpertDto> listByMajorId(Long majorId);
+
+    ExpertDto selectByPhone(String phone);
 	
 }

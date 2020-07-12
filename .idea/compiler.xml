@@ -15,7 +15,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="draw" target="8" />
+      <module name="draw" target="1.8" />
       <module name="draw-common" target="8" />
       <module name="draw-gateway" target="1.8" />
       <module name="renren-fast" target="1.8" />

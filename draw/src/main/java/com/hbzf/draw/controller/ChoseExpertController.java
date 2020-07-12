@@ -1,5 +1,6 @@
 package com.hbzf.draw.controller;
 
+import java.security.PublicKey;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -7,12 +8,10 @@ import java.util.Map;
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
 import com.hbzf.draw.entity.ExpertEntity;
 import com.hbzf.draw.entity.dto.ChoseExpertDto;
+import com.hbzf.draw.entity.dto.ExpertDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.lang.Nullable;
+import org.springframework.web.bind.annotation.*;
 
 import com.hbzf.draw.entity.ChoseExpertEntity;
 import com.hbzf.draw.service.ChoseExpertService;
@@ -99,6 +98,21 @@ public class ChoseExpertController {
 		choseExpertService.removeByIds(Arrays.asList(ids));
 
         return R.ok();
+    }
+
+    /**
+     * 根据传入的 proId 和 phones 查询抽奖人员
+     * @param proId 项目id
+     * @param phones 手机列表，以英文输入法","分割，如 15811223344,15800000000.13278671342
+     * @return 执行完成
+     */
+    @GetMapping("/lottery")
+    public R lottery(@RequestParam(value = "proId") Long proId,
+                     @RequestParam(value = "phones") @Nullable String phones) {
+
+        List<ExpertDto> ExpertDto = choseExpertService.lottery(proId, phones);
+
+        return R.ok().put("ExpertDto",ExpertDto);
     }
 
 }

@@ -9,12 +9,6 @@ import javax.validation.constraints.NotNull;
 public class ChoseMajorDto {
 
     /**
-     * 专业编码
-     */
-    @NotNull
-    private String majorCode;
-
-    /**
      * 专业id
      */
     @NotNull
@@ -26,27 +20,16 @@ public class ChoseMajorDto {
     private String majorName;
 
     /**
-     * 已抽取专家数
-     */
-    @NotNull
-    private Integer chosedCount;
-
-    /**
      * 需抽取专家数
      */
     @NotNull
     private Integer needCount;
 
-    /**
-     * 库存专家数
-     */
-    @NotNull
-    private Integer expertCount;
 
     /**
-     * 所属区域名称
-     */
-    @NotBlank
-    private String placeName;
+     * 是否删除
+     **/
+    private Integer isDelete;
+
 
 }
