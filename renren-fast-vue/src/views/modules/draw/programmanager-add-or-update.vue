@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div  v-loading="fullscreenLoading">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm"
              @keyup.enter.native="dataFormSubmit()"
              label-width="180px" size="mini" style="margin-bottom: 5px">
@@ -161,7 +161,7 @@
         </el-col>
       </el-row>
     </el-form>
-    <el-button @click="addMajor()">新增</el-button>
+    <el-button @click="addMajor()" :disabled="addMajorBtnDisabled">新增</el-button>
     <el-table size="mini"
               :data="tableData"
               ref="multipleTable"
@@ -190,8 +190,8 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button @click="deleteRow(scope.$index, tableData)" type="text" size="small">删除</el-button>
-          <el-button type="text" @click="mod(scope.$index, scope.row)" size="small">编辑</el-button>
+          <el-button @click="deleteRow(scope.$index, tableData)" type="text" size="small" :disabled="addMajorBtnDisabled">删除</el-button>
+          <el-button type="text" @click="mod(scope.$index, scope.row)" size="small" :disabled="addMajorBtnDisabled">编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -219,9 +219,10 @@
     </el-row>
     <!-- 弹窗, 新增 / 修改 -->
     <el-dialog
+      :title="'专业选择'"
       :close-on-click-modal="false"
       :visible.sync="majorAddVisible">
-      <add-or-update ref="addOrUpdate" @refreshDataList=""></add-or-update>
+      <major-select @fathermethod="fathermethod"></major-select>
     </el-dialog>
     <div class="demo">
       <form id="form1" hidden>
@@ -265,23 +266,22 @@
 
 
 <script>
-  import AddOrUpdate from './major'
-  import {PrintAccount} from '@/tools/doPrint.js'
+  import MajorSelect from './major-select'
   import {getLodop} from '@/tools/lodop.js'
 
   export default {
     components: {
-      AddOrUpdate
+      MajorSelect
     },
     created() {
       /*  console.log(this.$store.state.common.mainTabsActiveName);
-        var tab = this.$store.state.common.mainTabs.filter(item => item.name === this.$store.state.common.mainTabsActiveName);
+            var tab = this.$store.state.common.mainTabs.filter(item => item.name === this.$store.state.common.mainTabsActiveName);
 
-        tab[0].title ="123";*/
+            tab[0].title ="123";*/
       //获取传入的参数
-      console.log(this.$route)
       var param = this.$route.query;
-      if (param && param.id != '0') {
+      if (param && param.id && param.id !== '0') {
+        console.log(param.id);
         this.init(param.id)
       }
     },
@@ -289,6 +289,7 @@
     },
     data() {
       return {
+        fullscreenLoading: false,
         majorAddVisible: false,
         specialLogicList: '',
         specialLogicVisible: false,
@@ -301,6 +302,7 @@
         chouQuDisabled: false,
         printDisabled: true,
         proNameDisabled: false,
+        addMajorBtnDisabled: false,
         restaurants: [],
         dataForm: {
           id: 0,
@@ -384,16 +386,7 @@
           purWay: '5',
           label: '其他'
         }],
-        tableData: [{
-          majorId: '1',
-          majorCode: 'C123',
-          majorName: '王小虎',
-          needCount: '1',
-          chosedCount: 0,
-          expertCount: 100,
-          placeName: '湖北省',
-          isEdit: 0
-        }],
+        tableData: [],
         supervisoryPlaces: [{
           supervisoryPlaceId: '1',
           label: '省本级'
@@ -459,6 +452,23 @@
       }
     },
     methods: {
+      fathermethod(tableDates) {
+        this.majorAddVisible = false;
+        //去重
+        for (var i = 0; i < tableDates.length; i++) {
+          var flag = true;
+          for (var j = 0; j < this.tableData.length; j++) {
+            console.log(tableDates[i].majorId == this.tableData[j].majorId)
+            if(tableDates[i].majorId == this.tableData[j].majorId){
+              flag = false;
+              break;
+            }
+          }
+          if(flag){
+            this.tableData.push(tableDates[i]);
+          }
+        }
+      },
       init(id) {
         this.dataForm.id = id || 0;
         this.disabled = true;
@@ -477,27 +487,33 @@
                 this.resetBtnDisabled = true;
                 this.saveDisabled = true;
                 this.proNameDisabled = true;
-                if(this.dataForm.status == 4){
+                this.addMajorBtnDisabled = true;
+                if (this.dataForm.status == 4) {
                   this.printDisabled = false;
                 }
-                this.dataForm.code = data.programManager.code;
-                this.dataForm.name = data.programManager.name;
-                this.dataForm.proStatus = data.programManager.proStatus + '';
-                this.dataForm.purchasingId = data.programManager.purchasingId;
-                this.dataForm.extractionUnit = data.programManager.extractionUnit;
-                this.dataForm.purWay = data.programManager.purWay + '';
-                this.dataForm.startReview = data.programManager.startReview;
-                this.dataForm.endReview = data.programManager.endReview;
-                this.dataForm.govProRecordNumber = data.programManager.govProRecordNumber;
-                this.dataForm.govProPerson = data.programManager.govProPerson;
-                this.dataForm.reviewContent = data.programManager.reviewContent;
-                this.dataForm.budgetAmount = data.programManager.budgetAmount;
-                this.dataForm.extractionUnitContact = data.programManager.extractionUnitContact;
-                this.dataForm.extractionUnitPhone = data.programManager.extractionUnitPhone;
-                this.dataForm.address = data.programManager.address;
-                this.dataForm.supervisoryPlaceId = data.programManager.supervisoryPlaceId + '';
-                this.dataForm.avoidUnit = data.programManager.avoidUnit;
-                this.dataForm.remark = data.programManager.remark;
+                var programManager = data.programManagerDetail.programManager
+                this.dataForm.code = programManager.code;
+                this.dataForm.name = programManager.name;
+                this.dataForm.proStatus = programManager.proStatus + '';
+                this.dataForm.purchasingId = programManager.purchasingId;
+                this.dataForm.extractionUnit = programManager.extractionUnit;
+                this.dataForm.purWay = programManager.purWay + '';
+                this.dataForm.startReview = programManager.startReview;
+                this.dataForm.endReview = programManager.endReview;
+                this.dataForm.govProRecordNumber = programManager.govProRecordNumber;
+                this.dataForm.govProPerson = programManager.govProPerson;
+                this.dataForm.reviewContent = programManager.reviewContent;
+                this.dataForm.budgetAmount = programManager.budgetAmount;
+                this.dataForm.extractionUnitContact = programManager.extractionUnitContact;
+                this.dataForm.extractionUnitPhone = programManager.extractionUnitPhone;
+                this.dataForm.address = programManager.address;
+                this.dataForm.supervisoryPlaceId = programManager.supervisoryPlaceId + '';
+                this.dataForm.avoidUnit = programManager.avoidUnit;
+                this.dataForm.remark = programManager.remark;
+                data.programManagerDetail.choseMajorEntities.forEach(item => {
+                  item.isEdit = 0
+                });
+                this.tableData = data.programManagerDetail.choseMajorEntities;
               }
             })
           }
@@ -514,6 +530,7 @@
         this.saveDisabled = false;
         this.chouQuDisabled = true;
         this.printDisabled = true;
+        this.addMajorBtnDisabled = false;
       },
       addMajor() {
         this.majorAddVisible = true;
@@ -544,7 +561,7 @@
             var LODOP = getLodop();
             for (var k = 0; k < data.choseExpert.length; k++) {
               var a = data.choseExpert[k];
-              var num = k+1;
+              var num = k + 1;
               html += '<tr>\n' +
                 '                  <td style="border:solid 1px black">' + num + '</td>\n' +
                 '                    <td style="border:solid 1px black">' + a.expertName + '</td>\n' +
@@ -585,12 +602,16 @@
       ,
       mod(index, row) {
         row.isEdit = 1
-      }
-      ,
+      },
       // 表单提交
       dataFormSubmit() {
+        if(this.tableData.length ==0){
+          this.$message.error("请新增专业后保存");
+          return;
+        }
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
+            this.fullscreenLoading = true;
             this.saveDisabled = true;
             this.$http({
               url: this.$http.adornUrl(`/draw/programmanager/save`),
@@ -620,13 +641,13 @@
                 'majorList': this.tableData
               })
             }).then(({data}) => {
+              this.fullscreenLoading = false;
               if (data && data.code === 0) {
                 this.$message({
                   message: '操作成功',
                   type: 'success',
                   duration: 1500,
                   onClose: () => {
-                    console.log("dataFormSubmit:" + data.message);
                     this.init(data.msg);
                   }
                 })
