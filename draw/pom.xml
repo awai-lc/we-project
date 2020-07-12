@@ -95,11 +95,6 @@
             <artifactId>draw-common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.ipanda.common</groupId>-->
-<!--            <artifactId>ipanda-common-utils</artifactId>-->
-<!--            <version>${ipanda-common.version}</version>-->
-<!--        </dependency>-->
     </dependencies>
 
     <build>
