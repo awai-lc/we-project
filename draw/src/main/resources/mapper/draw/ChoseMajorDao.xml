@@ -14,6 +14,7 @@
         <result property="needCount" column="need_count"/>
         <result property="expertCount" column="expert_count"/>
         <result property="placeName" column="place_name"/>
+        <result property="isDelete" column="is_delete"/>
     </resultMap>
     <update id="deleteByProId">
         update chose_major set is_delete = 1

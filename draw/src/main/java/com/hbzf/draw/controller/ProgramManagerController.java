@@ -1,11 +1,15 @@
 package com.hbzf.draw.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
 import com.alibaba.fastjson.JSON;
+import com.hbzf.draw.entity.ChoseMajorEntity;
+import com.hbzf.draw.entity.dto.ProgramManagerDetailDto;
 import com.hbzf.draw.entity.request.ProgramManagerRequest;
+import com.hbzf.draw.service.ChoseMajorService;
 import com.hbzf.draw.util.exception.BizException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +23,8 @@ import com.hbzf.draw.entity.ProgramManagerEntity;
 import com.hbzf.draw.service.ProgramManagerService;
 import com.hbzf.common.utils.PageUtils;
 import com.hbzf.common.utils.R;
+
+import javax.annotation.Resource;
 
 
 /**
@@ -35,6 +41,8 @@ public class ProgramManagerController {
     @Autowired
     private ProgramManagerService programManagerService;
 
+    @Resource
+    private ChoseMajorService choseMajorService;
     /**
      * 列表
      */
@@ -54,8 +62,11 @@ public class ProgramManagerController {
     //@RequiresPermissions("draw:programmanager:info")
     public R info(@PathVariable("id") Long id) {
         ProgramManagerEntity programManager = programManagerService.getById(id);
-
-        return R.ok().put("programManager", programManager);
+        List<ChoseMajorEntity> choseMajorEntities = choseMajorService.getByProId(id);
+        ProgramManagerDetailDto detailDto = new ProgramManagerDetailDto();
+        detailDto.setProgramManager(programManager);
+        detailDto.setChoseMajorEntities(choseMajorEntities);
+        return R.ok().put("programManagerDetail", detailDto);
     }
 
     /**

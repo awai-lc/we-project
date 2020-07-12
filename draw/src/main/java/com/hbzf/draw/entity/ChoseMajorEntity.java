@@ -57,4 +57,6 @@ public class ChoseMajorEntity implements Serializable {
 	 */
 	private String placeName;
 
+	private Integer isDelete;
+
 }

@@ -19,6 +19,8 @@ public interface ChoseMajorService extends IService<ChoseMajorEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
 
+    List<ChoseMajorEntity> getByProId(Long id);
+
     List<ChoseMajorDto> listByProId(Long proID);
 }
 
