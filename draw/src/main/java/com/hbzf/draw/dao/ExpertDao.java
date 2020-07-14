@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * 专家
- * 
+ *
  * @author liucheng
  * @email 36628353@qq.com
  * @date 2020-07-05 00:02:59
@@ -21,5 +21,6 @@ public interface ExpertDao extends BaseMapper<ExpertEntity> {
     List<ExpertDto> listByMajorId(Long majorId);
 
     ExpertDto selectByPhone(String phone);
-	
+
+    List<String> selectByAllAvoidUnit();
 }

@@ -35,4 +35,7 @@
         from expert ex
         where ex.phone = #{phone}
     </select>
+    <select id="selectByAllAvoidUnit" resultType="java.lang.String">
+        select distinct(unit) from expert
+    </select>
 </mapper>

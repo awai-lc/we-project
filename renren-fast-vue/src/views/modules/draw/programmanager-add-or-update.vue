@@ -190,6 +190,18 @@
             ></el-input>
           </el-form-item>
         </el-col>
+        <el-col :span="8">
+          <el-form-item label="备注" prop="remark">
+            <el-input
+              type="textarea"
+              :rows="2"
+              placeholder="备注"
+              v-model="dataForm.remark"
+              :disabled="disabled"
+            >
+            </el-input>
+          </el-form-item>
+        </el-col>
       </el-row>
       <el-row>
         <el-col :span="8">
@@ -204,7 +216,7 @@
             </el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="16">
           <el-form-item label="回避专家单位" prop="avoidUnit">
             <el-select style="width:100%"
               v-model="dataForm.avoidUnit"
@@ -223,18 +235,6 @@
                 :value="item.value">
               </el-option>
             </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="备注" prop="remark">
-            <el-input
-              type="textarea"
-              :rows="2"
-              placeholder="备注"
-              v-model="dataForm.remark"
-              :disabled="disabled"
-            >
-            </el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -630,9 +630,20 @@
       };
     },
     mounted() {
-      this.list = this.states.map(item => {
-        return {value: `${item}`, label: `${item}`};
-      });
+      this.$http({
+        url: this.$http.adornUrl(
+          `/draw/expert/unitList`
+        ),
+        method: "get",
+        params: {
+
+        }
+      }).then(({data}) => {
+        this.list = data.map(item => {
+          return {value: `${item}`, label: `${item}`};
+        });
+      })
+
     },
     methods: {
       remoteMethod(query) {

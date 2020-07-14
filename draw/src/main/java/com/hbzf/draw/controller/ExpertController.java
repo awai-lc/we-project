@@ -3,10 +3,17 @@ package com.hbzf.draw.controller;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.google.common.cache.LoadingCache;
+import com.google.common.collect.Lists;
+import com.hbzf.draw.constants.DrawConstants;
+import com.hbzf.draw.entity.UnitEntity;
 import com.hbzf.draw.service.MajorService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,6 +42,9 @@ public class ExpertController {
     private ExpertService expertService;
     @Autowired
     private MajorService majorService;
+
+    @Autowired(required = false)
+    private LoadingCache<String, Map<String, Object>> loadingCache;
     /**
      * 列表
      */
@@ -94,4 +104,18 @@ public class ExpertController {
         return R.ok();
     }
 
+    /**
+     * 回避专家单位
+     */
+    @RequestMapping("/unitList")
+    //@RequiresPermissions("draw:expert:delete")
+    public List<String> unitList(){
+        List<String> stringList = Lists.newArrayList();
+        Map<String, Object> cacheUnchecked = loadingCache.getUnchecked(DrawConstants.AVOID_UNIT);
+        List<Object> unitList = cacheUnchecked.values().stream().map(e -> e).collect(Collectors.toList());
+        for (Object o : unitList) {
+            stringList.add((String) o);
+        }
+        return stringList;
+    }
 }

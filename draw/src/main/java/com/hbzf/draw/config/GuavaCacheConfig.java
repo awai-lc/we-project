@@ -5,6 +5,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Lists;
 import com.hbzf.draw.constants.DrawConstants;
+import com.hbzf.draw.dao.ExpertDao;
 import com.hbzf.draw.dao.PurWayDao;
 import com.hbzf.draw.dao.SupervisoryPlaceDao;
 import com.hbzf.draw.dao.UnitDao;
@@ -29,29 +30,34 @@ import java.util.concurrent.TimeUnit;
 public class GuavaCacheConfig {
 
     @Autowired(required = false)
-    private PurWayDao purWayMapper;
+    private ExpertDao expertDao;
 
     @Autowired(required = false)
     private UnitDao unitMapper;
 
-    @Autowired(required = false)
-    private SupervisoryPlaceDao supervisoryPlaceMapper;
 
     @Bean(name = "loadingCache")
     public LoadingCache<String, Map<String, Object>> getLoadingCache() {
-        return CacheBuilder.newBuilder().maximumSize(4).
+        return CacheBuilder.newBuilder().maximumSize(2).
                 expireAfterWrite(2, TimeUnit.MINUTES).
                 build(new CacheLoader<String, Map<String, Object>>() {
                     @Override
                     public Map<String, Object> load(String key) {
                         Map<String, Object> map = new HashMap<>();
                         switch (key) {
-
                             case DrawConstants.PUR_UNIT:
                                 List<UnitEntity> unitList = unitMapper.selectByAll();
                                 if (CollectionUtils.isNotEmpty(unitList)) {
                                     unitList.forEach(unit -> {
                                         map.put(unit.getId().toString(), unit);
+                                    });
+                                }
+                                break;
+                            case DrawConstants.AVOID_UNIT:
+                                List<String> avoidUnit = expertDao.selectByAllAvoidUnit();
+                                if (CollectionUtils.isNotEmpty(avoidUnit)) {
+                                    avoidUnit.forEach(unit -> {
+                                        map.put(unit, unit);
                                     });
                                 }
                                 break;
