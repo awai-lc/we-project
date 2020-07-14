@@ -6,6 +6,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class ProgramManagerDto {
@@ -113,7 +114,7 @@ public class ProgramManagerDto {
     /**
      * 回避专家单位
      */
-    private String avoidUnit;
+    private List<String> avoidUnit;
 
     /**
      * 备注

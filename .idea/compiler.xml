@@ -2,14 +2,15 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="renren-generator" />
-        <module name="draw-common" />
         <module name="draw" />
         <module name="renren-fast" />
+        <module name="renren-generator" />
+        <module name="draw-common" />
         <module name="draw-gateway" />
       </profile>
     </annotationProcessing>
