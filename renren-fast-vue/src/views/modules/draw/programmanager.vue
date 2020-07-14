@@ -77,7 +77,8 @@
       </el-table-column>
       <el-table-column header-align="center" align="center" width="150" label="操作">
         <template slot-scope="scope">
-         <router-link :to="{path: '/draw-programmanager-add-or-update/'+scope.row.id,}">
+         <router-link :to="{path:'/draw-programmanager-add-or-update'
+          ,query:{ id:scope.row.id }}">
             <el-button type="primary" size="small" icon="el-icon-edit">
               查看
             </el-button>

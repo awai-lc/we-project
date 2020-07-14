@@ -109,102 +109,28 @@ function fnCurrentRouteType (route, globalRoutes = []) {
 function fnAddDynamicMenuRoutes (menuList = [], routes = []) {
   var temp = []
   for (var i = 0; i < menuList.length; i++) {
-    console.log('!!!!!!' + menuList[i].list)
     if (menuList[i].list && menuList[i].list.length >= 1) {
-      console.log(i + '----ilist')
       temp = temp.concat(menuList[i].list)
     } else if (menuList[i].url && /\S/.test(menuList[i].url)) {
       menuList[i].url = menuList[i].url.replace(/^\//, '')
-      console.log(i + '-----------' + menuList[i].url)
-      var route = {}
-      // route = {
-      //   path: menuList[i].url.replace('/', '-'),
-      //   component: null,
-      //   name: menuList[i].url.replace('/', '-'),
-      //   meta: {
-      //     menuId: menuList[i].menuId,
-      //     title: menuList[i].name,
-      //     isDynamic: true,
-      //     isTab: true,
-      //     iframeUrl: ''
-      //   }
-      // }
-      // if (menuList[i].url != 'draw/programmanager') {
-      //   console.log('!!draw/programmanager' + 'aaa' + menuList[i].url.replace('/', '-'))
-      //   route = {
-      //     path: menuList[i].url.replace('/', '-'),
-      //     component: null,
-      //     name: menuList[i].url.replace('/', '-'),
-      //     meta: {
-      //       menuId: menuList[i].menuId,
-      //       title: menuList[i].name,
-      //       isDynamic: true,
-      //       isTab: true,
-      //       iframeUrl: ''
-      //     }
-      //   }
-      // } else {
-      //   console.log('draw/programmanager' + '--caca--' + menuList[i].url.replace('/', '-'))
-      //   route = {
-      //     path: menuList[i].url.replace('/', '-'),
-      //     component: null,
-      //     name: menuList[i].url.replace('/', '-'),
-      //     meta: {
-      //       menuId: menuList[i].menuId,
-      //       title: menuList[i].name,
-      //       isDynamic: true,
-      //       isTab: true,
-      //       iframeUrl: ''
-      //     },
-      //     children: [{
-      //       path: 'edit/:id(\\d+)',
-      //       component: () => import('@/views/modules/draw/programmanager-list-add-or-update'),
-      //       name: 'programmanager-list-add-or-update',
-      //       meta: { title: '项目详情', noCache: true, activeMenu: '/draw/programmanager'},
-      //       hidden: true
-      //     }]
-      //   }
-      // }
-      if (menuList[i].url != 'draw/programmanager-add-or-update') {
-        console.log('!!draw/programmanager' + 'aaa' + menuList[i].url.replace('/', '-'))
-        route = {
-          path: menuList[i].url.replace('/', '-'),
-          component: null,
-          name: menuList[i].url.replace('/', '-'),
-          meta: {
-            menuId: menuList[i].menuId,
-            title: menuList[i].name,
-            isDynamic: true,
-            isTab: true,
-            iframeUrl: ''
-          }
-        }
-      } else {
-        console.log('draw/programmanager' + '--caca--' + menuList[i].url.replace('/', '-'))
-        route = {
-          path: menuList[i].url.replace('/', '-') + '/:id(\\d+)',
-          component: null,
-          name: menuList[i].url.replace('/', '-'),
-          meta: {
-            menuId: menuList[i].menuId,
-            title: menuList[i].name,
-            isDynamic: true,
-            noCache: true,
-            isTab: true,
-            iframeUrl: ''
-          },
-          hidden: true
+      var route = {
+        path: menuList[i].url.replace('/', '-'),
+        component: null,
+        name: menuList[i].url.replace('/', '-'),
+        meta: {
+          menuId: menuList[i].menuId,
+          title: menuList[i].name,
+          isDynamic: true,
+          isTab: true,
+          iframeUrl: ''
         }
       }
-
       // url以http[s]://开头, 通过iframe展示
       if (isURL(menuList[i].url)) {
-        console.log('isURL----' + menuList[i].url)
         route['path'] = `i-${menuList[i].menuId}`
         route['name'] = `i-${menuList[i].menuId}`
         route['meta']['iframeUrl'] = menuList[i].url
       } else {
-        console.log('!!!isURL----' + menuList[i].url)
         try {
           route['component'] = _import(`modules/${menuList[i].url}`) || null
         } catch (e) {}

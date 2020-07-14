@@ -11,10 +11,10 @@ import javax.annotation.Resource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
-@RunWith(SpringRunner.class)
+/*@SpringBootTest
+@RunWith(SpringRunner.class)*/
 class ChoseExpertServiceImplTest {
-
+/*
     @Resource
     ChoseExpertService choseExpertService;
 
@@ -30,5 +30,5 @@ class ChoseExpertServiceImplTest {
     @Test
     void testExpertDao() {
         expertDao.listByMajorId(10L).forEach(System.out::println);
-    }
+    }*/
 }

@@ -68,7 +68,7 @@
             <el-input
               v-model="dataForm.extractionUnit"
               placeholder="抽取单位"
-              :disabled="disabled"
+              :disabled="true"
             ></el-input>
           </el-form-item>
         </el-col>
@@ -118,18 +118,6 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="政府采购计划备案号" prop="govProRecordNumber">
-            <el-input
-              v-model="dataForm.govProRecordNumber"
-              placeholder="采购备案号"
-              :disabled="disabled"
-              style="width: 100%"
-            ></el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="8">
           <el-form-item label="参与采购评审人代表" prop="govProPerson">
             <el-input
               v-model="dataForm.govProPerson"
@@ -138,6 +126,8 @@
             ></el-input>
           </el-form-item>
         </el-col>
+      </el-row>
+      <el-row>
         <el-col :span="8">
           <el-form-item label="评审内容" prop="reviewContent">
             <el-input
@@ -159,6 +149,27 @@
             ></el-input-number>
           </el-form-item>
         </el-col>
+        <el-col :span="8">
+          <el-form-item label="项目所属监管地" prop="supervisoryPlaceId">
+            <el-select
+              v-model="dataForm.supervisoryPlaceId"
+              clearable
+              placeholder="请选择"
+              :disabled="disabled"
+              style="width: 100%"
+            >
+              <el-option
+                v-for="item in supervisoryPlaces"
+                :key="item.supervisoryPlaceId"
+                :label="item.label"
+                :value="item.supervisoryPlaceId"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+
+
       </el-row>
       <el-row>
         <el-col :span="8">
@@ -177,25 +188,6 @@
               placeholder="抽取单位电话"
               :disabled="disabled"
             ></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="项目所属监管地" prop="supervisoryPlaceId">
-            <el-select
-              v-model="dataForm.supervisoryPlaceId"
-              clearable
-              placeholder="请选择"
-              :disabled="disabled"
-              style="width: 100%"
-            >
-              <el-option
-                v-for="item in supervisoryPlaces"
-                :key="item.supervisoryPlaceId"
-                :label="item.label"
-                :value="item.supervisoryPlaceId"
-              >
-              </el-option>
-            </el-select>
           </el-form-item>
         </el-col>
       </el-row>
@@ -398,12 +390,11 @@ export default {
 
             tab[0].title ="123"; */
     // 获取传入的参数
-    this.init(9);
     var param = this.$route.query;
     if (param && param.id && param.id !== "0") {
       console.log(param.id);
       this.init(param.id);
-      this.fetchData(param.id);
+      //this.fetchData(param.id);
     }
   },
   mounted() {},
@@ -430,7 +421,7 @@ export default {
         name: "",
         proStatus: "1",
         purchasingId: "",
-        extractionUnit: "",
+        extractionUnit: "湖北华通工程咨询有限公司",
         purWay: "1",
         startReview: "",
         endReview: "",
@@ -441,7 +432,7 @@ export default {
         extractionUnitContact: "",
         extractionUnitPhone: "",
         address: "",
-        supervisoryPlaceId: "1",
+        supervisoryPlaceId: "",
         avoidUnit: "",
         remark: ""
       },
@@ -483,9 +474,6 @@ export default {
         address: [
           { required: true, message: "评审地址不能为空", trigger: "blur" }
         ],
-        supervisoryPlaceId: [
-          { required: true, message: "项目所属监管地不能为空", trigger: "blur" }
-        ],
         avoidUnit: [],
         remark: []
       },
@@ -508,6 +496,10 @@ export default {
         },
         {
           purWay: "5",
+          label: "邀请"
+        },
+        {
+          purWay: "6",
           label: "其他"
         }
       ],

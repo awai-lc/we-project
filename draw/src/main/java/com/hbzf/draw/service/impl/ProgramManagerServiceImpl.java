@@ -66,6 +66,7 @@ public class ProgramManagerServiceImpl extends ServiceImpl<ProgramManagerDao, Pr
             queryWrapper.ge("start_review", startTime);
             queryWrapper.le("end_review", endTime);
         }
+        queryWrapper.orderByDesc("addByTime");
         IPage<ProgramManagerEntity> page = this.page(
                 new Query<ProgramManagerEntity>().getPage(params),
                 queryWrapper
