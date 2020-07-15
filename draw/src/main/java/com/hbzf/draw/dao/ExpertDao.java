@@ -4,8 +4,10 @@ import com.hbzf.draw.entity.ExpertEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.hbzf.draw.entity.dto.ExpertDto;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 专家
@@ -23,4 +25,6 @@ public interface ExpertDao extends BaseMapper<ExpertEntity> {
     ExpertDto selectByPhone(String phone);
 
     List<String> selectByAllAvoidUnit();
+
+    List<ExpertDto> selectByPhones(@Param("phones") Set<String> phones);
 }

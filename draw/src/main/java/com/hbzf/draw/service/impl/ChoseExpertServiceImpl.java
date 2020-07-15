@@ -1,6 +1,8 @@
 package com.hbzf.draw.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.hbzf.draw.dao.ChoseMajorDao;
 import com.hbzf.draw.dao.ExpertDao;
 import com.hbzf.draw.dao.ProgramManagerDao;
@@ -10,6 +12,8 @@ import com.hbzf.draw.entity.dto.ChoseMajorDto;
 import com.hbzf.draw.entity.dto.ExpertDto;
 import com.hbzf.draw.enums.ProStatusEnum;
 import com.hbzf.draw.util.MathUtil;
+import freemarker.template.utility.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -63,7 +67,8 @@ public class ChoseExpertServiceImpl extends ServiceImpl<ChoseExpertDao, ChoseExp
     public List<ExpertDto> lottery(Long proId, String phones) {
 
         List<ChoseMajorDto> choseMajorDtos = choseMajorDao.listByProId(proId);
-        if (choseMajorDtos == null) {
+        ProgramManagerEntity programManagerEntity = programManagerDao.selectById(proId);
+        if (choseMajorDtos == null || programManagerEntity == null) {
             throw new NullPointerException();
         }
 
@@ -78,7 +83,8 @@ public class ChoseExpertServiceImpl extends ServiceImpl<ChoseExpertDao, ChoseExp
                     .map(String::trim)
                     .collect(Collectors.toSet());
         }
-        List<ExpertDto> experts = this.getExpertWithPhone(map, phoneList);
+        List<ExpertDto> experts = this.getExpertWithPhone(map, phoneList,
+                Optional.ofNullable(programManagerEntity.getAvoidUnit()).orElse(StringUtils.EMPTY));
 
 
         //删除上一次抽取结果
@@ -105,10 +111,10 @@ public class ChoseExpertServiceImpl extends ServiceImpl<ChoseExpertDao, ChoseExp
         }
 
 
-        ProgramManagerEntity programManagerEntity = new ProgramManagerEntity();
-        programManagerEntity.setId(proId);
-        programManagerEntity.setProStatus(ProStatusEnum.WC.getCode());
-        programManagerDao.updateById(programManagerEntity);
+        ProgramManagerEntity update = new ProgramManagerEntity();
+        update.setId(proId);
+        update.setProStatus(ProStatusEnum.WC.getCode());
+        programManagerDao.updateById(update);
         return experts;
     }
 
@@ -125,21 +131,31 @@ public class ChoseExpertServiceImpl extends ServiceImpl<ChoseExpertDao, ChoseExp
      * @Author harryper
      * @Date 2020/7/12 17:53
      **/
-    public List<ExpertDto> getExpertWithPhone(Map<Long, Integer> map, Set<String> phones) {
-        if (phones == null || phones.size() <= 0) {
-            return this.getExpert(map);
-        }
+    public List<ExpertDto> getExpertWithPhone(Map<Long, Integer> map, Set<String> phones, String avoidUnit) {
+        Map<Long, List<Long>> needAvoidExpertMap = Maps.newHashMap();
+        Set<Long> marjorIds = map.keySet();
         // 手机号不为空
         ArrayList<ExpertDto> returnDto = new ArrayList<>();
-        for (String phone : phones) {
-            ExpertDto dto = expertDao.selectByPhone(phone);
-            // 将查询到的专家存入返回结果
-            returnDto.add(dto);
-
-            // 将对应 majorId 的 needCount 数目减 1
-            map.put(dto.getMajorId(), map.get(dto.getMajorId()) - 1);
+        if (phones != null && phones.size() > 0) {
+            List<ExpertDto> dtos = expertDao.selectByPhones(phones);
+            for (ExpertDto dto : dtos) {
+                //输入手机号不在选中专业中或者专家为回避专家单位
+                if (!marjorIds.contains(dto.getMajorId()) || avoidUnit.contains(dto.getUnit())) {
+                    continue;
+                }
+                // 将查询到的专家存入返回结果
+                returnDto.add(dto);
+                // 将对应 majorId 的 needCount 数目减 1
+                map.put(dto.getMajorId(), map.get(dto.getMajorId()) - 1);
+                if (needAvoidExpertMap.get(dto.getMajorId()) != null) {
+                    needAvoidExpertMap.get(dto.getMajorId()).add(dto.getExpertId());
+                } else {
+                    List<Long> needAvoidUnit = Lists.newArrayList(dto.getExpertId());
+                    needAvoidExpertMap.put(dto.getMajorId(), needAvoidUnit);
+                }
+            }
         }
-        returnDto.addAll(this.getExpert(map));
+        returnDto.addAll(this.getExpert(map, needAvoidExpertMap, avoidUnit));
         return returnDto;
     }
 
@@ -152,7 +168,7 @@ public class ChoseExpertServiceImpl extends ServiceImpl<ChoseExpertDao, ChoseExp
      * @Author harryper
      * @Date 2020/7/12 18:16
      **/
-    public List<ExpertDto> getExpert(Map<Long, Integer> map) {
+    public List<ExpertDto> getExpert(Map<Long, Integer> map, Map<Long, List<Long>> avoidExpertMap, String avoidUnit) {
         List<ExpertDto> returnDto = new ArrayList<>();
         Set<Long> keys = map.keySet();
         for (Long key : keys) {
@@ -161,6 +177,10 @@ public class ChoseExpertServiceImpl extends ServiceImpl<ChoseExpertDao, ChoseExp
             if (expertDtos == null || expertDtos.size() <= 0) {
                 continue;
             }
+            List<Long> avoidUnitIds = avoidExpertMap.get(key);
+            expertDtos.removeIf(e -> Optional.ofNullable(avoidUnitIds).orElse(Lists.newArrayList()).contains(e.getExpertId()));
+            //去除回避专家单位的专家
+            expertDtos.removeIf(e -> avoidUnit.contains(e.getUnit()));
             // 如果总的专家数目小于等于要抽取的，则不需抽取直接添加
             if (expertDtos.size() <= map.get(key)) {
                 returnDto.addAll(expertDtos);
@@ -168,8 +188,8 @@ public class ChoseExpertServiceImpl extends ServiceImpl<ChoseExpertDao, ChoseExp
             }
             // 总的专家数目大于要抽取的，则随机抽取 needCount 个
             int[] needCount = MathUtil.randomNum(1, expertDtos.size() + 1, map.get(key));
-            for (int i = 0; i < needCount.length; i++) {
-                returnDto.add(expertDtos.get(needCount[i] - 1));
+            for (int value : needCount) {
+                returnDto.add(expertDtos.get(value - 1));
             }
         }
         return returnDto;

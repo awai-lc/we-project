@@ -38,4 +38,13 @@
     <select id="selectByAllAvoidUnit" resultType="java.lang.String">
         select distinct(unit) from expert
     </select>
+    <select id="selectByPhones" resultType="com.hbzf.draw.entity.dto.ExpertDto">
+        select ex.id expertId,ex.expert_name expertName,ex.major_id majorId,ex.phone phone, ex.email email, ex.address address, ex.unit unit, ex.job_status jobStatus, ex.birth birth, ex.addby addby,
+        ex.addByTime addbytime, ex.lastModifiedBy lastmodifiedby, ex.lastModifiedByTime lastmodifiedbytime
+        from expert ex
+        where ex.phone in
+        <foreach collection="phones" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
 </mapper>

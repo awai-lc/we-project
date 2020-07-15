@@ -1,22 +1,18 @@
 package com.hbzf.draw.controller;
 
-import java.security.PublicKey;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
-//import org.apache.shiro.authz.annotation.RequiresPermissions;
-import com.hbzf.draw.entity.ExpertEntity;
+import com.hbzf.common.utils.PageUtils;
+import com.hbzf.common.utils.R;
+import com.hbzf.draw.entity.ChoseExpertEntity;
 import com.hbzf.draw.entity.dto.ChoseExpertDto;
 import com.hbzf.draw.entity.dto.ExpertDto;
+import com.hbzf.draw.service.ChoseExpertService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
-import com.hbzf.draw.entity.ChoseExpertEntity;
-import com.hbzf.draw.service.ChoseExpertService;
-import com.hbzf.common.utils.PageUtils;
-import com.hbzf.common.utils.R;
+import java.util.*;
+
+//import org.apache.shiro.authz.annotation.RequiresPermissions;
 
 
 
@@ -57,13 +53,19 @@ public class ChoseExpertController {
     }
 
     /**
-     * 信息
+     * 打印用
      */
     @RequestMapping("/listByProId/{id}")
     //@RequiresPermissions("draw:choseexpert:info")
     public R listByProId(@PathVariable("id") Long id){
         List<ChoseExpertDto> choseExpert = choseExpertService.listByProId(id);
-
+        //排序，专业一样的放一起
+        choseExpert.sort(new Comparator<ChoseExpertDto>() {
+            @Override
+            public int compare(ChoseExpertDto o1, ChoseExpertDto o2) {
+                return o1.getMajorId().compareTo(o2.getMajorId());
+            }
+        });
         return R.ok().put("choseExpert", choseExpert);
     }
 

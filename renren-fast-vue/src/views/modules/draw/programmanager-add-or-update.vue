@@ -267,8 +267,6 @@
           <span v-else>{{ scope.row.needCount }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="chosedCount" label="已抽取专家数">
-      </el-table-column>
       <el-table-column prop="expertCount" label="库存专家数"></el-table-column>
       <el-table-column prop="placeName" label="专业所属地区"></el-table-column>
       <el-table-column label="操作">
@@ -422,13 +420,13 @@
         majorAddVisible: false,
         specialLogicList: "",
         specialLogicVisible: false,
-        specialLogic: true,
+        specialLogic: false,
         disabled: false,
         resetBtnDisabled: false,
         updateBtnDisabled: true,
         isRouterAlive: true,
         saveDisabled: false,
-        chouQuDisabled: false,
+        chouQuDisabled: true,
         printDisabled: true,
         proNameDisabled: false,
         addMajorBtnDisabled: false,
@@ -499,23 +497,6 @@
         value: [],
         list: [],
         loading: false,
-        states: ["中国", "Alaska", "Arizona",
-          "Arkansas", "California", "Colorado",
-          "Connecticut", "Delaware", "Florida",
-          "Georgia", "Hawaii", "Idaho", "Illinois",
-          "Indiana", "Iowa", "Kansas", "Kentucky",
-          "Louisiana", "Maine", "Maryland",
-          "Massachusetts", "Michigan", "Minnesota",
-          "Mississippi", "Missouri", "Montana",
-          "Nebraska", "Nevada", "New Hampshire",
-          "New Jersey", "New Mexico", "New York",
-          "North Carolina", "North Dakota", "Ohio",
-          "Oklahoma", "Oregon", "Pennsylvania",
-          "Rhode Island", "South Carolina",
-          "South Dakota", "Tennessee", "Texas",
-          "Utah", "Vermont", "Virginia",
-          "Washington", "West Virginia", "Wisconsin",
-          "Wyoming"],
         purWays: [
           {
             purWay: "1",
@@ -630,6 +611,12 @@
       };
     },
     mounted() {
+      var userName = this.$store.state.user.name;
+      if(userName == 'admin'){
+        this.specialLogic = true;
+      }else {
+        this.specialLogic = false;
+      }
       this.$http({
         url: this.$http.adornUrl(
           `/draw/expert/unitList`

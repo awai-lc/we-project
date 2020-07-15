@@ -20,7 +20,7 @@ public class MathUtil {
      */
     public static int[] randomNum(int min, int max, int n) {
         if (n >= (max - min + 1) || max <= min) {
-            return null;
+            return new int[0];
         }
         int[] result = new int[n];
         int count = 0;
