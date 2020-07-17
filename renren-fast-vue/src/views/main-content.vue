@@ -75,13 +75,19 @@
         return { minHeight: height + 'px' }
       }
     },
+  
     methods: {
+
       // tabs, 选中tab
       selectedTabHandle (tab) {
+        console.log('tab.name--' + tab.name)
         tab = this.mainTabs.filter(item => item.name === tab.name)
         if (tab.length >= 1) {
-          console.log(tab)
-          this.$router.push({ name: tab[0].name, query: tab[0].query, params: tab[0].params })
+          if (tab[0].name.substring(0, 21) == 'programmanager-update') {
+            this.$router.push({name: 'programmanager-update', params: {id: tab[0].params.id}})
+          } else {
+            this.$router.push({ name: tab[0].name, query: tab[0].query, params: tab[0].params })
+          }
         }
       },
       // tabs, 删除tab

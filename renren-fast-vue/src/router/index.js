@@ -19,6 +19,7 @@ const _import = require('./import-' + process.env.NODE_ENV)
 const globalRoutes = [
   { path: '/404', component: _import('common/404'), name: '404', meta: { title: '404未找到' } },
   { path: '/login', component: _import('common/login'), name: 'login', meta: { title: '登录' } }
+
 ]
 
 // 主入口路由(需嵌套上左右整体布局)
@@ -36,7 +37,8 @@ const mainRoutes = {
     { path: '/home', component: _import('common/home'), name: 'home', meta: { title: '首页' } },
     { path: '/theme', component: _import('common/theme'), name: 'theme', meta: { title: '主题' } },
     { path: '/demo-echarts', component: _import('demo/echarts'), name: 'demo-echarts', meta: { title: 'demo-echarts', isTab: true } },
-    { path: '/demo-ueditor', component: _import('demo/ueditor'), name: 'demo-ueditor', meta: { title: 'demo-ueditor', isTab: true } }
+    { path: '/demo-ueditor', component: _import('demo/ueditor'), name: 'demo-ueditor', meta: { title: 'demo-ueditor', isTab: true } },
+    { path: '/programmanager-update', component: _import('modules/draw/programmanager-update'), name: 'programmanager-update', meta: { title: '项目详情', isTab: true } }
   ],
   beforeEnter (to, from, next) {
     let token = Vue.cookie.get('token')
@@ -73,6 +75,7 @@ router.beforeEach((to, from, next) => {
         sessionStorage.setItem('menuList', JSON.stringify(data.menuList || '[]'))
         sessionStorage.setItem('permissions', JSON.stringify(data.permissions || '[]'))
         next({ ...to, replace: true })
+        console.log('route---------')
       } else {
         sessionStorage.setItem('menuList', '[]')
         sessionStorage.setItem('permissions', '[]')
@@ -82,6 +85,7 @@ router.beforeEach((to, from, next) => {
       console.log(`%c${e} 请求菜单列表和权限失败，跳转至登录页！！`, 'color:blue')
       router.push({ name: 'login' })
     })
+    console.log('route----------------------------------')
   }
 })
 
@@ -165,35 +169,17 @@ function fnAddDynamicMenuRoutes (menuList = [], routes = []) {
       //     }]
       //   }
       // }
-      if (menuList[i].url != 'draw/programmanager-add-or-update') {
-        console.log('!!draw/programmanager' + 'aaa' + menuList[i].url.replace('/', '-'))
-        route = {
-          path: menuList[i].url.replace('/', '-'),
-          component: null,
-          name: menuList[i].url.replace('/', '-'),
-          meta: {
-            menuId: menuList[i].menuId,
-            title: menuList[i].name,
-            isDynamic: true,
-            isTab: true,
-            iframeUrl: ''
-          }
-        }
-      } else {
-        console.log('draw/programmanager' + '--caca--' + menuList[i].url.replace('/', '-'))
-        route = {
-          path: menuList[i].url.replace('/', '-') + '/:id(\\d+)',
-          component: null,
-          name: menuList[i].url.replace('/', '-'),
-          meta: {
-            menuId: menuList[i].menuId,
-            title: menuList[i].name,
-            isDynamic: true,
-            noCache: true,
-            isTab: true,
-            iframeUrl: ''
-          },
-          hidden: true
+      console.log('!!draw/programmanager' + 'aaa' + menuList[i].url.replace('/', '-'))
+      route = {
+        path: menuList[i].url.replace('/', '-'),
+        component: null,
+        name: menuList[i].url.replace('/', '-'),
+        meta: {
+          menuId: menuList[i].menuId,
+          title: menuList[i].name,
+          isDynamic: true,
+          isTab: true,
+          iframeUrl: ''
         }
       }
 
