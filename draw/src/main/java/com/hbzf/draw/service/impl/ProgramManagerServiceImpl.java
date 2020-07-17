@@ -18,6 +18,7 @@ import com.hbzf.draw.enums.PurWayEnum;
 import com.hbzf.draw.enums.SupervisoryPlaceEnum;
 import com.hbzf.draw.service.ProgramManagerService;
 import com.hbzf.draw.util.DateUtil;
+import com.hbzf.draw.util.SplitterUtil;
 import com.hbzf.draw.util.exception.BizException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
@@ -62,10 +63,11 @@ public class ProgramManagerServiceImpl extends ServiceImpl<ProgramManagerDao, Pr
         }
         String startTime = (String) params.get("startReviewTime");
         String endTime = (String) params.get("endReviewTime");
-        if(StringUtils.isNotBlank(startTime) && StringUtils.isNotBlank(endTime)){
+        if (StringUtils.isNotBlank(startTime) && StringUtils.isNotBlank(endTime)) {
             queryWrapper.ge("start_review", startTime);
             queryWrapper.le("end_review", endTime);
         }
+        queryWrapper.orderByDesc("addByTime");
         IPage<ProgramManagerEntity> page = this.page(
                 new Query<ProgramManagerEntity>().getPage(params),
                 queryWrapper
@@ -167,6 +169,10 @@ public class ProgramManagerServiceImpl extends ServiceImpl<ProgramManagerDao, Pr
         entity.setAddbytime(new Date());
         entity.setLastmodifiedby(1L);
         entity.setLastmodifiedbytime(new Date());
+
+        if (CollectionUtils.isNotEmpty(request.getProgramManager().getAvoidUnit())) {
+           entity.setAvoidUnit(SplitterUtil.longListToStrWithComma(request.getProgramManager().getAvoidUnit()));
+        }
         return entity;
     }
 

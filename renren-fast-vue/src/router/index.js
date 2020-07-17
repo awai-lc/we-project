@@ -75,7 +75,6 @@ router.beforeEach((to, from, next) => {
         sessionStorage.setItem('menuList', JSON.stringify(data.menuList || '[]'))
         sessionStorage.setItem('permissions', JSON.stringify(data.permissions || '[]'))
         next({ ...to, replace: true })
-        console.log('route---------')
       } else {
         sessionStorage.setItem('menuList', '[]')
         sessionStorage.setItem('permissions', '[]')
@@ -85,7 +84,6 @@ router.beforeEach((to, from, next) => {
       console.log(`%c${e} 请求菜单列表和权限失败，跳转至登录页！！`, 'color:blue')
       router.push({ name: 'login' })
     })
-    console.log('route----------------------------------')
   }
 })
 
@@ -190,7 +188,6 @@ function fnAddDynamicMenuRoutes (menuList = [], routes = []) {
         route['name'] = `i-${menuList[i].menuId}`
         route['meta']['iframeUrl'] = menuList[i].url
       } else {
-        console.log('!!!isURL----' + menuList[i].url)
         try {
           route['component'] = _import(`modules/${menuList[i].url}`) || null
         } catch (e) {}

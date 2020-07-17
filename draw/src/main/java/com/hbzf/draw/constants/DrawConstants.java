@@ -13,6 +13,11 @@ public class DrawConstants {
     public static final String PUR_UNIT = "PUR_UNIT";
 
     /**
+     * 回避专家单位
+     */
+    public static final String AVOID_UNIT = "AVOID_UNIT";
+
+    /**
      * 监管地
      */
     public static final String SUPERVISORY_PLACE = "SUPERVISORY_PLACE";

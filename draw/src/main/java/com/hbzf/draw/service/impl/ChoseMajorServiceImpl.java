@@ -1,5 +1,6 @@
 package com.hbzf.draw.service.impl;
 
+import com.hbzf.draw.entity.dto.ChoseMajorDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,9 +16,14 @@ import com.hbzf.draw.dao.ChoseMajorDao;
 import com.hbzf.draw.entity.ChoseMajorEntity;
 import com.hbzf.draw.service.ChoseMajorService;
 
+import javax.annotation.Resource;
+
 
 @Service("choseMajorService")
 public class ChoseMajorServiceImpl extends ServiceImpl<ChoseMajorDao, ChoseMajorEntity> implements ChoseMajorService {
+
+    @Resource
+    private ChoseMajorDao choseMajorDao;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -27,6 +33,11 @@ public class ChoseMajorServiceImpl extends ServiceImpl<ChoseMajorDao, ChoseMajor
         );
 
         return new PageUtils(page);
+    }
+
+    @Override
+    public List<ChoseMajorDto> listByProId(Long proID) {
+        return choseMajorDao.listByProId(proID);
     }
 
     @Override
