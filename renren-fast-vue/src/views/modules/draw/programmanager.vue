@@ -188,10 +188,59 @@
     components: {
       AddOrUpdate
     },
+    watch: {
+      $route: 'routeHandle'
+    },
+    computed: {
+      sidebarLayoutSkin: {
+        get () { return this.$store.state.common.sidebarLayoutSkin }
+      },
+      sidebarFold: {
+        get () { return this.$store.state.common.sidebarFold }
+      },
+      menuList: {
+        get () { return this.$store.state.common.menuList },
+        set (val) { this.$store.commit('common/updateMenuList', val) }
+      },
+      menuActiveName: {
+        get () { return this.$store.state.common.menuActiveName },
+        set (val) { this.$store.commit('common/updateMenuActiveName', val) }
+      },
+      mainTabs: {
+        get () { return this.$store.state.common.mainTabs },
+        set (val) { this.$store.commit('common/updateMainTabs', val) }
+      },
+      mainTabsActiveName: {
+        get () { return this.$store.state.common.mainTabsActiveName },
+        set (val) { this.$store.commit('common/updateMainTabsActiveName', val) }
+      }
+    },
     activated () {
       this.getDataList()
     },
     methods: {
+      routeHandle (route) {
+        if (route.meta.isTab) {
+          // tab选中, 不存在先添加
+          var tab = this.mainTabs.filter(item => item.name == route.name && item.params.id == route.params.id)[0]
+          if (!tab) {
+            if (route.meta.isDynamic) {
+              route = this.dynamicMenuRoutes.filter(item => item.name === route.name)[0]
+              if (!route) {
+                return console.error('未能找到可用标签页!')
+              }
+            }
+            tab = {
+              name: route.name + '/' + route.params.id,
+              title: route.meta.title + '-' + route.params.id,
+              params: route.params,
+              query: route.query
+            }
+            this.mainTabs = this.mainTabs.concat(tab)
+          }
+          this.mainTabsActiveName = tab.name
+        }
+      },
       // 获取数据列表
       getDataList () {
         this.dataListLoading = true

@@ -394,31 +394,31 @@
 </template>
 
 <script>
-  import MajorSelect from "./major-select";
-  import {getLodop} from "@/tools/lodop.js";
+  import MajorSelect from './major-select'
+import {getLodop} from '@/tools/lodop.js'
 
-  export default {
+export default {
     components: {
       MajorSelect
     },
-    created() {
+    created () {
       /*  console.log(this.$store.state.common.mainTabsActiveName);
               var tab = this.$store.state.common.mainTabs.filter(item => item.name === this.$store.state.common.mainTabsActiveName);
 
               tab[0].title ="123"; */
       // 获取传入的参数
-      var param = this.$route.query;
-      if (param && param.id && param.id !== "0") {
-        console.log(param.id);
-        this.init(param.id);
-        //this.fetchData(param.id);
+      var param = this.$route.query
+      if (param && param.id && param.id !== '0') {
+        console.log(param.id)
+        this.init(param.id)
+      // this.fetchData(param.id);
       }
     },
-    data() {
+    data () {
       return {
         fullscreenLoading: false,
         majorAddVisible: false,
-        specialLogicList: "",
+        specialLogicList: '',
         specialLogicVisible: false,
         specialLogic: false,
         disabled: false,
@@ -433,62 +433,62 @@
         restaurants: [],
         dataForm: {
           id: 0,
-          code: "",
-          name: "",
-          proStatus: "1",
-          purchasingId: "",
-          extractionUnit: "湖北华通工程咨询有限公司",
-          purWay: "1",
-          startReview: "",
-          endReview: "",
-          govProRecordNumber: "",
-          govProPerson: "",
-          reviewContent: "",
-          budgetAmount: "",
-          extractionUnitContact: "",
-          extractionUnitPhone: "",
-          address: "",
-          supervisoryPlaceId: "",
+          code: '',
+          name: '',
+          proStatus: '1',
+          purchasingId: '',
+          extractionUnit: '湖北华通工程咨询有限公司',
+          purWay: '1',
+          startReview: '',
+          endReview: '',
+          govProRecordNumber: '',
+          govProPerson: '',
+          reviewContent: '',
+          budgetAmount: '',
+          extractionUnitContact: '',
+          extractionUnitPhone: '',
+          address: '',
+          supervisoryPlaceId: '',
           avoidUnit: [],
-          remark: ""
+          remark: ''
         },
         dataRule: {
           code: [],
           name: [
-            {required: true, message: "项目名称不能为空", trigger: "blur"}
+            {required: true, message: '项目名称不能为空', trigger: 'blur'}
           ],
           proStatus: [],
           purchasingId: [
-            {required: true, message: "采购单位不能为空", trigger: "blur"}
+            {required: true, message: '采购单位不能为空', trigger: 'blur'}
           ],
           extractionUnit: [
-            {required: true, message: "抽取单位不能为空", trigger: "blur"}
+            {required: true, message: '抽取单位不能为空', trigger: 'blur'}
           ],
           purWay: [
-            {required: true, message: "采购方式不能为空", trigger: "blur"}
+            {required: true, message: '采购方式不能为空', trigger: 'blur'}
           ],
           startReview: [
-            {required: true, message: "评审开始时间不能为空", trigger: "blur"}
+            {required: true, message: '评审开始时间不能为空', trigger: 'blur'}
           ],
           endReview: [
-            {required: true, message: "评审结束时间不能为空", trigger: "blur"}
+            {required: true, message: '评审结束时间不能为空', trigger: 'blur'}
           ],
           govProRecordNumber: [],
           govProPerson: [],
           reviewContent: [
-            {required: true, message: "评审内容不能为空", trigger: "blur"}
+            {required: true, message: '评审内容不能为空', trigger: 'blur'}
           ],
           budgetAmount: [
-            {required: true, message: "预算金额不能为空", trigger: "blur"}
+            {required: true, message: '预算金额不能为空', trigger: 'blur'}
           ],
           extractionUnitContact: [
-            {required: true, message: "抽取单位联系人不能为空", trigger: "blur"}
+            {required: true, message: '抽取单位联系人不能为空', trigger: 'blur'}
           ],
           extractionUnitPhone: [
-            {required: true, message: "抽取单位电话不能为空", trigger: "blur"}
+            {required: true, message: '抽取单位电话不能为空', trigger: 'blur'}
           ],
           address: [
-            {required: true, message: "评审地址不能为空", trigger: "blur"}
+            {required: true, message: '评审地址不能为空', trigger: 'blur'}
           ],
           avoidUnit: [],
           remark: []
@@ -499,311 +499,310 @@
         loading: false,
         purWays: [
           {
-            purWay: "1",
-            label: "公开招标"
+            purWay: '1',
+            label: '公开招标'
           },
           {
-            purWay: "2",
-            label: "竞争性谈判"
+            purWay: '2',
+            label: '竞争性谈判'
           },
           {
-            purWay: "3",
-            label: "竞争性磋商"
+            purWay: '3',
+            label: '竞争性磋商'
           },
           {
-            purWay: "4",
-            label: "询价采购"
+            purWay: '4',
+            label: '询价采购'
           },
           {
-            purWay: "5",
-            label: "邀请"
+            purWay: '5',
+            label: '邀请'
           },
           {
-            purWay: "6",
-            label: "其他"
+            purWay: '6',
+            label: '其他'
           }
         ],
         tableData: [],
         supervisoryPlaces: [
           {
-            supervisoryPlaceId: "1",
-            label: "省本级"
+            supervisoryPlaceId: '1',
+            label: '省本级'
           },
           {
-            supervisoryPlaceId: "2",
-            label: "武汉市"
+            supervisoryPlaceId: '2',
+            label: '武汉市'
           },
           {
-            supervisoryPlaceId: "3",
-            label: "黄石市"
+            supervisoryPlaceId: '3',
+            label: '黄石市'
           },
           {
-            supervisoryPlaceId: "4",
-            label: "十堰市"
+            supervisoryPlaceId: '4',
+            label: '十堰市'
           },
           {
-            supervisoryPlaceId: "5",
-            label: "宜昌市"
+            supervisoryPlaceId: '5',
+            label: '宜昌市'
           },
           {
-            supervisoryPlaceId: "6",
-            label: "襄樊市"
+            supervisoryPlaceId: '6',
+            label: '襄樊市'
           },
           {
-            supervisoryPlaceId: "7",
-            label: "鄂州市"
+            supervisoryPlaceId: '7',
+            label: '鄂州市'
           },
           {
-            supervisoryPlaceId: "8",
-            label: "荆门市"
+            supervisoryPlaceId: '8',
+            label: '荆门市'
           },
           {
-            supervisoryPlaceId: "9",
-            label: "孝感市"
+            supervisoryPlaceId: '9',
+            label: '孝感市'
           },
           {
-            supervisoryPlaceId: "10",
-            label: "荆州市"
+            supervisoryPlaceId: '10',
+            label: '荆州市'
           },
           {
-            supervisoryPlaceId: "11",
-            label: "黄冈市"
+            supervisoryPlaceId: '11',
+            label: '黄冈市'
           },
           {
-            supervisoryPlaceId: "12",
-            label: "随州市"
+            supervisoryPlaceId: '12',
+            label: '随州市'
           },
           {
-            supervisoryPlaceId: "13",
-            label: "仙桃市"
+            supervisoryPlaceId: '13',
+            label: '仙桃市'
           },
           {
-            supervisoryPlaceId: "14",
-            label: "潜江市"
+            supervisoryPlaceId: '14',
+            label: '潜江市'
           },
           {
-            supervisoryPlaceId: "15",
-            label: "天门市"
+            supervisoryPlaceId: '15',
+            label: '天门市'
           },
           {
-            supervisoryPlaceId: "16",
-            label: "神农架林区"
+            supervisoryPlaceId: '16',
+            label: '神农架林区'
           }
         ],
         proStatuses: [
           {
-            proStatus: "1",
-            label: "底稿"
+            proStatus: '1',
+            label: '底稿'
           },
           {
-            proStatus: "2",
-            label: "待抽取"
+            proStatus: '2',
+            label: '待抽取'
           },
           {
-            proStatus: "3",
-            label: "抽取中"
+            proStatus: '3',
+            label: '抽取中'
           },
           {
-            proStatus: "4",
-            label: "抽取完成"
+            proStatus: '4',
+            label: '抽取完成'
           }
         ]
-      };
+      }
     },
-    mounted() {
-      var userName = this.$store.state.user.name;
-      if(userName == 'admin'){
-        this.specialLogic = true;
-      }else {
-        this.specialLogic = false;
+    mounted () {
+      var userName = this.$store.state.user.name
+      if (userName == 'admin') {
+        this.specialLogic = true
+      } else {
+        this.specialLogic = false
       }
       this.$http({
         url: this.$http.adornUrl(
           `/draw/expert/unitList`
         ),
-        method: "get",
+        method: 'get',
         params: {
 
         }
       }).then(({data}) => {
         this.list = data.map(item => {
-          return {value: `${item}`, label: `${item}`};
-        });
+          return {value: `${item}`, label: `${item}`}
+        })
       })
-
     },
     methods: {
-      remoteMethod(query) {
+      remoteMethod (query) {
         if (query !== '') {
-          this.loading = true;
+          this.loading = true
           setTimeout(() => {
-            this.loading = false;
+            this.loading = false
             this.options = this.list.filter(item => {
               return item.label.toLowerCase()
-                .indexOf(query.toLowerCase()) > -1;
-            });
-          }, 200);
+                .indexOf(query.toLowerCase()) > -1
+            })
+          }, 200)
         } else {
-          this.options = [];
+          this.options = []
         }
       },
-      fathermethod(tableDates) {
-        this.majorAddVisible = false;
-        // 去重
+      fathermethod (tableDates) {
+        this.majorAddVisible = false
+      // 去重
         for (var i = 0; i < tableDates.length; i++) {
-          var flag = true;
+          var flag = true
           for (var j = 0; j < this.tableData.length; j++) {
-            console.log(tableDates[i].majorId == this.tableData[j].majorId);
+            console.log(tableDates[i].majorId == this.tableData[j].majorId)
             if (tableDates[i].majorId == this.tableData[j].majorId) {
-              flag = false;
-              break;
+              flag = false
+              break
             }
           }
           if (flag) {
-            this.tableData.push(tableDates[i]);
+            this.tableData.push(tableDates[i])
           }
         }
       },
-      fetchData(id) {
+      fetchData (id) {
         // set tagsview title
-        this.setTagsViewTitle(id);
+        this.setTagsViewTitle(id)
 
-        // set page title
-        this.setPageTitle(id);
+      // set page title
+        this.setPageTitle(id)
       },
-      setTagsViewTitle(id) {
-        const title = "项目详情";
+      setTagsViewTitle (id) {
+        const title = '项目详情'
         const route = Object.assign({}, this.tempRoute, {
           title: `${title}-${id}`
-        });
-        this.$store.dispatch("tagsView/updateVisitedView", route);
+        })
+        this.$store.dispatch('tagsView/updateVisitedView', route)
       },
-      setPageTitle(id) {
-        const title = "项目详情";
-        document.title = `${title} - ${id}`;
+      setPageTitle (id) {
+        const title = '项目详情'
+        document.title = `${title} - ${id}`
       },
-      chouquMethod() {
-        this.specialLogicVisible = false;
-        this.fullscreenLoading = true;
+      chouquMethod () {
+        this.specialLogicVisible = false
+        this.fullscreenLoading = true
         this.$http({
           url: this.$http.adornUrl(
             `/draw/choseexpert/lottery`
           ),
-          method: "get",
+          method: 'get',
           params: {
-            "proId": this.dataForm.id,
-            "phones": this.specialLogicList,
+            'proId': this.dataForm.id,
+            'phones': this.specialLogicList
           }
         }).then(({data}) => {
-          this.fullscreenLoading = false;
+          this.fullscreenLoading = false
           if (data && data.code === 0) {
             this.$message({
-              message: "抽取完成",
-              type: "success",
+              message: '抽取完成',
+              type: 'success',
               duration: 1500,
               onClose: () => {
-                this.init(this.dataForm.id);
+                this.init(this.dataForm.id)
               }
-            });
+            })
           } else {
-            this.$message.error(data.msg);
+            this.$message.error(data.msg)
           }
-        });
+        })
       },
-      init(id) {
-        this.dataForm.id = id || 0;
-        this.disabled = true;
+      init (id) {
+        this.dataForm.id = id || 0
+        this.disabled = true
         this.$nextTick(() => {
           /*   tab[0].name = Vue.set() */
-          this.$refs["dataForm"].resetFields();
+          this.$refs['dataForm'].resetFields()
           if (this.dataForm.id) {
             this.$http({
               url: this.$http.adornUrl(
                 `/draw/programmanager/info/${this.dataForm.id}`
               ),
-              method: "get",
+              method: 'get',
               params: this.$http.adornParams()
             }).then(({data}) => {
               if (data && data.code === 0) {
-                this.updateBtnDisabled = false;
-                this.chouQuDisabled = false;
-                this.resetBtnDisabled = true;
-                this.saveDisabled = true;
-                this.proNameDisabled = true;
-                this.addMajorBtnDisabled = true;
-                var programManager = data.programManagerDetail.programManager;
-                this.dataForm.code = programManager.code;
-                this.dataForm.name = programManager.name;
-                this.dataForm.proStatus = programManager.proStatus + "";
+                this.updateBtnDisabled = false
+                this.chouQuDisabled = false
+                this.resetBtnDisabled = true
+                this.saveDisabled = true
+                this.proNameDisabled = true
+                this.addMajorBtnDisabled = true
+                var programManager = data.programManagerDetail.programManager
+                this.dataForm.code = programManager.code
+                this.dataForm.name = programManager.name
+                this.dataForm.proStatus = programManager.proStatus + ''
                 console.log(this.dataForm.proStatus)
                 if (this.dataForm.proStatus == 4) {
-                  this.printDisabled = false;
+                  this.printDisabled = false
                 }
-                this.dataForm.purchasingId = programManager.purchasingId;
-                this.dataForm.extractionUnit = programManager.extractionUnit;
-                this.dataForm.purWay = programManager.purWay + "";
-                this.dataForm.startReview = programManager.startReview;
-                this.dataForm.endReview = programManager.endReview;
+                this.dataForm.purchasingId = programManager.purchasingId
+                this.dataForm.extractionUnit = programManager.extractionUnit
+                this.dataForm.purWay = programManager.purWay + ''
+                this.dataForm.startReview = programManager.startReview
+                this.dataForm.endReview = programManager.endReview
                 this.dataForm.govProRecordNumber =
-                  programManager.govProRecordNumber;
-                this.dataForm.govProPerson = programManager.govProPerson;
-                this.dataForm.reviewContent = programManager.reviewContent;
-                this.dataForm.budgetAmount = programManager.budgetAmount;
+                  programManager.govProRecordNumber
+                this.dataForm.govProPerson = programManager.govProPerson
+                this.dataForm.reviewContent = programManager.reviewContent
+                this.dataForm.budgetAmount = programManager.budgetAmount
                 this.dataForm.extractionUnitContact =
-                  programManager.extractionUnitContact;
+                  programManager.extractionUnitContact
                 this.dataForm.extractionUnitPhone =
-                  programManager.extractionUnitPhone;
-                this.dataForm.address = programManager.address;
+                  programManager.extractionUnitPhone
+                this.dataForm.address = programManager.address
                 this.dataForm.supervisoryPlaceId =
-                  programManager.supervisoryPlaceId + "";
-                if(programManager.avoidUnit){
-                  this.dataForm.avoidUnit =  programManager.avoidUnit.split(',');
+                  programManager.supervisoryPlaceId + ''
+                if (programManager.avoidUnit) {
+                  this.dataForm.avoidUnit = programManager.avoidUnit.split(',')
                 }
-                this.dataForm.remark = programManager.remark;
+                this.dataForm.remark = programManager.remark
                 data.programManagerDetail.choseMajorEntities.forEach(item => {
-                  item.isEdit = 0;
-                });
-                this.tableData = data.programManagerDetail.choseMajorEntities;
+                  item.isEdit = 0
+                })
+                this.tableData = data.programManagerDetail.choseMajorEntities
               }
-            });
+            })
           }
-        });
+        })
       },
-      resetForm() {
-        this.$refs["dataForm"].resetFields();
+      resetForm () {
+        this.$refs['dataForm'].resetFields()
       },
-      deleteRow(index, rows) {
-        rows.splice(index, 1);
+      deleteRow (index, rows) {
+        rows.splice(index, 1)
       },
-      formUpdate() {
-        this.disabled = false;
-        this.saveDisabled = false;
-        this.chouQuDisabled = true;
-        this.printDisabled = true;
-        this.addMajorBtnDisabled = false;
+      formUpdate () {
+        this.disabled = false
+        this.saveDisabled = false
+        this.chouQuDisabled = true
+        this.printDisabled = true
+        this.addMajorBtnDisabled = false
       },
-      addMajor() {
-        this.majorAddVisible = true;
+      addMajor () {
+        this.majorAddVisible = true
       },
-      singlePrint() {
+      singlePrint () {
         this.$http({
           url: this.$http.adornUrl(
             `/draw/choseexpert/listByProId/${this.dataForm.id}`
           ),
-          method: "get",
+          method: 'get',
           params: this.$http.adornParams()
         }).then(({data}) => {
           if (data && data.code === 0) {
             if (data.choseExpert.length == 0) {
-              this.$message.error("请先抽取专家！");
-              return;
+              this.$message.error('请先抽取专家！')
+              return
             }
-            var proName = this.dataForm.name;
-            document.getElementById("table1").innerHTML = "";
+            var proName = this.dataForm.name
+            document.getElementById('table1').innerHTML = ''
             var html =
-              '<caption  align="center">' + proName + "项目抽取结果</caption>";
+              '<caption  align="center">' + proName + '项目抽取结果</caption>'
             html +=
-              "<tr>\n" +
+              '<tr>\n' +
               '                  <td style="border:solid 1px black">序号</td>\n' +
               '                  <td style="border:solid 1px black">专家名称</td>\n' +
               '                  <td style="border:solid 1px black">专家单位</td>\n' +
@@ -811,84 +810,84 @@
               '                  <td style="border:solid 1px black">电话</td>\n' +
               '                  <td style="border:solid 1px black">地址</td>\n' +
               '                  <td style="border:solid 1px black">抽取时间</td>\n' +
-              "                </tr>";
-            var LODOP = getLodop();
+              '                </tr>'
+            var LODOP = getLodop()
             for (var k = 0; k < data.choseExpert.length; k++) {
-              var a = data.choseExpert[k];
-              var num = k + 1;
+              var a = data.choseExpert[k]
+              var num = k + 1
               html +=
-                "<tr>\n" +
+                '<tr>\n' +
                 '                  <td style="border:solid 1px black">' +
                 num +
-                "</td>\n" +
+                '</td>\n' +
                 '                    <td style="border:solid 1px black">' +
                 a.expertName +
-                "</td>\n" +
+                '</td>\n' +
                 '                  <td style="border:solid 1px black">' +
                 a.unit +
-                "</td>\n" +
+                '</td>\n' +
                 '                   <td style="border:solid 1px black">' +
                 a.majorName +
-                "</td>\n" +
+                '</td>\n' +
                 '                  <td style="border:solid 1px black">' +
                 a.phone +
-                "</td>\n" +
+                '</td>\n' +
                 '                  <td style="border:solid 1px black">' +
                 a.address +
-                "</td>\n" +
+                '</td>\n' +
                 '                  <td style="border:solid 1px black">' +
                 a.addbytime +
-                "</td>\n" +
-                "                </tr>";
+                '</td>\n' +
+                '                </tr>'
             }
-            document.getElementById("table1").innerHTML = html;
+            document.getElementById('table1').innerHTML = html
             LODOP.ADD_PRINT_HTM(
               30,
               0,
-              "210mm",
-              "297mm",
-              document.getElementById("form1").innerHTML
-            );
-            LODOP.PREVIEW();
+              '210mm',
+              '297mm',
+              document.getElementById('form1').innerHTML
+            )
+            LODOP.PREVIEW()
           }
-        });
+        })
       },
-      querySearch(queryString, cb) {
-        var that = this;
-        var url = "/draw/queryByName";
+      querySearch (queryString, cb) {
+        var that = this
+        var url = '/draw/queryByName'
         this.$http({
           url: this.$http.adornUrl(`/draw/unit/queryByName/` + queryString),
-          method: "get",
+          method: 'get',
           params: this.$http.adornParams()
         }).then(({data}) => {
           if (data && data.code === 0) {
-            that.items = [];
-            var ds = data.list;
+            that.items = []
+            var ds = data.list
             for (var i = 0; i < ds.length; i++) {
-              that.items.push({value: ds[i]});
+              that.items.push({value: ds[i]})
             }
-            cb(that.items);
+            cb(that.items)
           }
-        });
+        })
       },
-      handleSelect(item) {
+      handleSelect (item) {
       },
-      mod(index, row) {
-        row.isEdit = 1;
+      mod (index, row) {
+        row.isEdit = 1
       },
       // 表单提交
-      dataFormSubmit() {
+      dataFormSubmit () {
         if (this.tableData.length == 0) {
-          this.$message.error("请新增专业后保存");
-          return;
+          this.$message.error('请新增专业后保存')
+          return
         }
-        this.$refs["dataForm"].validate(valid => {
+        this.$refs['dataForm'].validate(valid => {
           if (valid) {
-            this.fullscreenLoading = true;
-            this.saveDisabled = true;
+            this.fullscreenLoading = true
+            this.saveDisabled = true
             this.$http({
               url: this.$http.adornUrl(`/draw/programmanager/save`),
-              method: "post",
+              method: 'post',
               data: this.$http.adornData({
                 programManager: {
                   id: this.dataForm.id || undefined,
@@ -914,25 +913,24 @@
                 majorList: this.tableData
               })
             }).then(({data}) => {
-              this.fullscreenLoading = false;
+              this.fullscreenLoading = false
               if (data && data.code === 0) {
                 this.$message({
-                  message: "操作成功",
-                  type: "success",
+                  message: '操作成功',
+                  type: 'success',
                   duration: 1500,
                   onClose: () => {
-                    this.init(data.msg);
+                    this.init(data.msg)
                   }
-                });
+                })
               } else {
-                this.saveDisabled = false;
-                this.$message.error(data.msg);
+                this.saveDisabled = false
+                this.$message.error(data.msg)
               }
-            });
+            })
           }
-        });
+        })
       }
     }
   }
-};
 </script>
