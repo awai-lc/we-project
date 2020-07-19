@@ -3,6 +3,7 @@ package com.hbzf.draw.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.hbzf.common.utils.PageUtils;
 import com.hbzf.draw.entity.ChoseExpertEntity;
+import com.hbzf.draw.entity.dto.BuCgridDataDto;
 import com.hbzf.draw.entity.dto.ChoseExpertDto;
 import com.hbzf.draw.entity.dto.ExpertDto;
 
@@ -30,5 +31,7 @@ public interface ChoseExpertService extends IService<ChoseExpertEntity> {
      * @return
      **/
     List<ExpertDto> lottery(Long proId, String phones);
+
+    void bcLottery(Long proId, List<BuCgridDataDto> buCgridData);
 }
 

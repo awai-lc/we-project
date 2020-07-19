@@ -68,7 +68,7 @@
             <el-input
               v-model="dataForm.extractionUnit"
               placeholder="抽取单位"
-              :disabled="disabled"
+              :disabled="true"
             ></el-input>
           </el-form-item>
         </el-col>
@@ -193,7 +193,6 @@
         <el-col :span="8">
           <el-form-item label="备注" prop="remark">
             <el-input
-              type="textarea"
               :rows="2"
               placeholder="备注"
               v-model="dataForm.remark"
@@ -219,15 +218,15 @@
         <el-col :span="16">
           <el-form-item label="回避专家单位" prop="avoidUnit">
             <el-select style="width:100%"
-              v-model="dataForm.avoidUnit"
-              multiple
-              filterable
-              remote
-              :disabled="disabled"
-              reserve-keyword
-              placeholder="请输入搜索关键词"
-              :remote-method="remoteMethod"
-              :loading="loading">
+                       v-model="dataForm.avoidUnit"
+                       multiple
+                       filterable
+                       remote
+                       :disabled="disabled"
+                       reserve-keyword
+                       placeholder="请输入搜索关键词"
+                       :remote-method="remoteMethod"
+                       :loading="loading">
               <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -291,7 +290,7 @@
       </el-table-column>
     </el-table>
     <el-row :gutter="24" style="margin-top: 10px">
-      <el-col :span="9" :offset="7">
+      <el-col :span="11" :offset="6">
         <el-button
           type="primary"
           @click="dataFormSubmit()"
@@ -314,22 +313,16 @@
               <el-button
                 type="primary"
                 size="mini"
-                @click="chouquMethod()"
-              >确定
-              </el-button
-              >
+                @click="chouquMethod()">确定
+              </el-button>
             </div>
-            <el-button slot="reference" :disabled="chouQuDisabled"
-            >抽取
-            </el-button
-            >
+            <el-button slot="reference" :disabled="chouQuDisabled">抽取
+            </el-button>
           </el-popover>
         </div>
-        <el-button v-if="!specialLogic" :disabled="chouQuDisabled" @click="chouquMethod()"
-        >抽取
-        </el-button
-        >
-        <!--<el-button @click="singlePrint" icon="el-icon-printer" :disabled="printDisabled">打印</el-button>-->
+        <el-button v-if="!specialLogic" :disabled="chouQuDisabled" @click="chouquMethod()">抽取
+        </el-button>
+        <el-button @click="bcTableVisible = true" :disabled="chouQuDisabled">补抽</el-button>
         <el-button
           @click="singlePrint"
           icon="el-icon-printer"
@@ -390,6 +383,49 @@
         </table>
       </form>
     </div>
+    <el-dialog title="补抽列表" :visible.sync="bcTableVisible"  size="min">
+      <div style="text-align: center;">
+        <el-table size="min"
+                  max-height="400"
+                  border
+                  :data="buCgridData"
+                  style="width: 80%;height: 400px;margin-left: 10%">
+          <el-table-column property="phone" label="专家手机号">
+            <template slot-scope="scope">
+              <el-input placeholder="请输入内容" v-model="scope.row.phone"></el-input>
+
+            </template>
+          </el-table-column>
+          <el-table-column property="cancelReason" label="取消原因">
+            <template slot-scope="scope">
+              <el-select v-model="scope.row.cancelReason" placeholder="请选择">
+                <el-option
+                  v-for="item in cancelReasons"
+                  :key="item.value"
+                  :label="item.value"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+            </template>
+          </el-table-column>
+          <el-table-column label="添加">
+            <template slot-scope="scope">
+              <el-button type="text" @click="addCancelLine(scope.$index, scope.row)" size="small"
+              >添加
+              </el-button
+              >
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+      <div style="text-align: center; margin-top: 10px">
+        <el-button
+          type="primary"
+          size="mini"
+          @click="bcMethod()">保存
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -416,6 +452,7 @@ export default {
     },
     data () {
       return {
+        bcTableVisible: false,
         fullscreenLoading: false,
         majorAddVisible: false,
         specialLogicList: '',
@@ -431,6 +468,10 @@ export default {
         proNameDisabled: false,
         addMajorBtnDisabled: false,
         restaurants: [],
+        buCgridData: [{
+          phone: '',
+          cancelReason: '提前告知'
+        }],
         dataForm: {
           id: 0,
           code: '',
@@ -497,6 +538,10 @@ export default {
         value: [],
         list: [],
         loading: false,
+        cancelReasons: [{
+          value: "提前告知",
+          label: "提前告知"
+        }],
         purWays: [
           {
             purWay: '1',
@@ -652,7 +697,6 @@ export default {
         for (var i = 0; i < tableDates.length; i++) {
           var flag = true
           for (var j = 0; j < this.tableData.length; j++) {
-            console.log(tableDates[i].majorId == this.tableData[j].majorId)
             if (tableDates[i].majorId == this.tableData[j].majorId) {
               flag = false
               break
@@ -663,7 +707,14 @@ export default {
           }
         }
       },
-      fetchData (id) {
+      addCancelLine() {
+        var gridDate = {
+            phone: '',
+            cancelReason: '提前告知'
+          }
+        this.buCgridData.push(gridDate);
+      },
+      fetchData(id) {
         // set tagsview title
         this.setTagsViewTitle(id)
 
@@ -680,6 +731,34 @@ export default {
       setPageTitle (id) {
         const title = '项目详情'
         document.title = `${title} - ${id}`
+      },
+      bcMethod(){
+        this.bcTableVisible = false;
+        this.fullscreenLoading = true;
+        this.$http({
+          url: this.$http.adornUrl(
+            `/draw/choseexpert/bcLottery`
+          ),
+          method: "post",
+          data:this.$http.adornData({
+            proId: this.dataForm.id  || undefined,
+            buCgridData: this.buCgridData
+          })
+        }).then(({data}) => {
+          this.fullscreenLoading = false;
+          if (data && data.code === 0) {
+            this.$message({
+              message: "抽取完成",
+              type: "success",
+              duration: 1500,
+              onClose: () => {
+                this.init(this.dataForm.id);
+              }
+            });
+          } else {
+            this.$message.error(data.msg);
+          }
+        })
       },
       chouquMethod () {
         this.specialLogicVisible = false
@@ -754,9 +833,9 @@ export default {
                   programManager.extractionUnitPhone
                 this.dataForm.address = programManager.address
                 this.dataForm.supervisoryPlaceId =
-                  programManager.supervisoryPlaceId + ''
+                  programManager.supervisoryPlaceId + "";
                 if (programManager.avoidUnit) {
-                  this.dataForm.avoidUnit = programManager.avoidUnit.split(',')
+                  this.dataForm.avoidUnit = programManager.avoidUnit.split(',');
                 }
                 this.dataForm.remark = programManager.remark
                 data.programManagerDetail.choseMajorEntities.forEach(item => {

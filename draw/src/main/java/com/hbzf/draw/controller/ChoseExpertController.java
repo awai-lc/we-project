@@ -3,9 +3,12 @@ package com.hbzf.draw.controller;
 import com.hbzf.common.utils.PageUtils;
 import com.hbzf.common.utils.R;
 import com.hbzf.draw.entity.ChoseExpertEntity;
+import com.hbzf.draw.entity.dto.BuCgridDataDto;
 import com.hbzf.draw.entity.dto.ChoseExpertDto;
 import com.hbzf.draw.entity.dto.ExpertDto;
+import com.hbzf.draw.entity.request.BuCgridDataRequest;
 import com.hbzf.draw.service.ChoseExpertService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
@@ -117,4 +120,18 @@ public class ChoseExpertController {
         return R.ok().put("ExpertDto",ExpertDto);
     }
 
+
+    /**
+     补抽
+     */
+    @RequestMapping("/bcLottery")
+    public R bcLottery(@RequestBody BuCgridDataRequest request) {
+
+        if(Objects.isNull(request.getProId())){
+            return R.ok();
+        }
+        request.getBuCgridData().removeIf(e -> StringUtils.isBlank(e.getPhone()));
+        choseExpertService.bcLottery(request.getProId(), request.getBuCgridData());
+        return R.ok();
+    }
 }

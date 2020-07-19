@@ -6,13 +6,17 @@ import com.google.common.collect.Maps;
 import com.hbzf.draw.dao.ChoseMajorDao;
 import com.hbzf.draw.dao.ExpertDao;
 import com.hbzf.draw.dao.ProgramManagerDao;
+import com.hbzf.draw.entity.ChoseMajorEntity;
 import com.hbzf.draw.entity.ProgramManagerEntity;
+import com.hbzf.draw.entity.dto.BuCgridDataDto;
 import com.hbzf.draw.entity.dto.ChoseExpertDto;
 import com.hbzf.draw.entity.dto.ChoseMajorDto;
 import com.hbzf.draw.entity.dto.ExpertDto;
 import com.hbzf.draw.enums.ProStatusEnum;
 import com.hbzf.draw.util.MathUtil;
+import com.hbzf.draw.util.SplitterUtil;
 import freemarker.template.utility.StringUtil;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -116,6 +120,39 @@ public class ChoseExpertServiceImpl extends ServiceImpl<ChoseExpertDao, ChoseExp
         update.setProStatus(ProStatusEnum.WC.getCode());
         programManagerDao.updateById(update);
         return experts;
+    }
+
+    @Override
+    public void bcLottery(Long proId, List<BuCgridDataDto> buCgridData) {
+        if (CollectionUtils.isEmpty(buCgridData)) {
+            return;
+        }
+        List<ChoseExpertDto> choseExpertDtoList = listByProId(proId);
+        if (CollectionUtils.isEmpty(choseExpertDtoList)) {
+            return;
+        }
+        List<String> phones = buCgridData.stream().map(BuCgridDataDto::getPhone).collect(Collectors.toList());
+        List<ExpertDto> expertDtos = expertDao.selectByPhones(new HashSet<>(phones));
+        if (CollectionUtils.isEmpty(expertDtos)) {
+            return;
+        }
+        //若取消的专家不在已抽专家列表中，则去除该专家
+        List<Long> needCancelExpertIds = expertDtos.stream().map(ExpertDto::getExpertId).collect(Collectors.toList());
+        choseExpertDtoList.removeIf(e -> needCancelExpertIds.contains(e.getExpertId()));
+        String needChosePhones = SplitterUtil.longListToStrWithComma(choseExpertDtoList.stream().map(ChoseExpertDto::getPhone).collect(Collectors.toList()));
+        //抽取专家
+        lottery(proId, needChosePhones);
+    }
+
+    private void deteleCancleExpert(List<ExpertDto> expertDtos, Long proId) {
+        UpdateWrapper updateWrapper = new UpdateWrapper();
+        updateWrapper.eq("pro_id", proId);
+        updateWrapper.in("expert_id", expertDtos.stream().map(ExpertDto::getExpertId).collect(Collectors.toList()));
+        updateWrapper.eq("is_delete", 0);
+
+        ChoseExpertEntity entity = new ChoseExpertEntity();
+        entity.setIsDelete(1);
+        update(entity, updateWrapper);
     }
 
     /**

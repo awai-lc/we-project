@@ -9,7 +9,7 @@ import lombok.Data;
 
 /**
  * 选中专家
- * 
+ *
  * @author liucheng
  * @email 36628353@qq.com
  * @date 2020-07-05 00:02:58
@@ -20,7 +20,7 @@ public class ChoseExpertEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * 
+	 *
 	 */
 	@TableId
 	private Long id;

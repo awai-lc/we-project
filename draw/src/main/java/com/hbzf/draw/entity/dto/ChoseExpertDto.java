@@ -10,7 +10,7 @@ import java.util.Date;
 
 /**
  * 专家
- * 
+ *
  * @author liucheng
  * @email 36628353@qq.com
  * @date 2020-07-05 00:02:59
@@ -18,6 +18,11 @@ import java.util.Date;
 @Data
 public class ChoseExpertDto implements Serializable {
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * 专家Id
+	 */
+	private Long expertId;
 
 	/**
 	 * 专家名称
