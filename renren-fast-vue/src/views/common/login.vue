@@ -1,7 +1,7 @@
 <template>
   <div class="site-wrapper site-page--login">
     <div class="brand-info">
-       <h2 class="brand-info__text">湖北省政府采购评审专家管理系统</h2>
+       <h2 class="brand-info__text">湖北华通工程咨询有限公司专家管理系统</h2>
     </div>
     <div class="site-content__wrapper">
       <div class="site-content">
