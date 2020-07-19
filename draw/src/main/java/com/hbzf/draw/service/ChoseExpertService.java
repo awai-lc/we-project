@@ -30,7 +30,7 @@ public interface ChoseExpertService extends IService<ChoseExpertEntity> {
      * @param
      * @return
      **/
-    List<ExpertDto> lottery(Long proId, String phones);
+    List<ExpertDto> lottery(Long proId, String phones, String avoidExpertPhones);
 
     void bcLottery(Long proId, List<BuCgridDataDto> buCgridData);
 }

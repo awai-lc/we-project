@@ -114,10 +114,8 @@ public class ChoseExpertController {
     @GetMapping("/lottery")
     public R lottery(@RequestParam(value = "proId") Long proId,
                      @RequestParam(value = "phones") @Nullable String phones) {
-
-        List<ExpertDto> ExpertDto = choseExpertService.lottery(proId, phones);
-
-        return R.ok().put("ExpertDto",ExpertDto);
+        
+        return R.ok().put("ExpertDto",choseExpertService.lottery(proId, phones, StringUtils.EMPTY));
     }
 
 

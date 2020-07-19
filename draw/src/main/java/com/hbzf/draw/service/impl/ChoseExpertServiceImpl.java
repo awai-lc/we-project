@@ -68,7 +68,7 @@ public class ChoseExpertServiceImpl extends ServiceImpl<ChoseExpertDao, ChoseExp
     }
 
     @Override
-    public List<ExpertDto> lottery(Long proId, String phones) {
+    public List<ExpertDto> lottery(Long proId, String phones, String avoidExpertPhones) {
 
         List<ChoseMajorDto> choseMajorDtos = choseMajorDao.listByProId(proId);
         ProgramManagerEntity programManagerEntity = programManagerDao.selectById(proId);
@@ -88,7 +88,7 @@ public class ChoseExpertServiceImpl extends ServiceImpl<ChoseExpertDao, ChoseExp
                     .collect(Collectors.toSet());
         }
         List<ExpertDto> experts = this.getExpertWithPhone(map, phoneList,
-                Optional.ofNullable(programManagerEntity.getAvoidUnit()).orElse(StringUtils.EMPTY));
+                Optional.ofNullable(programManagerEntity.getAvoidUnit()).orElse(StringUtils.EMPTY), avoidExpertPhones);
 
 
         //删除上一次抽取结果
@@ -136,12 +136,23 @@ public class ChoseExpertServiceImpl extends ServiceImpl<ChoseExpertDao, ChoseExp
         if (CollectionUtils.isEmpty(expertDtos)) {
             return;
         }
-        //若取消的专家不在已抽专家列表中，则去除该专家
+        List<ChoseMajorDto> choseMajorDtos = choseMajorDao.listByProId(proId);
+        // 专业id，需要的数目
+        Map<Long, Integer> map = choseMajorDtos.stream()
+                .collect(Collectors.toMap(ChoseMajorDto::getMajorId, ChoseMajorDto::getNeedCount, (old, newOne) -> old));
+        Set<Long> choseMajorKey = map.keySet();
+        //选择出需要移除的专家
+        expertDtos.removeIf(e-> !choseMajorKey.contains(e.getMajorId()));
+
+        //选择出需要保留的专家
         List<Long> needCancelExpertIds = expertDtos.stream().map(ExpertDto::getExpertId).collect(Collectors.toList());
         choseExpertDtoList.removeIf(e -> needCancelExpertIds.contains(e.getExpertId()));
+
         String needChosePhones = SplitterUtil.longListToStrWithComma(choseExpertDtoList.stream().map(ChoseExpertDto::getPhone).collect(Collectors.toList()));
-        //抽取专家
-        lottery(proId, needChosePhones);
+        String needAvoidPhones = SplitterUtil.longListToStrWithComma(expertDtos.stream().map(ExpertDto::getPhone).collect(Collectors.toList()));
+        //抽取
+        lottery(proId, needChosePhones, needAvoidPhones);
+
     }
 
     private void deteleCancleExpert(List<ExpertDto> expertDtos, Long proId) {
@@ -168,7 +179,7 @@ public class ChoseExpertServiceImpl extends ServiceImpl<ChoseExpertDao, ChoseExp
      * @Author harryper
      * @Date 2020/7/12 17:53
      **/
-    public List<ExpertDto> getExpertWithPhone(Map<Long, Integer> map, Set<String> phones, String avoidUnit) {
+    public List<ExpertDto> getExpertWithPhone(Map<Long, Integer> map, Set<String> phones, String avoidUnit, String avoidExpertPhones) {
         Map<Long, List<Long>> needAvoidExpertMap = Maps.newHashMap();
         Set<Long> marjorIds = map.keySet();
         // 手机号不为空
@@ -192,7 +203,7 @@ public class ChoseExpertServiceImpl extends ServiceImpl<ChoseExpertDao, ChoseExp
                 }
             }
         }
-        returnDto.addAll(this.getExpert(map, needAvoidExpertMap, avoidUnit));
+        returnDto.addAll(this.getExpert(map, needAvoidExpertMap, avoidUnit, avoidExpertPhones));
         return returnDto;
     }
 
@@ -205,7 +216,7 @@ public class ChoseExpertServiceImpl extends ServiceImpl<ChoseExpertDao, ChoseExp
      * @Author harryper
      * @Date 2020/7/12 18:16
      **/
-    public List<ExpertDto> getExpert(Map<Long, Integer> map, Map<Long, List<Long>> avoidExpertMap, String avoidUnit) {
+    public List<ExpertDto> getExpert(Map<Long, Integer> map, Map<Long, List<Long>> avoidExpertMap, String avoidUnit, String avoidExpertPhones) {
         List<ExpertDto> returnDto = new ArrayList<>();
         Set<Long> keys = map.keySet();
         for (Long key : keys) {
@@ -218,6 +229,8 @@ public class ChoseExpertServiceImpl extends ServiceImpl<ChoseExpertDao, ChoseExp
             expertDtos.removeIf(e -> Optional.ofNullable(avoidUnitIds).orElse(Lists.newArrayList()).contains(e.getExpertId()));
             //去除回避专家单位的专家
             expertDtos.removeIf(e -> avoidUnit.contains(e.getUnit()));
+            //去除需回避专家
+            expertDtos.removeIf(e -> avoidExpertPhones.contains(e.getPhone()));
             // 如果总的专家数目小于等于要抽取的，则不需抽取直接添加
             if (expertDtos.size() <= map.get(key)) {
                 returnDto.addAll(expertDtos);

@@ -172,6 +172,8 @@ public class ProgramManagerServiceImpl extends ServiceImpl<ProgramManagerDao, Pr
 
         if (CollectionUtils.isNotEmpty(request.getProgramManager().getAvoidUnit())) {
            entity.setAvoidUnit(SplitterUtil.longListToStrWithComma(request.getProgramManager().getAvoidUnit()));
+        }else{
+            entity.setAvoidUnit(StringUtils.EMPTY);
         }
         return entity;
     }
