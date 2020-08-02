@@ -9,6 +9,7 @@
         <result property="expertName" column="expert_name"/>
         <result property="majorId" column="major_id"/>
         <result property="phone" column="phone"/>
+        <result property="idCard" column="id_card"/>
         <result property="email" column="email"/>
         <result property="address" column="address"/>
         <result property="unit" column="unit"/>

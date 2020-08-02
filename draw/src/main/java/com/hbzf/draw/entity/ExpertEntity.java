@@ -10,7 +10,7 @@ import lombok.Data;
 
 /**
  * 专家
- * 
+ *
  * @author liucheng
  * @email 36628353@qq.com
  * @date 2020-07-05 00:02:59
@@ -21,7 +21,7 @@ public class ExpertEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * 
+	 *
 	 */
 	@TableId
 	private Long id;
@@ -42,6 +42,11 @@ public class ExpertEntity implements Serializable {
 	 * 手机号
 	 */
 	private String phone;
+
+	/**
+	 * 身份证号
+	 */
+	private String idCard;
 	/**
 	 * 邮箱
 	 */

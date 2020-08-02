@@ -1,5 +1,5 @@
 <template>
-  <div class="mod-config">
+  <div class="mod-config" v-loading="fullscreenLoading">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
         <el-input v-model="dataForm.key" placeholder="参数名" clearable></el-input>
@@ -8,6 +8,7 @@
         <el-button @click="getDataList()">查询</el-button>
         <el-button v-if="isAuth('draw:expert:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
         <el-button v-if="isAuth('draw:expert:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+        <el-button v-if="isAuth('draw:expert:delete')" type="primary" @click="uploadFile()">上传</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -18,8 +19,7 @@
       <el-table-column
         type="selection"
         header-align="center"
-        align="center"
-        width="50">
+        align="center">
       </el-table-column>
       <el-table-column
         prop="expertName"
@@ -30,20 +30,23 @@
       <el-table-column
         prop="majorName"
         header-align="center"
-        width="200px"
         align="center"
         label="专业名称">
       </el-table-column>
       <el-table-column
         prop="phone"
         header-align="center"
-        width="110px"
         align="center"
         label="手机号">
       </el-table-column>
       <el-table-column
+        prop="idCard"
+        header-align="center"
+        align="center"
+        label="身份证">
+      </el-table-column>
+      <el-table-column
         prop="email"
-        width="150px"
         header-align="center"
         align="center"
         label="邮箱">
@@ -73,7 +76,6 @@
       <el-table-column
         prop="birth"
         header-align="center"
-        width="110px"
         align="center"
         label="出生年月">
       </el-table-column>
@@ -81,13 +83,11 @@
         prop="address"
         header-align="center"
         align="center"
-        width="300px"
         label="地址">
       </el-table-column>
       <el-table-column
         prop="unit"
         header-align="center"
-        width="300px"
         align="center"
         label="工作单位">
       </el-table-column>
@@ -115,9 +115,31 @@
     </el-pagination>
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
+
+    <el-dialog
+      :title="'专家&专业上传'"
+      :close-on-click-modal="false"
+      :visible.sync="uploadFileVisible">
+      <el-upload
+        el-upload
+        drag
+        :action="actionUrl"
+        accept=".xls,.xlsx"
+        ref="upload"
+        :on-change="onUploadChange"
+        :on-success="handleSuccess"
+        :auto-upload="false"
+        :limit="1"
+        list-type="text"
+        :file-list="files">
+        <i class="el-icon-upload"></i>
+        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+      </el-upload>
+      <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传</el-button>
+    </el-dialog>
+
   </div>
 </template>
-
 <script>
   import AddOrUpdate from './expert-add-or-update'
   export default {
@@ -126,13 +148,18 @@
         dataForm: {
           key: ''
         },
+        fullscreenLoading: false,
+        actionUrl: `${window.SITE_CONFIG.baseUrl}/draw/file/expertUpload`,
+        files: [],
+        base64File:'',
         dataList: [],
         pageIndex: 1,
         pageSize: 10,
         totalPage: 0,
         dataListLoading: false,
         dataListSelections: [],
-        addOrUpdateVisible: false
+        addOrUpdateVisible: false,
+        uploadFileVisible : false
       }
     },
     components: {
@@ -142,12 +169,37 @@
       this.getDataList()
     },
     methods: {
+      submitUpload()
+      {
+        this.fullscreenLoading = true;
+        this.uploadFileVisible = false;
+        this.$refs.upload.submit();
+      },
+      handleSuccess (res, file) {
+        console.log(res);
+        this.fullscreenLoading = false;
+        if (data && data.code === 0) {
+          this.$message.info('上传成功');
+        }else {
+          this.$message.error(res.msg);
+        }
+      },
+      onUploadChange(file) {
+        var flieArr = file.name.split('.');
+        var suffix = flieArr[flieArr.length - 1];
+        const isIMAGE = (suffix === 'xls' || suffix === 'xlsx');
+
+        if (!isIMAGE) {
+          this.$message.error('上传文件只能是excel格式!');
+          return false;
+        }
+      },
       switchChange (data) {
         console.log(data)
       },
       // 获取数据列表
       getDataList () {
-        this.dataListLoading = true
+        this.dataListLoading = true;
         this.$http({
           url: this.$http.adornUrl('/draw/expert/list'),
           method: 'get',
@@ -192,6 +244,9 @@
         this.$nextTick(() => {
           this.$refs.addOrUpdate.init(id)
         })
+      },
+      uploadFile(){
+        this.uploadFileVisible = true;
       },
       // 删除
       deleteHandle (id) {

@@ -7,10 +7,13 @@
     <el-form-item label="专家名称" prop="expertName">
       <el-input v-model="dataForm.expertName" placeholder="专家名称"></el-input>
     </el-form-item>
-    
+
     <el-form-item label="手机号" prop="phone">
       <el-input v-model="dataForm.phone" placeholder="手机号"></el-input>
     </el-form-item>
+      <el-form-item label="身份证" prop="idCard">
+        <el-input v-model="dataForm.idCard" placeholder="身份证号"></el-input>
+      </el-form-item>
     <el-form-item label="邮箱" prop="email">
       <el-input v-model="dataForm.email" placeholder="邮箱"></el-input>
     </el-form-item>
@@ -50,7 +53,7 @@
         :props="props"
         filterable>
       </el-cascader>
-    </el-form-item> 
+    </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取消</el-button>
@@ -76,6 +79,7 @@
           birth: '',
           title: '',
           addby: '',
+          idCard:'',
           lastmodifiedby: '',
           lastmodifiedbytime: '',
           majorIds: []
@@ -95,6 +99,9 @@
           ],
           phone: [
             { required: true, message: '手机号不能为空', trigger: 'blur' }
+          ],
+          idCard: [
+            { required: true, message: '身份证号不能为空', trigger: 'blur' }
           ],
           email: [
             { required: true, message: '邮箱不能为空', trigger: 'blur' }
@@ -193,6 +200,7 @@
                   'expertName': this.dataForm.expertName,
                   'majorId': this.dataForm.majorIds[this.dataForm.majorIds.length - 1],
                   'phone': this.dataForm.phone,
+                  'idCard':this.dataForm.idCard,
                   'email': this.dataForm.email,
                   'address': this.dataForm.address,
                   'unit': this.dataForm.unit,
@@ -234,6 +242,7 @@
                   'phone': this.dataForm.phone,
                   'email': this.dataForm.email,
                   'address': this.dataForm.address,
+                  'idCard':this.dataForm.idCard,
                   'unit': this.dataForm.unit,
                   'jobStatus': this.dataForm.jobStatus,
                   'birth': this.dataForm.birth,
@@ -269,6 +278,6 @@
 </script>
 <style scoped>
   .el-cascader{
-    width: 500px;  
+    width: 500px;
 }
 </style>
