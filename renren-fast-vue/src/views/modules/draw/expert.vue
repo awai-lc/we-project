@@ -175,11 +175,48 @@
         this.uploadFileVisible = false;
         this.$refs.upload.submit();
       },
+      dataURLtoBlob(dataurl) {
+        var bstr = atob(dataurl)
+        var n = bstr.length;
+        var u8arr = new Uint8Array(n);
+        while (n--) {
+          u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new Blob([u8arr], { type: 'xlsx' });
+      },
       handleSuccess (res, file) {
         console.log(res);
         this.fullscreenLoading = false;
-        if (data && data.code === 0) {
-          this.$message.info('上传成功');
+        if (res && res.code === 0) {
+          this.$alert(res.result.result, '上传结果', {
+            confirmButtonText: '确定',
+            callback: action => {
+              var URLExcel = this.dataURLtoBlob(res.result.excelStr);
+              var reader = new FileReader();
+              reader.readAsDataURL(URLExcel);
+              reader.onload = function (e) {
+                // 兼容IE
+                if (window.navigator.msSaveOrOpenBlob) {
+                  var bstr = atob(e.target.result.split(",")[1]);
+                  var n = bstr.length;
+                  var u8arr = new Uint8Array(n);
+                  while (n--) {
+                    u8arr[n] = bstr.charCodeAt(n);
+                  }
+                  var blob = new Blob([u8arr]);
+                  window.navigator.msSaveOrOpenBlob(blob,'result.xlsx');
+                } else {
+                  // 转换完成，创建一个a标签用于下载
+                  const a = document.createElement('a');
+                  a.download = 'result.xlsx'; // 这里写你的文件名
+                  a.href = e.target.result;
+                  document.body.appendChild(a)
+                  a.click();
+                  document.body.removeChild(a)
+                }
+              }
+            }
+          });
         }else {
           this.$message.error(res.msg);
         }
