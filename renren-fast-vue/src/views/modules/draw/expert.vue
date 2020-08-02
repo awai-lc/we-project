@@ -9,6 +9,7 @@
         <el-button v-if="isAuth('draw:expert:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
         <el-button v-if="isAuth('draw:expert:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
         <el-button v-if="isAuth('draw:expert:delete')" type="primary" @click="uploadFile()">上传</el-button>
+        <el-button v-if="isAuth('draw:expert:delete')" type="primary" @click="downTemplate()">模板下载</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -117,7 +118,7 @@
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
 
     <el-dialog
-      :title="'专家&专业上传'"
+      :title="'专家上传'"
       :close-on-click-modal="false"
       :visible.sync="uploadFileVisible">
       <el-upload
@@ -280,6 +281,41 @@
         this.addOrUpdateVisible = true
         this.$nextTick(() => {
           this.$refs.addOrUpdate.init(id)
+        })
+      },
+      downTemplate(){
+        this.$http({
+          url: this.$http.adornUrl('/draw/file/expertTemplateDown'),
+          method: 'get'
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+            var URLExcel = this.dataURLtoBlob(data.result);
+            var reader = new FileReader();
+            reader.readAsDataURL(URLExcel);
+            reader.onload = function (e) {
+              // 兼容IE
+              if (window.navigator.msSaveOrOpenBlob) {
+                var bstr = atob(e.target.result.split(",")[1]);
+                var n = bstr.length;
+                var u8arr = new Uint8Array(n);
+                while (n--) {
+                  u8arr[n] = bstr.charCodeAt(n);
+                }
+                var blob = new Blob([u8arr]);
+                window.navigator.msSaveOrOpenBlob(blob,'专家模板.xlsx');
+              } else {
+                // 转换完成，创建一个a标签用于下载
+                const a = document.createElement('a');
+                a.download = '专家模板.xlsx'; // 这里写你的文件名
+                a.href = e.target.result;
+                document.body.appendChild(a)
+                a.click();
+                document.body.removeChild(a)
+              }
+            }
+          }else {
+            this.$message.error(data.msg)
+          }
         })
       },
       uploadFile(){

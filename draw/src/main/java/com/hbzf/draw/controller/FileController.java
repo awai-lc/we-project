@@ -12,6 +12,7 @@ import com.hbzf.draw.util.ExcelUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -74,7 +75,7 @@ public class FileController {
     public R expertTemplateDown() {
 
         try {
-            InputStream inputStream = this.getClass().getResourceAsStream("/filetemplate/专家上传模板.xlsx");
+            InputStream inputStream = this.getClass().getResourceAsStream("/static/专家上传模板.xlsx");
             Workbook workbook = new XSSFWorkbook(inputStream);
             //生成新excel
             String base64 = ExcelUtil.getBase64ByWorkbook(workbook);
