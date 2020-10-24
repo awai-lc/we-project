@@ -342,6 +342,45 @@
     </el-dialog>
     <div class="demo">
       <form id="form1" hidden>
+        <span align="center">湖北华通工程咨询有限公司评审专家抽取结果表</span>
+        <p>项目详情</p>
+        <table id="table2" width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td style="border:solid 1px black">项目名称</td>
+            <td style="border:solid 1px black" colspan="3"></td>
+            <td style="border:solid 1px black">采购方式</td>
+            <td style="border:solid 1px black"></td>
+          </tr>
+          <tr>
+            <td style="border:solid 1px black">评审开始时间</td>
+            <td style="border:solid 1px black"></td>
+            <td style="border:solid 1px black">评审结束时间</td>
+            <td style="border:solid 1px black"></td>
+            <td style="border:solid 1px black">政府采购计划确认书</td>
+            <td style="border:solid 1px black"></td>
+          </tr>
+          <tr>
+            <td style="border:solid 1px black">抽取单位</td>
+            <td style="border:solid 1px black"></td>
+            <td style="border:solid 1px black">抽取单位联系人</td>
+            <td style="border:solid 1px black"></td>
+            <td style="border:solid 1px black">抽取单位电话</td>
+            <td style="border:solid 1px black"></td>
+          </tr>
+          <tr>
+            <td style="border:solid 1px black">采购单位</td>
+            <td style="border:solid 1px black"></td>
+            <td style="border:solid 1px black">采购人代表</td>
+            <td style="border:solid 1px black"></td>
+            <td style="border:solid 1px black">预算金额</td>
+            <td style="border:solid 1px black"></td>
+          </tr>
+          <tr>
+            <td style="border:solid 1px black">评审地址</td>
+            <td style="border:solid 1px black" colspan="5"></td>
+          </tr>
+        </table>
+        <p>专家详情</p>
         <table width="100%" border="0" cellspacing="0" cellpadding="0">
           <tr>
             <td align="center" valign="middle">
@@ -879,20 +918,20 @@ export default {
             var proName = this.dataForm.name
             document.getElementById('table1').innerHTML = ''
             var html =
-              '<caption  align="center">' + proName + '项目抽取结果</caption>'
+              ''
             html +=
               '<tr>\n' +
               '                  <td style="border:solid 1px black">序号</td>\n' +
               '                  <td style="border:solid 1px black">专家名称</td>\n' +
               '                  <td style="border:solid 1px black">专家单位</td>\n' +
               '                  <td style="border:solid 1px black">专家专业</td>\n' +
-              '                  <td style="border:solid 1px black">电话</td>\n' +
+              '                  <td style="border:solid 1px black">联系方式</td>\n' +
               '                  <td style="border:solid 1px black">地址</td>\n' +
               '                  <td style="border:solid 1px black">抽取时间</td>\n' +
               '                </tr>'
             var LODOP = getLodop()
-            for (var k = 0; k < data.choseExpert.length; k++) {
-              var a = data.choseExpert[k]
+            for (var k = 0; k < data.choseExpertDtoList.length; k++) {
+              var a = data.choseExpertDtoList[k]
               var num = k + 1
               html +=
                 '<tr>\n' +
@@ -919,7 +958,45 @@ export default {
                 '</td>\n' +
                 '                </tr>'
             }
-            document.getElementById('table1').innerHTML = html
+            document.getElementById('table1').innerHTML = html;
+            var programEnty = data.programManager;
+            document.getElementById('table2').innerHTML = '';
+            var html2 = '<tr>\n' +
+                '        <td style="border:solid 1px black">项目名称</td>\n' +
+                '        <td style="border:solid 1px black" colspan="3">'+programEnty.name +'</td>\n' +
+                '        <td style="border:solid 1px black">采购方式</td>\n' +
+                '        <td style="border:solid 1px black">'+programEnty.purWayText+'</td>\n' +
+                '      </tr>\n' +
+                '      <tr>\n' +
+                '        <td style="border:solid 1px black">评审开始时间</td>\n' +
+                '        <td style="border:solid 1px black">'+programEnty.startReviewText+'</td>\n' +
+                '        <td style="border:solid 1px black">评审结束时间</td>\n' +
+                '        <td style="border:solid 1px black">'+programEnty.endReviewText+'</td>\n' +
+                '        <td style="border:solid 1px black">政府采购计划确认书</td>\n' +
+                '        <td style="border:solid 1px black">'+""+'</td>\n' +
+                '      </tr>\n' +
+                '       <tr>\n' +
+                '        <td style="border:solid 1px black">抽取单位</td>\n' +
+                '        <td style="border:solid 1px black">'+programEnty.extractionUnit+'</td>\n' +
+                '        <td style="border:solid 1px black">抽取单位联系人</td>\n' +
+                '        <td style="border:solid 1px black">'+programEnty.extractionUnitContact+'</td>\n' +
+                '        <td style="border:solid 1px black">抽取单位电话</td>\n' +
+                '        <td style="border:solid 1px black">'+programEnty.extractionUnitPhone+'</td>\n' +
+                '      </tr>\n' +
+                '      <tr>\n' +
+                '        <td style="border:solid 1px black">采购单位</td>\n' +
+                '        <td style="border:solid 1px black">'+programEnty.extractionUnitPhone+'</td>\n' +
+                '        <td style="border:solid 1px black">采购人代表</td>\n' +
+                '        <td style="border:solid 1px black">'+programEnty.purchasingId+'</td>\n' +
+                '        <td style="border:solid 1px black">预算金额</td>\n' +
+                '        <td style="border:solid 1px black">'+programEnty.budgetAmount+'万元</td>\n' +
+                '      </tr>\n' +
+                '      <tr>\n' +
+                '        <td style="border:solid 1px black">评审地址</td>\n' +
+                '        <td style="border:solid 1px black" colspan="5">'+programEnty.address+'</td>\n' +
+                '      </tr>';
+
+              document.getElementById('table2').innerHTML = html2;
             LODOP.ADD_PRINT_HTM(
               30,
               0,
