@@ -8,8 +8,10 @@ import com.hbzf.draw.entity.dto.ChoseExpertDto;
 import com.hbzf.draw.entity.dto.ProgramManagerDetailDto;
 import com.hbzf.draw.entity.request.BuCgridDataRequest;
 import com.hbzf.draw.entity.response.ChoseExpertDtoResponse;
+import com.hbzf.draw.enums.PurWayEnum;
 import com.hbzf.draw.service.ChoseExpertService;
 import com.hbzf.draw.service.ProgramManagerService;
+import com.hbzf.draw.util.DateUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
@@ -67,6 +69,14 @@ public class ChoseExpertController {
     //@RequiresPermissions("draw:choseexpert:info")
     public R listByProId(@PathVariable("id") Long id){
         ProgramManagerEntity programManagerEntity = programManagerService.getById(id);
+        programManagerEntity.setStartReviewText(DateUtil.formatDateStr(programManagerEntity.getStartReview()));
+        programManagerEntity.setEndReviewText(DateUtil.formatDateStr(programManagerEntity.getEndReview()));
+        PurWayEnum purWayEnum = PurWayEnum.parseCode(programManagerEntity.getPurWay().intValue());
+        if(null != purWayEnum){
+            programManagerEntity.setPurWayText(purWayEnum.getDesc());
+        }else {
+            programManagerEntity.setPurWayText("");
+        }
         List<ChoseExpertDto> choseExpert = choseExpertService.listByProId(id);
         //排序，专业一样的放一起
         choseExpert.sort(new Comparator<ChoseExpertDto>() {

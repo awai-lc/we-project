@@ -342,46 +342,66 @@
     </el-dialog>
     <div class="demo">
       <form id="form1" hidden>
-        <span align="center">湖北华通工程咨询有限公司评审专家抽取结果表</span>
-        <p>项目详情</p>
-        <table id="table2" width="100%" border="0" cellspacing="0" cellpadding="0">
-          <tr>
-            <td style="border:solid 1px black">项目名称</td>
-            <td style="border:solid 1px black" colspan="3"></td>
-            <td style="border:solid 1px black">采购方式</td>
-            <td style="border:solid 1px black"></td>
-          </tr>
-          <tr>
-            <td style="border:solid 1px black">评审开始时间</td>
-            <td style="border:solid 1px black"></td>
-            <td style="border:solid 1px black">评审结束时间</td>
-            <td style="border:solid 1px black"></td>
-            <td style="border:solid 1px black">政府采购计划确认书</td>
-            <td style="border:solid 1px black"></td>
-          </tr>
-          <tr>
-            <td style="border:solid 1px black">抽取单位</td>
-            <td style="border:solid 1px black"></td>
-            <td style="border:solid 1px black">抽取单位联系人</td>
-            <td style="border:solid 1px black"></td>
-            <td style="border:solid 1px black">抽取单位电话</td>
-            <td style="border:solid 1px black"></td>
-          </tr>
-          <tr>
-            <td style="border:solid 1px black">采购单位</td>
-            <td style="border:solid 1px black"></td>
-            <td style="border:solid 1px black">采购人代表</td>
-            <td style="border:solid 1px black"></td>
-            <td style="border:solid 1px black">预算金额</td>
-            <td style="border:solid 1px black"></td>
-          </tr>
-          <tr>
-            <td style="border:solid 1px black">评审地址</td>
-            <td style="border:solid 1px black" colspan="5"></td>
-          </tr>
-        </table>
-        <p>专家详情</p>
         <table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td align="center" valign="middle">
+            湖北华通工程咨询有限公司评审专家抽取结果表
+          </td>
+          </tr>
+          <tr>
+            <td align="center" valign="middle">
+              <table  width="80%" border="0" cellspacing="0" cellpadding="0"><tbody><tr>
+                <td>项目详情</td></tr></tbody></table>
+
+            </td>
+          </tr>
+          <tr>
+            <td align="center"  valign="middle">
+              <table id="table2" width="80%" style="border: 1px solid black; border-collapse: collapse;">
+                <tr>
+                  <td style="border:solid 1px black">项目名称</td>
+                  <td style="border:solid 1px black" colspan="3"></td>
+                  <td style="border:solid 1px black">采购方式</td>
+                  <td style="border:solid 1px black"></td>
+                </tr>
+                <tr>
+                  <td style="border:solid 1px black">评审开始时间</td>
+                  <td style="border:solid 1px black"></td>
+                  <td style="border:solid 1px black">评审结束时间</td>
+                  <td style="border:solid 1px black"></td>
+                  <td style="border:solid 1px black">政府采购计划确认书</td>
+                  <td style="border:solid 1px black"></td>
+                </tr>
+                <tr>
+                  <td style="border:solid 1px black">抽取单位</td>
+                  <td style="border:solid 1px black"></td>
+                  <td style="border:solid 1px black">抽取单位联系人</td>
+                  <td style="border:solid 1px black"></td>
+                  <td style="border:solid 1px black">抽取单位电话</td>
+                  <td style="border:solid 1px black"></td>
+                </tr>
+                <tr>
+                  <td style="border:solid 1px black">采购单位</td>
+                  <td style="border:solid 1px black"></td>
+                  <td style="border:solid 1px black">采购人代表</td>
+                  <td style="border:solid 1px black"></td>
+                  <td style="border:solid 1px black">预算金额</td>
+                  <td style="border:solid 1px black"></td>
+                </tr>
+                <tr>
+                  <td style="border:solid 1px black">评审地址</td>
+                  <td style="border:solid 1px black" colspan="5"></td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td align="center" valign="middle">
+              <table  width="80%" border="0" cellspacing="0" cellpadding="0"><tbody><tr>
+                <td>专家详情</td></tr></tbody></table>
+
+            </td>
+          </tr>
           <tr>
             <td align="center" valign="middle">
               <table
@@ -763,7 +783,7 @@ export default {
         const route = Object.assign({}, this.tempRoute, {
           title: `${title}-${id}`
         })
-        this.$store.dispatch('common/updateVisitedView', route)
+        this.$store.dispatch('tagsView/updateVisitedView', route)
       },
       setPageTitle (id) {
         const title = '项目详情'
@@ -928,8 +948,8 @@ export default {
               '                  <td style="border:solid 1px black">抽取时间</td>\n' +
               '                </tr>'
             var LODOP = getLodop()
-            for (var k = 0; k < data.choseExpertDtoList.length; k++) {
-              var a = data.choseExpertDtoList[k]
+            for (var k = 0; k < data.choseExpert.choseExpertDtoList.length; k++) {
+              var a = data.choseExpert.choseExpertDtoList[k]
               var num = k + 1
               html +=
                 '<tr>\n' +
@@ -957,7 +977,7 @@ export default {
                 '                </tr>'
             }
             document.getElementById('table1').innerHTML = html;
-            var programEnty = data.programManager;
+            var programEnty = data.choseExpert.programManager;
             document.getElementById('table2').innerHTML = '';
             var html2 = '<tr>\n' +
                 '        <td style="border:solid 1px black">项目名称</td>\n' +
@@ -983,9 +1003,9 @@ export default {
                 '      </tr>\n' +
                 '      <tr>\n' +
                 '        <td style="border:solid 1px black">采购单位</td>\n' +
-                '        <td style="border:solid 1px black">'+programEnty.extractionUnitPhone+'</td>\n' +
-                '        <td style="border:solid 1px black">采购人代表</td>\n' +
                 '        <td style="border:solid 1px black">'+programEnty.purchasingId+'</td>\n' +
+                '        <td style="border:solid 1px black">采购人代表</td>\n' +
+                '        <td style="border:solid 1px black">'+programEnty.govProPerson+'</td>\n' +
                 '        <td style="border:solid 1px black">预算金额</td>\n' +
                 '        <td style="border:solid 1px black">'+programEnty.budgetAmount+'万元</td>\n' +
                 '      </tr>\n' +
@@ -995,6 +1015,7 @@ export default {
                 '      </tr>';
 
               document.getElementById('table2').innerHTML = html2;
+              console.log(document.getElementById('form1').innerHTML)
             LODOP.ADD_PRINT_HTM(
               30,
               0,
