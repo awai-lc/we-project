@@ -3,11 +3,13 @@ package com.hbzf.draw.controller;
 import com.hbzf.common.utils.PageUtils;
 import com.hbzf.common.utils.R;
 import com.hbzf.draw.entity.ChoseExpertEntity;
-import com.hbzf.draw.entity.dto.BuCgridDataDto;
+import com.hbzf.draw.entity.ProgramManagerEntity;
 import com.hbzf.draw.entity.dto.ChoseExpertDto;
-import com.hbzf.draw.entity.dto.ExpertDto;
+import com.hbzf.draw.entity.dto.ProgramManagerDetailDto;
 import com.hbzf.draw.entity.request.BuCgridDataRequest;
+import com.hbzf.draw.entity.response.ChoseExpertDtoResponse;
 import com.hbzf.draw.service.ChoseExpertService;
+import com.hbzf.draw.service.ProgramManagerService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
@@ -31,6 +33,9 @@ import java.util.*;
 public class ChoseExpertController {
     @Autowired
     private ChoseExpertService choseExpertService;
+
+    @Autowired
+    private ProgramManagerService programManagerService;
 
     /**
      * 列表
@@ -61,6 +66,7 @@ public class ChoseExpertController {
     @RequestMapping("/listByProId/{id}")
     //@RequiresPermissions("draw:choseexpert:info")
     public R listByProId(@PathVariable("id") Long id){
+        ProgramManagerEntity programManagerEntity = programManagerService.getById(id);
         List<ChoseExpertDto> choseExpert = choseExpertService.listByProId(id);
         //排序，专业一样的放一起
         choseExpert.sort(new Comparator<ChoseExpertDto>() {
@@ -69,7 +75,10 @@ public class ChoseExpertController {
                 return o1.getMajorId().compareTo(o2.getMajorId());
             }
         });
-        return R.ok().put("choseExpert", choseExpert);
+        ChoseExpertDtoResponse response = new ChoseExpertDtoResponse();
+        response.setProgramManager(programManagerEntity);
+        response.setChoseExpertDtoList(choseExpert);
+        return R.ok().put("choseExpert", response);
     }
 
     /**
