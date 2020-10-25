@@ -110,7 +110,7 @@ public class ChoseExpertServiceImpl extends ServiceImpl<ChoseExpertDao, ChoseExp
             entity.setAddby(expert.getAddby());
             entity.setAddbytime(expert.getAddbytime());
             entity.setLastmodifiedby(expert.getLastmodifiedby());
-            entity.setLastmodifiedbytime(expert.getLastmodifiedbytime());
+            entity.setLastmodifiedbytime(new Date());
             choseExpertDao.insert(entity);
         }
 
