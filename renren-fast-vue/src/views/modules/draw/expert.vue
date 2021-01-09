@@ -237,14 +237,14 @@
       },
       // 获取数据列表
       getDataList () {
-        this.dataListLoading = true;
+        this.dataListLoading = true
         this.$http({
           url: this.$http.adornUrl('/draw/expert/list'),
           method: 'get',
           params: this.$http.adornParams({
             'page': this.pageIndex,
             'limit': this.pageSize,
-            'key': this.dataForm.key
+            'expertName': this.dataForm.key
           })
         }).then(({data}) => {
           if (data && data.code === 0) {

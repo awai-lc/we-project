@@ -5,6 +5,7 @@ import com.google.common.collect.Maps;
 import com.hbzf.common.utils.R;
 import com.hbzf.draw.dao.MajorDao;
 import com.hbzf.draw.entity.MajorEntity;
+import com.hbzf.draw.entity.ProgramManagerEntity;
 import com.hbzf.draw.enums.JobStatusEnum;
 import com.hbzf.draw.enums.UploadResultEnum;
 import com.hbzf.draw.util.exception.BizException;
@@ -37,9 +38,14 @@ public class ExpertServiceImpl extends ServiceImpl<ExpertDao, ExpertEntity> impl
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        String name = params.get("expertName").toString();
+        if (StringUtils.isNotBlank(name)) {
+            queryWrapper.likeRight("expert_name", name.trim());
+        }
         IPage<ExpertEntity> page = this.page(
                 new Query<ExpertEntity>().getPage(params),
-                new QueryWrapper<ExpertEntity>()
+                queryWrapper
         );
         page.getRecords().forEach((record) -> {
             MajorEntity majorEntity = majorDao.selectById(record.getMajorId());
