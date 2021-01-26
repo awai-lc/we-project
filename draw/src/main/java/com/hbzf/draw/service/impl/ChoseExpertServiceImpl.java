@@ -100,7 +100,7 @@ public class ChoseExpertServiceImpl extends ServiceImpl<ChoseExpertDao, ChoseExp
             entity = new ChoseExpertEntity();
             entity.setExpertId(418L);
             entity.setMajorId(34L);
-            entity.setProId(53L);
+            entity.setProId(proId);
             entity.setIsDelete(0);
             entity.setAddby(1L);
             entity.setAddbytime(new Date());
