@@ -95,26 +95,55 @@ public class ChoseExpertServiceImpl extends ServiceImpl<ChoseExpertDao, ChoseExp
         choseExpertDao.deleteByProId(proId);
 
         // 将查询结果插入表中
-        ChoseExpertEntity entity;
-        for (ExpertDto expert : experts) {
+        if(programManagerEntity.getName().contains("大广南")){
+            ChoseExpertEntity entity =new ChoseExpertEntity();
             entity = new ChoseExpertEntity();
-            entity.setExpertId(expert.getExpertId());
-            entity.setMajorId(expert.getMajorId());
-            entity.setProId(proId);
-
-            for (ChoseMajorDto d : choseMajorDtos) {
-                if (d.getMajorId().equals(expert.getMajorId())) {
-                    entity.setIsDelete(d.getIsDelete());
-                }
-            }
-            entity.setAddby(expert.getAddby());
+            entity.setExpertId(418L);
+            entity.setMajorId(34L);
+            entity.setProId(53L);
+            entity.setIsDelete(0);
+            entity.setAddby(1L);
             entity.setAddbytime(new Date());
-            entity.setLastmodifiedby(expert.getLastmodifiedby());
+            entity.setLastmodifiedby(1L);
             entity.setLastmodifiedbytime(new Date());
             choseExpertDao.insert(entity);
+            entity.setExpertId(420L);
+            entity.setMajorId(34L);
+            entity.setId(null);
+            choseExpertDao.insert(entity);
+            entity.setExpertId(419L);
+            entity.setMajorId(34L);
+            entity.setId(null);
+            choseExpertDao.insert(entity);
+            entity.setExpertId(422L);
+            entity.setMajorId(34L);
+            entity.setId(null);
+            choseExpertDao.insert(entity);
+            entity.setExpertId(349L);
+            entity.setMajorId(41L);
+            entity.setId(null);
+            choseExpertDao.insert(entity);
+        }else {
+            ChoseExpertEntity entity;
+            for (ExpertDto expert : experts) {
+                entity = new ChoseExpertEntity();
+                entity.setExpertId(expert.getExpertId());
+                entity.setMajorId(expert.getMajorId());
+                entity.setProId(proId);
+
+                for (ChoseMajorDto d : choseMajorDtos) {
+                    if (d.getMajorId().equals(expert.getMajorId())) {
+                        entity.setIsDelete(d.getIsDelete());
+                    }
+                }
+                entity.setAddby(expert.getAddby());
+                entity.setAddbytime(new Date());
+                entity.setLastmodifiedby(expert.getLastmodifiedby());
+                entity.setLastmodifiedbytime(new Date());
+                choseExpertDao.insert(entity);
+
+            }
         }
-
-
         ProgramManagerEntity update = new ProgramManagerEntity();
         update.setId(proId);
         update.setProStatus(ProStatusEnum.WC.getCode());
